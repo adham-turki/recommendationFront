@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'; // Import PropTypes for validation
-import Sidebar from '../components/Sidebar.jsx';
+import Sidebar from '../components/AdminSidebar.jsx';
 import Dashboard from '../components/Dashboard.jsx';
 import Posts from '../components/Posts.jsx';
 import Users from '../components/Users.jsx';
