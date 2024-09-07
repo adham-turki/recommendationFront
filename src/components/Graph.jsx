@@ -1,0 +1,207 @@
+
+
+// export default ForceDirectedGraph;
+import { useEffect, useState } from 'react';
+import * as d3 from 'd3';
+import GraphSidebar from './graphSidebar';
+
+const ForceDirectedGraph = () => {
+  const [blueNodes, setBlueNodes] = useState([]);
+  const [orangeNodes, setOrangeNodes] = useState([]);
+  const [draggedNodeData, setDraggedNodeData] = useState(null);
+  const [selectedNodeData, setSelectedNodeData] = useState(null);
+
+  useEffect(() => {
+    const width = 928;
+    const height = 890;
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    d3.json('./graph.json').then((data) => {
+      const links = data.links.map((d) => ({ ...d }));
+      const nodes = data.nodes.map((d) => ({ ...d }));
+
+      const blue = nodes.filter((d) => d.group === 'Cited Works');
+      const orange = nodes.filter((d) => d.group === 'Citing Patents');
+      setBlueNodes(blue);
+      setOrangeNodes(orange);
+
+      d3.select('#chart').selectAll('svg').remove();
+      const svgContainer = d3.select('#chart')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('viewBox', [-width / 2, -height / 2, width, height])
+        .attr('style', 'max-width: 100%; height: auto;');
+
+      svgContainer.append('defs')
+        .append('clipPath')
+        .attr('id', 'circleClip')
+        .append('circle')
+        .attr('r', 20)
+        .attr('cx', 0)
+        .attr('cy', 0);
+
+      const simulation = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(links).id((d) => d.id).distance(100))
+        .force('charge', d3.forceManyBody().strength(-200))
+        .force('collision', d3.forceCollide().radius(40))
+        .force('x', d3.forceX())
+        .force('y', d3.forceY());
+
+      const link = svgContainer.append('g')
+        .attr('stroke', 'orange')
+        .attr('stroke-opacity', 0.6)
+        .selectAll('line')
+        .data(links)
+        .join('line')
+        .attr('stroke-width', 3);
+
+      const node = svgContainer.append('g')
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 1.5)
+        .selectAll('.node')
+        .data(nodes)
+        .join('g')
+        .attr('class', 'node')
+        .style('cursor', 'pointer');
+
+      node.filter((d) => d.group === 'Cited Works')
+        .append('circle')
+        .attr('r', 30)
+        .attr('fill', (d) => color(d.group));
+
+      node.filter((d) => d.group === 'Cited Works')
+        .append('text')
+        .attr('dy', '.3em')
+        .attr('text-anchor', 'middle')
+        .attr('fill', '#fff')
+        .attr('font-size', '15px')
+        .text((d) => d.id.charAt(0));
+
+      node.filter((d) => d.group === 'Citing Patents')
+        .append('image')
+        .attr('xlink:href', (d) => d.img)
+        .attr('width', 40)
+        .attr('height', 40)
+        .attr('x', -20)
+        .attr('y', -20)
+        .attr('clip-path', 'url(#circleClip)');
+
+      node.append('title').text((d) => d.id);
+
+      node.call(d3.drag()
+        .on('start', dragstarted)
+        .on('drag', dragged)
+        .on('end', dragended))
+        .on('click', (event, d) => {
+          setSelectedNodeData(d);  // Set clicked node data
+          setDraggedNodeData(null);  // Clear dragged data when clicking
+        });
+
+      simulation.on('tick', () => {
+        link
+          .attr('x1', (d) => d.source.x)
+          .attr('y1', (d) => d.source.y)
+          .attr('x2', (d) => d.target.x)
+          .attr('y2', (d) => d.target.y);
+
+        node
+          .attr('transform', (d) => `translate(${d.x},${d.y})`);
+      });
+
+      function dragstarted(event) {
+        if (!event.active) simulation.alphaTarget(0.1).restart();
+        event.subject.fx = event.subject.x;
+        event.subject.fy = event.subject.y;
+      }
+
+      function dragged(event) {
+        event.subject.fx = event.x;
+        event.subject.fy = event.y;
+        setDraggedNodeData(event.subject);
+        setSelectedNodeData(null);  // Clear selected data when dragging
+      }
+
+      function dragended(event) {
+        if (!event.active) simulation.alphaTarget(0);
+        event.subject.fx = null;
+        event.subject.fy = null;
+      }
+    });
+
+    return () => {
+      d3.select('#chart').selectAll('svg').remove();
+    };
+  }, []);
+
+  return (
+    <div className="flex h-full">
+      <div className="w-full relative">
+        <div className="sticky top-16 flex items-center">
+          <div id="chart" className='w-3/4' />
+        </div>
+
+       {/* Display dragged node data */}
+{draggedNodeData && (
+  <div className="fixed bottom-80 top-20 right-72 2xl:right-1/4 w-80 p-6 bg-[#F8F9FA] shadow-lg border border-[#E0E0E0] overflow-auto rounded-3xl">
+    {/* Profile Image and ID */}
+    <div className="mb-4 flex flex-col items-center">
+      {draggedNodeData.group === 'Citing Patents' && (
+        <img
+          src={draggedNodeData.img}
+          alt="Node"
+          className="w-24 h-24 rounded-full object-cover border-4 border-[#007BFF]"
+        />
+      )}
+      {draggedNodeData.group === 'Cited Works' && (
+        <div className="w-24 h-24 rounded-full bg-[#1f77b4] text-white text-4xl flex items-center justify-center border-4 border-[#007BFF]">
+          {draggedNodeData.id.charAt(0).toUpperCase()}
+        </div>
+      )}
+      <h3 className="mt-4 text-2xl font-bold text-gray-800">{draggedNodeData.id}</h3>
+    </div>
+    <ul className="mt-2 text-gray-700 list-disc">
+      {Object.entries(draggedNodeData).slice(0, 2).map(([key, value]) => (
+        <li key={key} className="mb-1"><strong>{key}:</strong> {value.toString()}</li>
+      ))}
+    </ul>
+    <button onClick={() => setDraggedNodeData(null)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors">✕</button>
+  </div>
+)}
+
+{/* Display selected node data */}
+{selectedNodeData && (
+  <div className="fixed bottom-80 top-20 right-72 2xl:right-1/4 w-80 p-6 bg-[#F8F9FA] shadow-lg border border-[#E0E0E0] overflow-auto rounded-3xl">
+    {/* Profile Image and ID */}
+    <div className="mb-4 flex flex-col items-center">
+      {selectedNodeData.group === 'Citing Patents' && (
+        <img
+          src={selectedNodeData.img}
+          alt="Node"
+          className="w-24 h-24 rounded-full object-cover border-4 border-[#007BFF]"
+        />
+      )}
+      {selectedNodeData.group === 'Cited Works' && (
+        <div className="w-24 h-24 rounded-full bg-[#1f77b4] text-white text-4xl flex items-center justify-center border-4 border-[#21587f]">
+          {selectedNodeData.id.charAt(0).toUpperCase()}
+        </div>
+      )}
+      <h3 className="mt-4 text-2xl font-bold text-gray-800">{selectedNodeData.id}</h3>
+    </div>
+    <ul className="mt-2 text-gray-700 list-disc">
+      {Object.entries(selectedNodeData).slice(1, 2).map(([key, value]) => (
+        <li key={key} className="mb-1"><strong>{key}:</strong> {value.toString()}</li>
+      ))}
+    </ul>
+    <button onClick={() => setSelectedNodeData(null)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors">✕</button>
+  </div>
+)}
+
+      </div>
+      <GraphSidebar blueNodes={blueNodes} orangeNodes={orangeNodes} />
+    </div>
+  );
+};
+
+export default ForceDirectedGraph;
