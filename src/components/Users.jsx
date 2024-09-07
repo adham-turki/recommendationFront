@@ -37,7 +37,7 @@ const Users = ({ darkMode }) => {
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className={`layout-content-container flex flex-col max-w-[1960px] flex-1 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
+    <div className={`layout-content-container flex flex-col max-w-[1960px] flex-1 ${darkMode ? 'bg-gray-900 text-white' : ' text-black'}`}>
       <div className="flex flex-wrap justify-between gap-3 p-4">
         <p className="tracking-light text-[32px] font-bold leading-tight min-w-72">Users</p>
       </div>
@@ -63,7 +63,7 @@ const Users = ({ darkMode }) => {
           <div className={`flex overflow-hidden rounded-xl border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-[#E0E0E0] bg-white'}`}>
             <table className="flex-1">
               <thead>
-                <tr className={darkMode ? 'bg-gray-800 text-white' : 'bg-white'}>
+                <tr className={darkMode ? 'bg-gray-700 text-white' : 'bg-white'}>
                   <th className="px-4 py-3 text-left w-[400px] text-sm font-medium leading-normal">Profile</th>
                   <th className="px-4 py-3 text-left w-[400px] text-sm font-medium leading-normal">Name`</th>
                   <th className="px-4 py-3 text-left w-[400px] text-sm font-medium leading-normal">Email</th>
