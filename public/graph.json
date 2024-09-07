@@ -2,248 +2,248 @@
     "nodes": [
         {
             "id": "Sport",
-            "group": "Cited Works",
+            "group": "Categories",
             "radius": 2,
             "citing_patents_count": 2
         },
         {
             "id": "Technology ",
-            "group": "Cited Works",
+            "group": "Categories",
             "radius": 1,
             "citing_patents_count": 1
         },
         {
             "id": "Music",
-            "group": "Cited Works",
+            "group": "Categories",
             "radius": 1,
             "citing_patents_count": 1
         },
         {
             "id": "Reading",
-            "group": "Cited Works",
+            "group": "Categories",
             "radius": 1,
             "citing_patents_count": 1
         },
         {
             "id": "Fitness",
-            "group": "Cited Works",
+            "group": "Categories",
             "radius": 3,
             "citing_patents_count": 3
         },
         {
             "id": "Gaming",
-            "group": "Cited Works",
+            "group": "Categories",
             "radius": 1,
             "citing_patents_count": 1
         },
         {
             "id": "Art",
-            "group": "Cited Works",
+            "group": "Categories",
             "radius": 1,
             "citing_patents_count": 1
         },
         {
             "id": "History ",
-            "group": "Cited Works",
+            "group": "Categories",
             "radius": 1,
             "citing_patents_count": 1
         },
         {
             "id": "Science ",
-            "group": "Cited Works",
+            "group": "Categories",
             "radius": 1,
             "citing_patents_count": 1
         },
         {
             "id": "Movies",
-            "group": "Cited Works",
+            "group": "Categories",
             "radius": 1,
             "citing_patents_count": 1
         },
         {
             "id": "Psychology",
-            "group": "Cited Works",
+            "group": "Categories",
             "radius": 1,
             "citing_patents_count": 1
         },
         {
             "id": "Adham Turki",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://media.istockphoto.com/id/1303206630/photo/portrait-of-smiling-caucasian-businesswoman-pose-in-office.jpg?s=2048x2048&w=is&k=20&c=yY_iusrwTkxnEtu7FBQAaMc83iQEm2icnoKze5vcgFA="
         },
         {
             "id": "Sarah Ahmad",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://media.istockphoto.com/id/1503297213/photo/elderly-man-profile-and-thinking-about-future-retirement-and-pension-with-headshot-mockup.jpg?s=2048x2048&w=is&k=20&c=KaK4Zc79n9_J63MxL3naL0MhfbzhNB7Q8pIn_Jjw7cw="
 
             
         },
         {
             "id": "Ahmad Hamad",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://plus.unsplash.com/premium_photo-1682088122308-448e4af02945?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
         },
         {
             "id": "Munawwar Qamar",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.unsplash.com/photo-1675358742476-6ad595824519?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
         },
         {
             "id": "Safa Taweel",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.unsplash.com/photo-1602178856779-d57888ae2f8f?q=80&w=1910&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
         },
         {
             "id": "Haneen Abu Elhawa",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
         },
         {
             "id": "Issa Abuawada",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
         },
         {
             "id": "Ali Omar",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
         },
         {
             "id": "Alexander Smith",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "Sophia Johnson",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "Ethan Williams",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/1374510/pexels-photo-1374510.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "Isabella Brown",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/220429/pexels-photo-220429.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "Anas ss",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "Noah Miller",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/610294/pexels-photo-610294.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "Oliver Moore",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/34534/people-peoples-homeless-male.jpg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "Emma Taylor",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/697509/pexels-photo-697509.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "William Anderson",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/1264210/pexels-photo-1264210.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "Charlotte Thomas",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/943084/pexels-photo-943084.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         
         {
             "id": "Leo Messi",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/432059/pexels-photo-432059.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "James Jackson",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/4417069/pexels-photo-4417069.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         
         {
             "id": "Amelia White",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/1559486/pexels-photo-1559486.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         
         {
             "id": "Benjamin Harris",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/4067768/pexels-photo-4067768.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         
         {
             "id": "Harper Martin",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/346529/pexels-photo-346529.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "Grace Robinson",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/346529/pexels-photo-346529.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "Lucas Martinez",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/1278566/pexels-photo-1278566.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         
         {
             "id": "Ella Garcia",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=1856&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
         },
         
         {
             "id": "Jackson Lee",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
         {
             "id": "Mason Lewis",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         },
        
         {
             "id": "Logan Walker",
-            "group": "Citing Patents",
+            "group": "Users",
             "img": "https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg?auto=compress&cs=tinysrgb&w=600"
 
         }

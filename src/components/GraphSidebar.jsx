@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLayerGroup, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
-const GraphSidebar = ({ blueNodes, orangeNodes, darkMode }) => { // Accept darkMode prop
+const GraphSidebar = ({ blueNodes, orangeNodes, darkMode }) => {
   const [expandedSection, setExpandedSection] = useState(null);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
 

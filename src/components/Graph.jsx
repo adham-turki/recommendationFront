@@ -4,8 +4,10 @@
 import { useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import GraphSidebar from './graphSidebar';
+import PropTypes from 'prop-types';
 
-const ForceDirectedGraph = () => {
+
+const ForceDirectedGraph = ({ darkMode }) => {
   const [blueNodes, setBlueNodes] = useState([]);
   const [orangeNodes, setOrangeNodes] = useState([]);
   const [draggedNodeData, setDraggedNodeData] = useState(null);
@@ -21,8 +23,8 @@ const ForceDirectedGraph = () => {
       const links = data.links.map((d) => ({ ...d }));
       const nodes = data.nodes.map((d) => ({ ...d }));
 
-      const blue = nodes.filter((d) => d.group === 'Cited Works');
-      const orange = nodes.filter((d) => d.group === 'Citing Patents');
+      const blue = nodes.filter((d) => d.group === 'Categories');
+      const orange = nodes.filter((d) => d.group === 'Users');
       setBlueNodes(blue);
       setOrangeNodes(orange);
 
@@ -66,12 +68,12 @@ const ForceDirectedGraph = () => {
         .attr('class', 'node')
         .style('cursor', 'pointer');
 
-      node.filter((d) => d.group === 'Cited Works')
+      node.filter((d) => d.group === 'Categories')
         .append('circle')
         .attr('r', 30)
         .attr('fill', (d) => color(d.group));
 
-      node.filter((d) => d.group === 'Cited Works')
+      node.filter((d) => d.group === 'Categories')
         .append('text')
         .attr('dy', '.3em')
         .attr('text-anchor', 'middle')
@@ -79,7 +81,7 @@ const ForceDirectedGraph = () => {
         .attr('font-size', '15px')
         .text((d) => d.id.charAt(0));
 
-      node.filter((d) => d.group === 'Citing Patents')
+      node.filter((d) => d.group === 'Users')
         .append('image')
         .attr('xlink:href', (d) => d.img)
         .attr('width', 40)
@@ -143,25 +145,28 @@ const ForceDirectedGraph = () => {
         </div>
 
        {/* Display dragged node data */}
-{draggedNodeData && (
-  <div className="fixed bottom-80 top-20 right-72 2xl:right-1/4 w-80 p-6 bg-[#F8F9FA] shadow-lg border border-[#E0E0E0] overflow-auto rounded-3xl">
+       {draggedNodeData && (
+  <div className={`fixed bottom-80 top-20 right-72 2xl:right-1/4 w-80 p-6 shadow-lg border overflow-auto rounded-3xl mt-6
+    ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-[#F8F9FA] border-[#E0E0E0]'}`}>
     {/* Profile Image and ID */}
     <div className="mb-4 flex flex-col items-center">
-      {draggedNodeData.group === 'Citing Patents' && (
+      {draggedNodeData.group === 'Users' && (
         <img
           src={draggedNodeData.img}
           alt="Node"
           className="w-24 h-24 rounded-full object-cover border-4 border-[#007BFF]"
         />
       )}
-      {draggedNodeData.group === 'Cited Works' && (
-        <div className="w-24 h-24 rounded-full bg-[#1f77b4] text-white text-4xl flex items-center justify-center border-4 border-[#007BFF]">
-          {draggedNodeData.id.charAt(0).toUpperCase()}
+      {draggedNodeData.group === 'Categories' && (
+        <div className={`w-24 h-24 rounded-full flex items-center justify-center border-4 ${darkMode ? 'bg-blue-500 border-[#3b82f6]' : 'bg-[#1f77b4] border-[#007BFF]'}`}>
+          <span className="text-4xl text-white">
+            {draggedNodeData.id.charAt(0).toUpperCase()}
+          </span>
         </div>
       )}
-      <h3 className="mt-4 text-2xl font-bold text-gray-800">{draggedNodeData.id}</h3>
+      <h3 className={`mt-4 text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>{draggedNodeData.id}</h3>
     </div>
-    <ul className="mt-2 text-gray-700 list-disc">
+    <ul className={`mt-2 list-disc ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
       {Object.entries(draggedNodeData).slice(0, 2).map(([key, value]) => (
         <li key={key} className="mb-1"><strong>{key}:</strong> {value.toString()}</li>
       ))}
@@ -172,24 +177,27 @@ const ForceDirectedGraph = () => {
 
 {/* Display selected node data */}
 {selectedNodeData && (
-  <div className="fixed bottom-80 top-20 right-72 2xl:right-1/4 w-80 p-6 bg-[#F8F9FA] shadow-lg border border-[#E0E0E0] overflow-auto rounded-3xl">
+  <div className={`fixed bottom-80 top-20 right-72 2xl:right-1/4 w-80 p-6 shadow-lg border overflow-auto rounded-3xl mt-6
+    ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-[#F8F9FA] border-[#E0E0E0]'}`}>
     {/* Profile Image and ID */}
     <div className="mb-4 flex flex-col items-center">
-      {selectedNodeData.group === 'Citing Patents' && (
+      {selectedNodeData.group === 'Users' && (
         <img
           src={selectedNodeData.img}
           alt="Node"
           className="w-24 h-24 rounded-full object-cover border-4 border-[#007BFF]"
         />
       )}
-      {selectedNodeData.group === 'Cited Works' && (
-        <div className="w-24 h-24 rounded-full bg-[#1f77b4] text-white text-4xl flex items-center justify-center border-4 border-[#21587f]">
-          {selectedNodeData.id.charAt(0).toUpperCase()}
+      {selectedNodeData.group === 'Categories' && (
+        <div className={`w-24 h-24 rounded-full flex items-center justify-center border-4 ${darkMode ? 'bg-blue-500 border-[#3b82f6]' : 'bg-[#1f77b4] border-[#007BFF]'}`}>
+          <span className="text-4xl text-white">
+            {selectedNodeData.id.charAt(0).toUpperCase()}
+          </span>
         </div>
       )}
-      <h3 className="mt-4 text-2xl font-bold text-gray-800">{selectedNodeData.id}</h3>
+      <h3 className={`mt-4 text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>{selectedNodeData.id}</h3>
     </div>
-    <ul className="mt-2 text-gray-700 list-disc">
+    <ul className={`mt-2 list-disc ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
       {Object.entries(selectedNodeData).slice(1, 2).map(([key, value]) => (
         <li key={key} className="mb-1"><strong>{key}:</strong> {value.toString()}</li>
       ))}
@@ -198,10 +206,15 @@ const ForceDirectedGraph = () => {
   </div>
 )}
 
+
+
       </div>
-      <GraphSidebar blueNodes={blueNodes} orangeNodes={orangeNodes} />
+      <GraphSidebar blueNodes={blueNodes} orangeNodes={orangeNodes} darkMode={darkMode} />
     </div>
   );
+};
+ForceDirectedGraph.propTypes = {
+  darkMode: PropTypes.bool.isRequired,
 };
 
 export default ForceDirectedGraph;

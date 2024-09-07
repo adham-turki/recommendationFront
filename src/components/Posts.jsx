@@ -82,7 +82,7 @@ const Posts = ({ darkMode }) => { // Receive darkMode prop
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className={`layout-content-container flex flex-col max-w-[1960px] flex-1 ${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-black'}`}>
+    <div className={`layout-content-container flex flex-col max-w-[1960px] flex-1 ${darkMode ? 'bg-gray-900 text-gray-100' : ' text-black'}`}>
       {/* Header */}
       <div className="flex flex-wrap justify-between gap-3 p-4">
         <p className="tracking-light text-[32px] font-bold leading-tight min-w-72">Posts</p>
