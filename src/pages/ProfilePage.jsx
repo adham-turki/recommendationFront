@@ -1,10 +1,17 @@
 import { useState, useEffect } from "react";
 import { useCountries } from "use-react-countries";
-import { FiUser, FiLogOut, FiBriefcase, FiGlobe, FiStar, FiTrash2 } from "react-icons/fi";
+import {
+  FiUser,
+  FiLogOut,
+  FiBriefcase,
+  FiGlobe,
+  FiStar,
+  FiTrash2,
+} from "react-icons/fi";
 import { FaHistory, FaSave } from "react-icons/fa";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { Link  } from "react-router-dom";
+import { Link } from "react-router-dom";
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [activeSection, setActiveSection] = useState("Edit Profile"); // For tracking active sidebar section
@@ -85,32 +92,11 @@ const ProfilePage = () => {
     <div className="flex flex-col min-h-screen relative">
       <Header />
 
-      
-        {/* Small Vertical Sidebar */}
-        <aside className="fixed top-1/3 left-0 z-50 flex flex-col items-center space-y-6 bg-[#14044c] p-4 rounded-r-lg shadow-lg">
-          <Link to="/history">
-            <button
-              className="bg-[#845EC2] text-white p-4 rounded-full shadow-lg hover:bg-[#7b53b6] transition-all duration-300 transform hover:scale-110"
-              title="History"
-            >
-              <FaHistory className="w-6 h-6" />
-            </button>
-          </Link>
-          <Link to="/saved-items">
-            <button
-              className="bg-[#FFC75F] text-[#14044c] p-4 rounded-full shadow-lg hover:bg-[#e6b64a] transition-all duration-300 transform hover:scale-110"
-              title="Saved Items"
-            >
-              <FaSave className="w-6 h-6" />
-            </button>
-          </Link>
-        </aside>
-
-
       <div className="flex-grow w-full flex flex-col items-center p-8 pt-32 bg-[#e6e2eb]">
         {!isEditing ? (
           <div className="w-full max-w-6xl p-16 bg-white rounded-lg shadow-lg">
             <div className="flex items-center space-x-12 mb-12">
+             
               <div className="relative">
                 {userInfo.profilePictureUrl ? (
                   <img
@@ -124,28 +110,54 @@ const ProfilePage = () => {
                   </div>
                 )}
               </div>
+             
               <div className="flex-1 space-y-6">
                 <h2 className="text-3xl font-bold text-[#14044c]">
                   {userInfo.firstName} {userInfo.lastName}
                 </h2>
                 <div className="grid grid-cols-2 gap-6">
                   <p className="text-sm text-[#14044c]">
-                    <span className="font-semibold">Email:</span> {userInfo.email}
+                    <span className="font-semibold">Email:</span>{" "}
+                    {userInfo.email}
                   </p>
                   <p className="text-sm text-[#14044c]">
-                    <span className="font-semibold">Country:</span> {userInfo.country}
+                    <span className="font-semibold">Country:</span>{" "}
+                    {userInfo.country}
                   </p>
                   <p className="text-sm text-[#14044c]">
-                    <span className="font-semibold">Job Status:</span> {userInfo.jobStatus}
+                    <span className="font-semibold">Job Status:</span>{" "}
+                    {userInfo.jobStatus}
                   </p>
                   <p className="text-sm text-[#14044c]">
-                    <span className="font-semibold">Birthdate:</span> {userInfo.birthdate}
+                    <span className="font-semibold">Birthdate:</span>{" "}
+                    {userInfo.birthdate}
                   </p>
                   <p className="text-sm text-[#14044c] col-span-2">
-                    <span className="font-semibold">Account Created:</span> {userInfo.accountCreationDate}
+                    <span className="font-semibold">Account Created:</span>{" "}
+                    {userInfo.accountCreationDate}
                   </p>
                 </div>
               </div>
+
+              <div className="   z-50 flex flex-col items-center space-y-6  p-4 rounded-r-lg ">
+                <Link to="/history">
+                  <button
+                    className="bg-[#845EC2] text-white p-4 rounded-xl shadow-lg hover:bg-[#7b53b6] transition-all duration-300 transform hover:scale-110"
+                    title="History"
+                  >
+                    <FaHistory className="w-6 h-6" />
+                  </button>
+                </Link>
+                <Link to="/saved-items">
+                  <button
+                    className="bg-[#FFC75F] text-[#14044c] p-4 rounded-xl shadow-lg hover:bg-[#e6b64a] transition-all duration-300 transform hover:scale-110"
+                    title="Saved Items"
+                  >
+                    <FaSave className="w-6 h-6" />
+                  </button>
+                </Link>
+              </div>
+              
             </div>
 
             <div className="flex justify-between mb-4">
@@ -161,7 +173,11 @@ const ProfilePage = () => {
               >
                 <FiLogOut className="inline mr-2" /> Logout
               </button>
+
+              
             </div>
+
+            
           </div>
         ) : (
           <div className="flex w-full max-w-6xl">

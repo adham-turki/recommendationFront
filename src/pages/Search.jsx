@@ -86,7 +86,9 @@ const Search = () => {
   };
 
   return (
-    <div className="w-full max-w-8xl p-4 bg-[#e6e2eb] min-h-screen flex flex-col">
+
+    <div>
+      <div className="w-full max-w-8xl p-4 bg-[#e6e2eb] min-h-screen flex flex-col">
       {<Header /> }
 
       <main className="relative flex flex-1 bg-[#e6e2eb]">
@@ -172,7 +174,9 @@ const Search = () => {
         </div>
       </main>
 
-      { <Footer /> }
+       
+    </div>
+    <Footer />
     </div>
   );
 };
