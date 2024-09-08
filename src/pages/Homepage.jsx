@@ -5,18 +5,33 @@ import NewspaperHeader from "../components/NewspaperHeader";
 import YouTubeVideo from "../components/YouTubeVideo";
 import { useNavigate } from "react-router-dom";
 import ServicesSection from "../components/ServicesSection";
-
-
-
-import { useState } from "react";
+import { useState , useEffect, } from "react";
 import { BsMoonFill, BsSunFill, BsSearch, BsX, BsList } from "react-icons/bs"; // Added BsList for hamburger menu
 import matchifyLogo from "../assets/matchify_logo1.png"; // Adjust the path according to your folder structure
 import matchifyLogowhite from  "../assets/matchify_logo_white.png";
+
 const Header2 = () => {
   const [darkMode, setDarkMode] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // To track the state of the search bar
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // To track sidebar visibility
-  const [activeButton, setActiveButton] = useState("Home"); // Track the active button
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeButton, setActiveButton] = useState("Home");
+  const [scrolled, setScrolled] = useState(false); // State to track scroll position
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) { // Adjust scroll threshold as needed
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -24,28 +39,28 @@ const Header2 = () => {
 
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
-    setIsSidebarOpen(false); // Close sidebar when navigating
+    setIsSidebarOpen(false);
   };
 
   const handleSearchClick = () => {
-    setIsSearchOpen(!isSearchOpen); // Toggle the search bar on click
+    setIsSearchOpen(!isSearchOpen);
   };
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen); // Toggle the sidebar visibility
-    setIsSearchOpen(false); // Close search when sidebar is closed
+    setIsSidebarOpen(!isSidebarOpen);
+    setIsSearchOpen(false);
   };
 
   return (
     <>
-      {/* Header */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between whitespace-nowrap px-10 py-4 ${
-          darkMode ? " border-gray-700" : " border-gray-200"
+        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between whitespace-nowrap px-10 py-4 transition-colors duration-300 ${
+          scrolled ? (darkMode ? "bg-gray-800" : "bg-white") : "bg-transparent"
+        } ${
+          darkMode ? "border-gray-700" : "border-gray-200"
         } shadow-md`}
         style={{ fontFamily: "'Quicksand', sans-serif" }}
       >
-        {/* Logo and Title */}
         <div className="flex items-center gap-2">
           <img
             src={matchifyLogo}
@@ -61,7 +76,6 @@ const Header2 = () => {
           </h2>
         </div>
 
-        {/* Navigation Links */}
         <nav className="hidden md:flex space-x-5">
           <a
             href="/"
@@ -125,7 +139,6 @@ const Header2 = () => {
           </a>
         </nav>
 
-        {/* Search Button / Search Bar and Dark Mode Toggle */}
         <div className="flex items-center space-x-4">
           {!isSearchOpen ? (
             <button
@@ -166,7 +179,6 @@ const Header2 = () => {
             </div>
           )}
 
-          {/* Dark Mode Toggle */}
           <div
             onClick={toggleDarkMode}
             className={`relative w-14 h-8 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer ${
@@ -186,7 +198,6 @@ const Header2 = () => {
             </div>
           </div>
 
-          {/* Hamburger Menu Icon for Sidebar on Small Screens */}
           <button
             className="md:hidden flex items-center text-[#14044c]"
             onClick={toggleSidebar}
@@ -196,7 +207,6 @@ const Header2 = () => {
         </div>
       </header>
 
-      {/* Sidebar for small screens (opens from the right) */}
       <div
         className={`fixed inset-0 z-40 bg-gray-800 bg-opacity-75 transform ${
           isSidebarOpen ? "translate-x-0" : "translate-x-full"
@@ -222,7 +232,7 @@ const Header2 = () => {
               Home
             </a>
             <a
-              href="#"
+              href="/my-feed"
               onClick={() => handleButtonClick("Feeds")}
               className={`text-lg font-medium ${
                 activeButton === "Feeds"
@@ -260,7 +270,6 @@ const Header2 = () => {
     </>
   );
 };
-
 
 
 const HeroSection = () => {
@@ -343,17 +352,26 @@ const PersonalizedSection = () => {
   );
 };
 
+
 const ArticleCard = ({ image, title, readTime }) => {
+  // Encode the title for use in a URL
+  const searchQuery = encodeURIComponent(title);
+
   return (
     <div className="flex flex-col gap-3 pb-3">
       <div
-        className="bg-center bg-no-repeat aspect-video bg-cover rounded-xl "
+        className="bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
         style={{ backgroundImage: `url("${image}")` }}
       ></div>
       <div>
-        <p className="text-[#1D3557] text-xl font-medium leading-normal">
+        <a
+          href={`https://www.google.com/search?q=${searchQuery}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#1D3557] text-xl font-medium leading-normal hover:underline"
+        >
           {title}
-        </p>
+        </a>
         <p className="text-[#25303f] text-base font-normal leading-normal">
           {readTime} min read
         </p>
@@ -361,6 +379,7 @@ const ArticleCard = ({ image, title, readTime }) => {
     </div>
   );
 };
+
 
 const Homepage = () => {
   const youtubeUrl = "https://www.youtube.com/watch?v=lkkGlVWvkLk"; // Replace with your YouTube video URL

@@ -11,7 +11,7 @@
 //     <Router>
 //       <div className={`min-h-screen min-w-full flex flex-col ${darkMode ? 'dark' : ''} bg-[#FBFBFB]`}>
 //         <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-        
+
 //         <Routes>
 //           <Route path="/" element={<ContentPage darkMode={darkMode} setDarkMode={setDarkMode} />} />
 //         </Routes>
@@ -21,7 +21,6 @@
 // };
 
 // export default App;
-
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Homepage from "./pages/Homepage";
@@ -33,6 +32,7 @@ import SavedItemsPage from "./pages/SavedItemsPage";
 import AdminPage from "./pages/AdminPage";
 const App = () => {
   return (
+
     <Router>
   <Routes>
     <Route path="/profile" element={<ProfilePage />} />
@@ -45,6 +45,7 @@ const App = () => {
     {/* Add more routes here as needed */}
   </Routes>
 </Router>
+
   );
 };
 
