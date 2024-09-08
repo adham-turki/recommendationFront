@@ -14,7 +14,7 @@ const Header2 = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeButton, setActiveButton] = useState("Home");
+  const [activeButton, setActiveButton] = useState();
   const [scrolled, setScrolled] = useState(false); // State to track scroll position
 
   useEffect(() => {
@@ -108,7 +108,7 @@ const Header2 = () => {
             Feeds
           </a>
           <a
-            href="#"
+            href="/search"
             onClick={() => handleButtonClick("Users")}
             className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Users"
@@ -123,7 +123,7 @@ const Header2 = () => {
             Users
           </a>
           <a
-            href="#"
+            href="/profile"
             onClick={() => handleButtonClick("Profile")}
             className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Profile"

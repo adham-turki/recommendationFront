@@ -6,7 +6,7 @@ const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeButton, setActiveButton] = useState("Home");
+  const [activeButton, setActiveButton] = useState();
   const isAdmin = true; // Simulating whether the user is an admin
 
   const toggleDarkMode = () => {
@@ -55,7 +55,7 @@ const Header = () => {
         <div className="flex-1 flex justify-center">
           <div className="hidden md:flex space-x-5">
             <a
-              href="#"
+              href="/"
               onClick={() => handleButtonClick("Home")}
               className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
                 activeButton === "Home"
