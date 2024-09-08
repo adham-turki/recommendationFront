@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FaGlobe, FaBriefcase, FaSearch } from 'react-icons/fa';
-// import Header from './Header';
-// import Footer from './Footer';
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import SearchResults from './SearchResults';
 
 const FilterCard = ({ title, icon, options, onFilterChange, reset }) => {
@@ -87,7 +87,7 @@ const Search = () => {
 
   return (
     <div className="w-full max-w-8xl p-4 bg-[#e6e2eb] min-h-screen flex flex-col">
-      {/* <Header /> */}
+      {<Header /> }
 
       <main className="relative flex flex-1 bg-[#e6e2eb]">
         {/* Sidebar */}
@@ -172,7 +172,7 @@ const Search = () => {
         </div>
       </main>
 
-      {/* <Footer /> */}
+      { <Footer /> }
     </div>
   );
 };

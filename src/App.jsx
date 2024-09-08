@@ -28,15 +28,20 @@ import Homepage from "./pages/Homepage";
 import MyFeed from "./pages/MyFeed";
 import HistoryPage from "./pages/HistoryPage";
 import Search from "./pages/Search";
-
+import ProfilePage from "./pages/ProfilePage";
+import SavedItemsPage from "./pages/SavedItemsPage";
+import AdminPage from "./pages/AdminPage";
 const App = () => {
   return (
     <Router>
   <Routes>
+    <Route path="/profile" element={<ProfilePage />} />
+    <Route path="/saved-items" element={<SavedItemsPage />} />
     <Route path="/" element={<Homepage />} />
     <Route path="/my-feed" element={<MyFeed />} />
     <Route path="/history" element={<HistoryPage />} />
     <Route path="/search" element={<Search />} />
+    <Route path="/admin" element={<AdminPage />} />
     {/* Add more routes here as needed */}
   </Routes>
 </Router>
