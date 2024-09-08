@@ -26,15 +26,20 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import MyFeed from "./pages/MyFeed";
+import HistoryPage from "./pages/HistoryPage";
+import Search from "./pages/Search";
 
 const App = () => {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/my-feed" element={<MyFeed />} />
-      </Routes>
-    </Router>
+  <Routes>
+    <Route path="/" element={<Homepage />} />
+    <Route path="/my-feed" element={<MyFeed />} />
+    <Route path="/history" element={<HistoryPage />} />
+    <Route path="/search" element={<Search />} />
+    {/* Add more routes here as needed */}
+  </Routes>
+</Router>
   );
 };
 
