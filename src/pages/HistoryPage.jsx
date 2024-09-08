@@ -169,8 +169,9 @@ import { AiOutlineCalendar } from "react-icons/ai";
 import { FaThumbsUp, FaThumbsDown, FaShareAlt } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-//import Header from './Header';
-//import Footer from './Footer';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+
 // Sample static data
 const staticHistoryItems = [
   {
@@ -178,21 +179,24 @@ const staticHistoryItems = [
     title: "Sample History Item 1",
     type: "like",
     date: "2024-09-01T12:00:00Z",
-    thumbnail: "/path/to/sample-image1.jpg"
+    thumbnail: "/path/to/sample-image1.jpg",
+    videoUrl: "https://example.com/video1" // Added video URL for demonstration
   },
   {
     content_id: 2,
     title: "Sample History Item 2",
     type: "dislike",
     date: "2024-09-02T14:00:00Z",
-    thumbnail: "/path/to/sample-image2.jpg"
+    thumbnail: "/path/to/sample-image2.jpg",
+    videoUrl: "https://example.com/video2" // Added video URL for demonstration
   },
   {
     content_id: 3,
     title: "Sample History Item 3",
     type: "share",
     date: "2024-09-03T16:00:00Z",
-    thumbnail: "/path/to/sample-image3.jpg"
+    thumbnail: "/path/to/sample-image3.jpg",
+    videoUrl: "https://example.com/video3" // Added video URL for demonstration
   }
 ];
 
@@ -220,7 +224,7 @@ const HistoryPage = () => {
         const response = { data: staticHistoryItems }; // For testing, replace this with actual API call
 
         // Uncomment the following line to use the actual API call
-        // const response = await axios.get(`https://virtserver.swaggerhub.com/ISSAABED3322/project/1.0.0/history?${params.toString()}`);
+        // const response = await axios.get(https://virtserver.swaggerhub.com/ISSAABED3322/project/1.0.0/history?${params.toString()});
 
         console.log(response.data); // For debugging
         
@@ -254,125 +258,142 @@ const HistoryPage = () => {
 
   return (
     <div className="min-h-screen bg-[#e6e2eb]">
-      {/* <Header /> */}
+      <Header />
       <main className="pt-20 pb-16"> {/* Adjust padding to avoid overlap */}
-      <header className="mb-6">
-        <h1 className="text-4xl font-extrabold text-[#14044c] mb-6">History</h1>
+        <header className="mb-6">
+          <h1 className="text-4xl font-extrabold text-[#14044c] mb-6 ml-24">History</h1>
 
-        <div className="max-w-4xl mx-auto flex flex-col space-y-6">
-          {/* Filter and Sort */}
-          <div className="flex flex-col space-y-4">
-            <div className="flex items-center border-b border-gray-400 pb-2">
-              <div className="flex space-x-6">
-                {/* Filter Options */}
-                <div
-                  onClick={() => setFilter("like")}
-                  className={`cursor-pointer flex items-center px-4 py-2 rounded-lg ${
-                    filter === "like" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
-                  } transition-all duration-300`}
-                >
-                  <FaThumbsUp className={`text-lg ${filter === "like" ? "text-white" : "text-[#14044c]"}`} />
-                  <span className="ml-2 text-lg">Like</span>
-                </div>
-
-                <div
-                  onClick={() => setFilter("dislike")}
-                  className={`cursor-pointer flex items-center px-4 py-2 rounded-lg ${
-                    filter === "dislike" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
-                  } transition-all duration-300`}
-                >
-                  <FaThumbsDown className={`text-lg ${filter === "dislike" ? "text-white" : "text-[#14044c]"}`} />
-                  <span className="ml-2 text-lg">Dislike</span>
-                </div>
-
-                <div
-                  onClick={() => setFilter("share")}
-                  className={`cursor-pointer flex items-center px-4 py-2 rounded-lg ${
-                    filter === "share" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
-                  } transition-all duration-300`}
-                >
-                  <FaShareAlt className={`text-lg ${filter === "share" ? "text-white" : "text-[#14044c]"}`} />
-                  <span className="ml-2 text-lg">Share</span>
-                </div>
-
-                <div
-                  onClick={() => setFilter("all")}
-                  className={`cursor-pointer flex items-center px-4 py-2 rounded-lg ${
-                    filter === "all" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
-                  } transition-all duration-300`}
-                >
-                  <span className="text-lg">All</span>
-                </div>
-              </div>
-
-              {/* Sort by Date */}
-              <div
-                onClick={() => setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"))}
-                className="ml-auto cursor-pointer flex items-center px-4 py-2 text-[#14044c] rounded-lg hover:bg-[#c293dd] hover:text-white transition-all duration-300"
-              >
-                <span className="text-lg">Sort by Date</span>
-                <MdSort
-                  className={`text-2xl ml-2 ${sortOrder === "asc" ? "transform rotate-180" : ""} transition-transform duration-300`}
-                />
-              </div>
-            </div>
-
-            {/* Date Pickers */}
-            <div className="flex space-x-6 mb-4">
-              {[{ date: startDate, setDate: setStartDate, label: "Start Date" }, { date: endDate, setDate: setEndDate, label: "End Date" }].map(
-                ({ date, setDate, label }, idx) => (
-                  <div className="relative flex-1" key={idx}>
-                    <DatePicker
-                      selected={date}
-                      onChange={(selectedDate) => setDate(selectedDate)}
-                      customInput={
-                        <div className="relative w-full">
-                          <input
-                            type="text"
-                            value={date ? date.toLocaleDateString() : ""}
-                            readOnly
-                            className="w-full px-4 py-3 bg-white text-[#14044c] border-2 border-[#d1c8f3] rounded-lg shadow-lg focus:outline-none placeholder:text-[#a4a4a4] pl-10"
-                            placeholder={label}
-                          />
-                          <div className="absolute top-0 left-0 flex items-center pl-3 h-full pointer-events-none">
-                            <AiOutlineCalendar className="text-[#14044c] text-xl" />
-                          </div>
-                        </div>
-                      }
-                    />
+          <div className="max-w-4xl mx-auto flex flex-col space-y-6">
+            {/* Filter and Sort */}
+            <div className="flex flex-col space-y-4">
+              <div className="flex items-center border-b border-gray-400 pb-2">
+                <div className="flex space-x-6">
+                  {/* Filter Options */}
+                  <div
+                    onClick={() => setFilter("like")}
+                    className={`cursor-pointer flex items-center px-4 py-2 rounded-lg ${
+                      filter === "like" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
+                    } transition-all duration-300`}
+                  >
+                    <FaThumbsUp className={`text-lg ${filter === "like" ? "text-white" : "text-[#14044c]"}`} />
+                    <span className="ml-2 text-lg">Like</span>
                   </div>
-                )
-              )}
+
+                  <div
+                    onClick={() => setFilter("dislike")}
+                    className={`cursor-pointer flex items-center px-4 py-2 rounded-lg ${
+                      filter === "dislike" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
+                    } transition-all duration-300`}
+                  >
+                    <FaThumbsDown className={`text-lg ${filter === "dislike" ? "text-white" : "text-[#14044c]"}`} />
+                    <span className="ml-2 text-lg">Dislike</span>
+                  </div>
+
+                  <div
+                    onClick={() => setFilter("share")}
+                    className={`cursor-pointer flex items-center px-4 py-2 rounded-lg ${
+                      filter === "share" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
+                    } transition-all duration-300`}
+                  >
+                    <FaShareAlt className={`text-lg ${filter === "share" ? "text-white" : "text-[#14044c]"}`} />
+                    <span className="ml-2 text-lg">Share</span>
+                  </div>
+
+                  <div
+                    onClick={() => setFilter("all")}
+                    className={`cursor-pointer flex items-center px-4 py-2 rounded-lg ${
+                      filter === "all" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
+                    } transition-all duration-300`}
+                  >
+                    <span className="text-lg">All</span>
+                  </div>
+                </div>
+
+                {/* Sort by Date */}
+                <div
+                  onClick={() => setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"))}
+                  className="ml-auto cursor-pointer flex items-center px-4 py-2 text-[#14044c] rounded-lg hover:bg-[#c293dd] hover:text-white transition-all duration-300"
+                >
+                  <span className="text-lg">Sort by Date</span>
+                  <MdSort
+                    className={`text-2xl ml-2 ${sortOrder === "asc" ? "transform rotate-180" : ""} transition-transform duration-300`}
+                  />
+                </div>
+              </div>
+
+              {/* Date Pickers */}
+              <div className="flex space-x-6 mb-4">
+                {[{ date: startDate, setDate: setStartDate, label: "Start Date" }, { date: endDate, setDate: setEndDate, label: "End Date" }].map(
+                  ({ date, setDate, label }, idx) => (
+                    <div className="relative flex-1" key={idx}>
+                      <DatePicker
+                        selected={date}
+                        onChange={(selectedDate) => setDate(selectedDate)}
+                        customInput={
+                          <div className="relative w-full">
+                            <input
+                              type="text"
+                              value={date ? date.toLocaleDateString() : ""}
+                              readOnly
+                              className="w-full px-4 py-3 bg-white text-[#14044c] border-2 border-[#d1c8f3] rounded-lg shadow-lg focus:outline-none placeholder:text-[#a4a4a4] pl-10"
+                              placeholder={label}
+                            />
+                            <div className="absolute top-0 left-0 flex items-center pl-3 h-full pointer-events-none">
+                              <AiOutlineCalendar className="text-[#14044c] text-xl" />
+                            </div>
+                          </div>
+                        }
+                      />
+                    </div>
+                  )
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <section className="flex flex-col gap-6 max-w-4xl mx-auto">
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p className="text-red-500">{error}</p>
-        ) : filteredItems.length > 0 ? (
-          filteredItems.map((item) => (
-            <div
-              key={item.content_id}
-              className="bg-white rounded-lg shadow-lg overflow-hidden flex items-center p-6 hover:scale-105 transform transition-transform duration-300"
-            >
-              <img className="w-28 h-28 object-cover rounded-lg" src={item.thumbnail} alt={item.title} />
-              <div className="ml-6 flex-1">
-                <h3 className="text-lg font-semibold text-[#14044c]">{item.title}</h3>
-                <p className="text-sm text-[#6a5b8b] mt-1">{new Date(item.date).toLocaleDateString()}</p>
-              </div>
+        <section className="max-w-4xl mx-auto">
+          {loading ? (
+            <p className="text-center text-lg">Loading...</p>
+          ) : error ? (
+            <p className="text-center text-lg text-red-600">{error}</p>
+          ) : (
+            <div className="space-y-4">
+              {filteredItems.map((item) => (
+                <div
+                  key={item.content_id}
+                  className="flex items-center bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                >
+                  <img
+                    src={item.thumbnail}
+                    alt={item.title}
+                    className="w-20 h-20 object-cover rounded-lg mr-4"
+                  />
+                  <div className="flex-1">
+                    <h2 className="text-xl font-semibold text-[#14044c]">{item.title}</h2>
+                    <p className="text-gray-600 text-sm">{new Date(item.date).toLocaleDateString()}</p>
+                    <div className="flex items-center space-x-2 mt-2">
+                      {item.type === "like" && <FaThumbsUp className="text-green-500" />}
+                      {item.type === "dislike" && <FaThumbsDown className="text-red-500" />}
+                      {item.type === "share" && <FaShareAlt className="text-blue-500" />}
+                    </div>
+                  </div>
+                  <a
+                    href={item.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-4 bg-[#14044c] text-white px-4 py-2 rounded-lg hover:bg-[#a982d6] transition-all duration-300"
+                  >
+                    
+                    Watch Now
+                  </a>
+                </div>
+              ))}
             </div>
-          ))
-        ) : (
-          <p>No history items found.</p>
-        )}
-      </section>
+          )}
+        </section>
       </main>
-      {/* <Footer /> */}
-      
+      {<Footer /> }
     </div>
   );
 };
