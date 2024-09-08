@@ -11,7 +11,7 @@
 //     <Router>
 //       <div className={`min-h-screen min-w-full flex flex-col ${darkMode ? 'dark' : ''} bg-[#FBFBFB]`}>
 //         <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-        
+
 //         <Routes>
 //           <Route path="/" element={<ContentPage darkMode={darkMode} setDarkMode={setDarkMode} />} />
 //         </Routes>
@@ -22,19 +22,20 @@
 
 // export default App;
 
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import MyFeed from "./pages/MyFeed";
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/my-feed" element={<MyFeed />} />
-      </Routes>
-    </Router>
+   
+      <Router>
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/my-feed" element={<MyFeed />} />
+        </Routes>
+      </Router>
+  
   );
 };
 
