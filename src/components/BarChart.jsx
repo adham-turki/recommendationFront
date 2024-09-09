@@ -9,7 +9,7 @@ const CustomBarChart = ({ data, darkMode }) => {
       <XAxis dataKey="name" stroke={darkMode ? '#ddd' : '#333'} />
       <YAxis stroke={darkMode ? '#ddd' : '#333'} />
       <Tooltip contentStyle={{ backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#000' }} />
-      <Bar dataKey="performance" fill={darkMode ? '#82ca9d' : '#8884d8'} />
+      <Bar dataKey="interaction" fill={darkMode ? '#82ca9d' : '#8884d8'} />
     </BarChart>
   );
 };
@@ -19,7 +19,7 @@ CustomBarChart.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-      performance: PropTypes.number.isRequired,
+      interaction: PropTypes.number.isRequired,
     })
   ).isRequired,
   darkMode: PropTypes.bool.isRequired, // Add darkMode prop

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -16,9 +16,26 @@ const Users = ({ darkMode }) => {
     { username: 'Daniel Lee', email: 'daniel.lee@gmail.com', phone: '0597936388', posts: 7, likes: 90, shares: 15 ,image:'https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=1856&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'},
   ];
 
+  
+
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [users, setUsers] = useState(null);
   const usersPerPage = 5;
+  async function fetchData() {
+    const res = await fetch("http://192.168.1.123:2505/users");
+    setUsers( await res.json());
+  }
+
+  useEffect(() => {
+    if(users === null){
+
+      fetchData(); 
+    }
+  }, []);
+
+   
+  console.log(users)
 
   // Filter users based on search term
   const filteredUsers = initialUsers.filter(user =>
@@ -97,33 +114,25 @@ const Users = ({ darkMode }) => {
             </table>
           </div>
           {/* Pagination Controls */}
-          <div className="flex justify-between py-3">
-            <button
-              className={`flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 ${currentPage === 1 ? 'bg-gray-500' : darkMode ? 'bg-gray-700 text-white' : 'bg-[#EEEEEE]'} text-sm font-medium leading-normal`}
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <div className="flex items-center space-x-2">
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  className={`flex min-w-[30px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 ${currentPage === index + 1 ? (darkMode ? 'bg-blue-500 text-white' : 'bg-blue-500 text-white') : darkMode ? 'bg-gray-700 text-white' : 'bg-[#EEEEEE] text-black'} text-sm font-medium leading-normal`}
-                  onClick={() => handlePageChange(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
-            </div>
-            <button
-              className={`flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 ${currentPage === totalPages ? 'bg-gray-500' : darkMode ? 'bg-gray-700 text-white' : 'bg-[#EEEEEE]'} text-sm font-medium leading-normal`}
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
+      <div className="px-4 py-3 flex justify-between items-center">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 rounded-md text-sm font-medium ${darkMode ? 'bg-gray-700 text-gray-100' : 'bg-[#dbd7d7] text-black'} ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+          Previous
+        </button>
+        <span className="text-sm font-medium">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2 rounded-md text-sm font-medium ${darkMode ? 'bg-gray-700 text-gray-100' : 'bg-[#dbd7d7] text-black'} ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+          Next
+        </button>
+      </div>
         </div>
       </div>
     </div>
