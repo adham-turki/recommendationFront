@@ -62,7 +62,7 @@ const Header = () => {
         {/* Navigation Links (Right aligned) */}
         <div className="flex space-x-5">
           <a
-            href="/"
+            href="/home"
             onClick={() => handleButtonClick("Home")}
             className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Home"
