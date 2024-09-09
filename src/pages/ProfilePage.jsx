@@ -96,7 +96,6 @@ const ProfilePage = () => {
         {!isEditing ? (
           <div className="w-full max-w-6xl p-16 bg-white rounded-lg shadow-lg">
             <div className="flex items-center space-x-12 mb-12">
-             
               <div className="relative">
                 {userInfo.profilePictureUrl ? (
                   <img
@@ -110,7 +109,7 @@ const ProfilePage = () => {
                   </div>
                 )}
               </div>
-             
+
               <div className="flex-1 space-y-6">
                 <h2 className="text-3xl font-bold text-[#14044c]">
                   {userInfo.firstName} {userInfo.lastName}
@@ -138,26 +137,6 @@ const ProfilePage = () => {
                   </p>
                 </div>
               </div>
-
-              <div className="   z-50 flex flex-col items-center space-y-6  p-4 rounded-r-lg ">
-                <Link to="/history">
-                  <button
-                    className="bg-[#845EC2] text-white p-4 rounded-xl shadow-lg hover:bg-[#7b53b6] transition-all duration-300 transform hover:scale-110"
-                    title="History"
-                  >
-                    <FaHistory className="w-6 h-6" />
-                  </button>
-                </Link>
-                <Link to="/saved-items">
-                  <button
-                    className="bg-[#FFC75F] text-[#14044c] p-4 rounded-xl shadow-lg hover:bg-[#e6b64a] transition-all duration-300 transform hover:scale-110"
-                    title="Saved Items"
-                  >
-                    <FaSave className="w-6 h-6" />
-                  </button>
-                </Link>
-              </div>
-              
             </div>
 
             <div className="flex justify-between mb-4">
@@ -167,17 +146,7 @@ const ProfilePage = () => {
               >
                 Edit Profile
               </button>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 text-white py-2 px-6 rounded-full shadow-md hover:bg-red-800 transition duration-300"
-              >
-                <FiLogOut className="inline mr-2" /> Logout
-              </button>
-
-              
             </div>
-
-            
           </div>
         ) : (
           <div className="flex w-full max-w-6xl">

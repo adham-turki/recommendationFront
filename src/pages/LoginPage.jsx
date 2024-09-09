@@ -10,11 +10,8 @@ const LinkLoginPage = () => {
         <Route path="/login" element={<Login />} />
         
         {/* Route for Signup page */}
-        <Route path="/signup" element={<Signup />} />
-        
-        {/* Redirect to Login page by default */}
-        <Route path="*" element={<Login />} />
-      </Routes>
+        <Route path="/" element={<Signup />} />
+        </Routes>
     </Router>
   );
 };

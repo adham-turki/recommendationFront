@@ -76,10 +76,11 @@ const SavedItemsPage = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="flex-grow flex p-4 bg-slate-50" style={{ paddingTop: '100px' }}>
-        <aside className="w-1/4 p-4">
+      <div className="flex-grow flex p-4 bg-[#f6f1fa]" style={{ paddingTop: '100px' }}>
+        <aside className="w-1/4 pr-4">
+          <div className="bg-white p-4 rounded-lg shadow-md ">
           <h2 className="text-lg font-bold text-[#14044c] mb-4">Categories</h2>
-          <div className="bg-white p-4 rounded-lg shadow-md">
+
             <ul className="space-y-2">
               {categories.map((category, index) => (
                 <li

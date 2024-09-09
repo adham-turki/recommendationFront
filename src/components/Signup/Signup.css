@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Besley:wght@400;700&display=swap');
 
 /* Global Styles */
-body {
+.txt{
   font-family: 'Besley', serif;
 }
 
 /* Specific Styles for Text */
-.type3 {
+.type6 {
   font-family: 'Georgia', serif;
 }
 
@@ -44,7 +44,7 @@ body {
 }
 
 /* Google Button Styles */
-.type1::after {
+.type4::after {
   content: "Welcome";
   height: 50px;
   width: 250px;
@@ -62,7 +62,7 @@ body {
   transition: all 0.5s ease-in-out;
 }
 
-.type1::before {
+.type4::before {
   content: "Signup with Google";
   height: 50px;
   width: 250px;
@@ -80,16 +80,16 @@ body {
   transition: all 0.5s ease-in-out;
 }
 
-.type1:hover::after {
+.type4:hover::after {
   transform: translateY(0) scale(1.2);
 }
 
-.type1:hover::before {
+.type4:hover::before {
   transform: translateY(-50px) scale(0) rotate(120deg);
 }
 
 /* GitHub Button Styles */
-.type2::after {
+.type5::after {
   content: "Welcome";
   height: 50px;
   width: 250px;
@@ -107,7 +107,7 @@ body {
   transition: all 0.5s ease-in-out;
 }
 
-.type2::before {
+.type5::before {
   content: "Signup with GitHub";
   height: 50px;
   width: 250px;
@@ -125,11 +125,11 @@ body {
   transition: all 0.5s ease-in-out;
 }
 
-.type2:hover::after {
+.type5:hover::after {
   transform: translateY(0) scale(1.2);
 }
 
-.type2:hover::before {
+.type5:hover::before {
   transform: translateY(-50px) scale(0) rotate(120deg);
 }
 

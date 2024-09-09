@@ -1,42 +1,50 @@
 
-import { useState } from "react";
-import { BsMoonFill, BsSunFill, BsSearch, BsX, BsList } from "react-icons/bs";
+import { useState, useRef, useEffect } from "react";
+import { BsX, BsList } from "react-icons/bs";
 import matchifyLogo from "../assets/matchify_logo.png";
 
 const Header = () => {
-  const [darkMode, setDarkMode] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeButton, setActiveButton] = useState();
+  const [activeButton, setActiveButton] = useState(""); // Start with no active button
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const isAdmin = true; // Simulating whether the user is an admin
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
-
   const handleButtonClick = (buttonName) => {
-    setActiveButton(buttonName);
-
+    setActiveButton(buttonName); // Set the clicked button as active
     setIsSidebarOpen(false);
-  };
-
-  const handleSearchClick = () => {
-    setIsSearchOpen(!isSearchOpen);
   };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
-    setIsSearchOpen(false);
-
   };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    console.log("Logged out");
+  };
+
+  const handleClickOutsideDropdown = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutsideDropdown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideDropdown);
+    };
+  }, []);
 
   return (
     <>
 
       <header
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between whitespace-nowrap px-10 py-4 ${
-          darkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-200"
-        } shadow-md`}
+        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between whitespace-nowrap px-10 py-4 bg-white border-gray-200 shadow-md`}
         style={{ fontFamily: "'Quicksand', sans-serif" }}
       >
         {/* Logo and Title */}
@@ -49,166 +57,117 @@ const Header = () => {
 
           />
           <h2
-            className={`text-3xl font-bold leading-tight tracking-[-0.015em] ${
-              darkMode ? "text-white" : "text-[#14044c]"
-            }`}
+            className={`text-3xl font-bold leading-tight tracking-[-0.015em] text-[#14044c]`}
           >
             Matchify
           </h2>
 
         </div>
 
-        {/* Navigation Links */}
-        <div className="flex-1 flex justify-center">
-          <div className="hidden md:flex space-x-5">
-            <a
-              href="/"
-              onClick={() => handleButtonClick("Home")}
-              className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
-                activeButton === "Home"
-                  ? darkMode
-                    ? "bg-[#e6e2eb] text-gray-900"
-                    : "bg-[#14044c] text-white"
-                  : darkMode
-                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
-              }`}
-            >
-              Home
-            </a>
-            <a
-              href="/my-feed"
-              onClick={() => handleButtonClick("Feeds")}
-              className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
-                activeButton === "Feeds"
-                  ? darkMode
-                    ? "bg-[#e6e2eb] text-gray-900"
-                    : "bg-[#14044c] text-white"
-                  : darkMode
-                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
-              }`}
-            >
-              Feeds
-            </a>
-            <a
-              href="/search"
-              onClick={() => handleButtonClick("Users")}
-              className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
-                activeButton === "Users"
-                  ? darkMode
-                    ? "bg-[#e6e2eb] text-gray-900"
-                    : "bg-[#14044c] text-white"
-                  : darkMode
-                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
-              }`}
-            >
-              Users
-            </a>
-            <a
-              href="/profile"
-              onClick={() => handleButtonClick("Profile")}
-              className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
-                activeButton === "Profile"
-                  ? darkMode
-                    ? "bg-[#e6e2eb] text-gray-900"
-                    : "bg-[#14044c] text-white"
-                  : darkMode
-                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
-              }`}
-            >
-              Profile
-            </a>
-
-            {/* Conditionally render Admin button */}
-            {isAdmin && (
-              <a
-                href="/admin"
-                onClick={() => handleButtonClick("Admin")}
-                className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
-                  activeButton === "Admin"
-                    ? darkMode
-                      ? "bg-[#e6e2eb] text-gray-900"
-                      : "bg-[#14044c] text-white"
-                    : darkMode
-                    ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                    : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
-                }`}
-              >
-                Admin
-              </a>
-            )}
-          </div>
-        </div>
-
-        {/* Search Button / Search Bar, Dark Mode Toggle, and Profile Photo */}
-        <div className="flex items-center space-x-4">
-          {!isSearchOpen ? (
-            <button
-              onClick={handleSearchClick}
-              className={`flex items-center  hover:text-[#33527A] transition duration-300 ${
-                darkMode ? "text-[#e6e2eb]" : "text-[#14044c]"
-              }`}
-            >
-              <BsSearch size={24} />
-            </button>
-          ) : (
-            <div
-              className={`relative w-full md:w-96 flex items-center border-2 ${
-                darkMode ? "border-[#e6e2eb]" : "border-[#14044c]"
-              } rounded-xl`}
-            >
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <BsSearch
-                  className={`${darkMode ? "text-white" : "text-[#e6e2eb]"}`}
-                />
-              </div>
-              <input
-                type="text"
-                placeholder="Search for articles, ads, or people"
-                className={`block w-full pl-10 p-2.5 rounded-xl shadow-sm focus:outline-none focus:ring-[#14044c] focus:border-[#14044c] ${
-                  darkMode
-                    ? "bg-gray-800 text-white border-gray-600"
-                    : "bg-[#FFFAFA] text-[#14044c] border-[#14044c]"
-                }`}
-              />
-              <button
-                onClick={handleSearchClick}
-                className="absolute right-0 mr-4"
-              >
-                <BsX
-                  className={`${darkMode ? "text-white" : "text-[#14044c]"}`}
-                  size={24}
-                />
-              </button>
-            </div>
-          )}
-
-          {/* Dark Mode Toggle */}
-          <div
-            onClick={toggleDarkMode}
-            className={`relative w-14 h-8 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer ${
-              darkMode ? "bg-gray-600" : "bg-gray-200"
+        {/* Navigation Links (Right aligned) */}
+        <div className="flex space-x-5">
+          <a
+            href="/home"
+            onClick={() => handleButtonClick("Home")}
+            className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+              activeButton === "Home"
+                ? "bg-[#14044c] text-white"
+                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
             }`}
           >
-            <div
-              className={`absolute left-1 h-6 w-6 bg-white rounded-full shadow-md transform ${
-                darkMode ? "translate-x-full" : ""
-              } transition-transform duration-300 ease-in-out`}
-            >
-              {darkMode ? (
-                <BsMoonFill className="text-[#14044c] absolute inset-0 m-auto" />
-              ) : (
-                <BsSunFill className="text-[#14044c] absolute inset-0 m-auto" />
-              )}
-            </div>
-          </div>
+            Home
+          </a>
+          <a
+            href="/my-feed"
+            onClick={() => handleButtonClick("Feeds")}
+            className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+              activeButton === "Feeds"
+                ? "bg-[#14044c] text-white"
+                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+            }`}
+          >
+            Feeds
+          </a>
+          <a
+            href="/search"
+            onClick={() => handleButtonClick("Users")}
+            className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+              activeButton === "Users"
+                ? "bg-[#14044c] text-white"
+                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+            }`}
+          >
+            Users
+          </a>
+          <a
+            href="/profile"
+            onClick={() => handleButtonClick("Profile")}
+            className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+              activeButton === "Profile"
+                ? "bg-[#14044c] text-white"
+                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+            }`}
+          >
+            Profile
+          </a>
 
-          {/* Profile Picture */}
-          <div className="bg-[#14044c] text-white flex items-center justify-center rounded-full h-10 w-10 border border-[#14044c]">
-            <span className="text-lg font-bold">NH</span>
+          {/* Conditionally render Admin button */}
+          {isAdmin && (
+            <a
+              href="/admin"
+              onClick={() => handleButtonClick("Admin")}
+              className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+                activeButton === "Admin"
+                  ? "bg-[#14044c] text-white"
+                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+              }`}
+            >
+              Admin
+            </a>
+          )}
+
+          {/* Profile Picture with Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <div
+              className="bg-[#14044c] text-white flex items-center justify-center rounded-full h-10 w-10 cursor-pointer"
+              onClick={toggleDropdown}
+            >
+              <span className="text-lg font-bold">NH</span>
+            </div>
+
+            {/* Dropdown Menu */}
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg">
+                <ul className="py-2">
+                  <li>
+                    <a
+                      href="/history"
+                      className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      History
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/saved-items"
+                      className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      Saved Items
+                    </a>
+                  </li>
+                  <hr className="my-2 border-gray-300" />
+                  <li>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-red-600 hover:bg-red-100 cursor-pointer font-semibold"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Hamburger Menu Icon for Sidebar on Small Screens */}
@@ -236,7 +195,7 @@ const Header = () => {
           </button>
           <nav className="flex flex-col space-y-4 p-6 pt-20">
             <a
-              href="#"
+              href="/"
               onClick={() => handleButtonClick("Home")}
               className={`text-lg font-medium ${
                 activeButton === "Home"
@@ -247,7 +206,7 @@ const Header = () => {
               Home
             </a>
             <a
-              href="#"
+              href="/my-feed"
               onClick={() => handleButtonClick("Feeds")}
               className={`text-lg font-medium ${
                 activeButton === "Feeds"
@@ -258,7 +217,7 @@ const Header = () => {
               Feeds
             </a>
             <a
-              href="#"
+              href="/search"
               onClick={() => handleButtonClick("Users")}
               className={`text-lg font-medium ${
                 activeButton === "Users"
@@ -269,7 +228,7 @@ const Header = () => {
               Users
             </a>
             <a
-              href="#"
+              href="/profile"
               onClick={() => handleButtonClick("Profile")}
               className={`text-lg font-medium ${
                 activeButton === "Profile"
@@ -301,7 +260,6 @@ const Header = () => {
     </>
   );
 };
-
 
 
 export default Header;

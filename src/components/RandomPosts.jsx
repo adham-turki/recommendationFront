@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import Spinner from "./Spinner";
 import axios from "axios";
 import {
   AiFillLike,
@@ -15,6 +16,10 @@ const recommendations = [
   {
     content_id: "12345",
     title: "Latest Tech Trends",
+    description:
+      "Technology today is evolving at a rapid pace, enabling faster change and progress, causing an acceleration of the rate of change. However, it is not only technology trends and emerging technologies that are evolving, a lot more has changed, making IT professionals realize that their role will not stay the same in the contactless world tomorrow. And an IT professional in 2024 will constantly be learning, unlearning, and relearning (out of necessity, if not desire).",
+    image_url:
+      "https://www.simplilearn.com/ice9/free_resources_article_thumb/Technology_Trends.jpg",
     type: "Article",
     url: "https://www.simplilearn.com/top-technology-trends-and-jobs-article",
     category: "Tech",
@@ -75,18 +80,23 @@ const PublicAPIPosts = () => {
   const [likes, setLikes] = useState({});
   const [dislikes, setDislikes] = useState({});
   const [shares, setShares] = useState({});
-  const [savedPosts, setSavedPosts] = useState([]); // To track saved posts
-  const [enlargedImage, setEnlargedImage] = useState(null); // State to track the enlarged image
-  const [filter, setFilter] = useState("All"); // State to track the selected filter
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [enlargedImage, setEnlargedImage] = useState(null);
+  const [filter, setFilter] = useState("All");
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+
+  const observer = useRef();
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setLoading(true);
       try {
         const booksResponse = await axios.get(
-          "https://openlibrary.org/subjects/science.json?limit=7"
+          `https://openlibrary.org/subjects/science.json?limit=7&page=${page}`
         );
         const artResponse = await axios.get(
-          "https://api.artic.edu/api/v1/artworks?limit=7"
+          `https://api.artic.edu/api/v1/artworks?limit=7&page=${page}`
         );
 
         const bookPosts = booksResponse.data.works.map((book) => ({
@@ -128,14 +138,42 @@ const PublicAPIPosts = () => {
           .sort(() => 0.5 - Math.random())
           .slice(0, 5);
 
-        const allPosts = [...recommendations, ...shuffledPosts];
-        setPosts(allPosts);
+        setPosts((prevPosts) => [
+          ...prevPosts,
+          ...shuffledPosts,
+          ...recommendations,
+        ]);
       } catch (error) {
         console.error("Error fetching posts:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchPosts();
+  }, [page]);
+
+  useEffect(() => {
+    const handleObserver = (entries) => {
+      const target = entries[0];
+      if (target.isIntersecting) {
+        setPage((prevPage) => prevPage + 1);
+      }
+    };
+
+    const options = {
+      root: null,
+      rootMargin: "20px",
+      threshold: 1.0,
+    };
+
+    observer.current = new IntersectionObserver(handleObserver, options);
+    const element = document.getElementById("load-more-trigger");
+    if (element) observer.current.observe(element);
+
+    return () => {
+      if (observer.current) observer.current.disconnect();
+    };
   }, []);
 
   // Filter posts based on the selected filter
@@ -178,16 +216,23 @@ const PublicAPIPosts = () => {
     }));
   };
 
-  const handleShareClick = (title, index) => {
+  // const handleShareClick = (title, index) => {
+  //   incrementShare(index); // Update share count
+  //   const searchLink = generateGoogleSearchLink(title);
+  //   window.open(searchLink, "_blank"); // Open the search link in a new tab
+  // };
+
+  const handleShareClick = (post, index) => {
     incrementShare(index); // Update share count
-    const searchLink = generateGoogleSearchLink(title);
-    window.open(searchLink, "_blank"); // Open the search link in a new tab
-   
-  };
-
-
-
   
+    // Determine the URL to share
+    const shareUrl = post.url ? post.url : generateGoogleSearchLink(post.title);
+  
+    // Open the URL in a new tab
+    window.open(shareUrl, "_blank");
+  };
+  
+
   const savePost = (post) => {
     const isSaved = savedPosts.some(
       (savedPost) => savedPost.content_id === post.content_id
@@ -209,6 +254,13 @@ const PublicAPIPosts = () => {
 
   const handleCloseImage = () => {
     setEnlargedImage(null);
+  };
+
+  const truncateDescription = (description, maxLength = 250) => {
+    if (description.length > maxLength) {
+      return `${description.substring(0, maxLength)}...`;
+    }
+    return description;
   };
 
   return (
@@ -277,16 +329,24 @@ const PublicAPIPosts = () => {
               </h3>
 
               {/* Handling post types */}
+
               {post.type === "Article" ? (
                 <div>
-                  <a
-                    href={post.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 underline"
-                  >
-                    Read Article
-                  </a>
+                  <div className="flex justify-center">
+                    <img
+                      src={post.image_url}
+                      alt={post.title}
+                      className="w-[200px] h-auto  object-cover cursor-pointer"
+                      onClick={() => handleImageClick(post.image)}
+                    />
+                  </div>
+
+                  <p className="text-sm mt-2  text-gray-700">
+                    {/* {post.description} */}
+                    {truncateDescription(post.description)} 
+                  </p>
+
+                
                 </div>
               ) : post.type === "youtube" ? (
                 <div>
@@ -300,134 +360,84 @@ const PublicAPIPosts = () => {
                     allowFullScreen
                   ></iframe>
                 </div>
-              ) : post.type === "movie" ? (
-                <div className="relative">
-                  <Tooltip title="Expand" arrow>
-                    <div
-                      className="w-full gap-1 overflow-hidden bg-white rounded-xl flex cursor-pointer"
-                      style={{ aspectRatio: "3/2", height: "350px" }} // Smaller height
+              ) : post.type === "book" ||
+                post.type === "art" ||
+                post.type == "movie" ? (
+                <div>
+                  <div className="flex justify-center">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-[200px] h-auto  object-cover cursor-pointer"
                       onClick={() => handleImageClick(post.image)}
-                    >
-                      <div
-                        className="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none flex-1"
-                        style={{
-                          backgroundImage: `url(${post.image})`,
-                          backgroundSize: "contain",
-                          backgroundPosition: "center",
-                          backgroundRepeat: "no-repeat",
-                        }}
-                      ></div>
-                    </div>
-                  </Tooltip>
-                  <p className="text-sm mt-2">{post.description}</p>
+                    />
+                  </div>
+                  <p className="text-sm mt-2  text-gray-700">
+                    {post.description}
+                  </p>
                 </div>
-              ) : (
-                <div className="relative">
-                  <Tooltip title="Expand" arrow>
-                    <div
-                      className="w-full gap-1 overflow-hidden bg-white rounded-xl flex cursor-pointer"
-                      style={{ aspectRatio: "3/2", height: "350px" }} // Smaller height
-                      onClick={() => handleImageClick(post.image)}
+              ) : null}
+
+              {/* <p className="text-sm mt-2  text-gray-700">{post.description}</p> */}
+
+              <div className="flex justify-between mt-4">
+                <div className="flex space-x-2">
+                  <Tooltip title="Like">
+                    <button
+                      onClick={() => toggleLike(index)}
+                      className="p-2 text-xl text-gray-600 hover:text-blue-600 "
                     >
-                      <div
-                        className="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none flex-1"
-                        style={{
-                          backgroundImage: `url(${post.image})`,
-                          backgroundSize: "contain",
-                          backgroundPosition: "center",
-                          backgroundRepeat: "no-repeat",
-                        }}
-                      ></div>
-                    </div>
+                      {likes[index] ? (
+                        <AiFillLike className="text-blue-600" />
+                      ) : (
+                        <AiOutlineLike />
+                      )}
+                    </button>
                   </Tooltip>
-                  <p className="text-sm mt-2">{post.description}</p>
-                </div>
-              )}
-
-              {/* Post interactions */}
-              <div className="flex justify-center items-center mt-4 space-x-4">
-                <Tooltip title="Like" arrow>
-                  <button
-                    onClick={() => toggleLike(index)}
-                    className="flex items-center space-x-1 text-blue-500 underline"
-                  >
-                    {likes[index] ? (
-                      <AiFillLike className="text-blue-500" />
-                    ) : (
-                      <AiOutlineLike />
-                    )}
-                    <span>{likes[index] ? "Liked" : "Like"}</span>
-                  </button>
-                </Tooltip>
-                <Tooltip title="Dislike" arrow>
-                  <button
-                    onClick={() => toggleDislike(index)}
-                    className="flex items-center space-x-1 text-red-500 underline"
-                  >
-                    {dislikes[index] ? (
-                      <AiFillDislike className="text-red-500" />
-                    ) : (
-                      <AiOutlineDislike />
-                    )}
-                    <span>{dislikes[index] ? "Disliked" : "Dislike"}</span>
-                  </button>
-                </Tooltip>
-                {/* <Tooltip title="Share" arrow>
-                  <button
-                    onClick={() => incrementShare(index)}
-                    className="flex items-center space-x-1 text-green-600 underline"
-                  >
-                    <AiOutlineShareAlt />
-                    <span>Share ({shares[index] || 0})</span>
-                  </button>
-                </Tooltip> */}
-
-                <Tooltip title="Share" arrow>
-                  <button
-                    onClick={() => handleShareClick(post.title)} // Pass the title to the handler
-                    className="flex items-center space-x-1 text-green-600 underline"
-                  >
-                    <AiOutlineShareAlt />
-                    <span>Share ({shares[index] || 0})</span>
-                  </button>
-                </Tooltip>
-
-                <Tooltip
-                  title={
-                    savedPosts.some(
-                      (post) => post.content_id === post.content_id
-                    )
-                      ? "Unsave"
-                      : "Save"
-                  }
-                  arrow
-                >
-                  <button
-                    onClick={() => savePost(post)}
-                    className="flex items-center space-x-1 text-yellow-500 underline"
-                  >
-                    {savedPosts.some(
-                      (savedPost) => savedPost.content_id === post.content_id
-                    ) ? (
-                      <AiFillSave />
-                    ) : (
-                      <AiOutlineSave />
-                    )}
-                    <span>
+                  <Tooltip title="Dislike">
+                    <button
+                      onClick={() => toggleDislike(index)}
+                      className="p-2 text-xl text-gray-600 hover:text-red-600"
+                    >
+                      {dislikes[index] ? (
+                        <AiFillDislike className="text-red-600" />
+                      ) : (
+                        <AiOutlineDislike />
+                      )}
+                    </button>
+                  </Tooltip>
+                  <Tooltip title="Save">
+                    <button
+                      onClick={() => savePost(post)}
+                      className="p-2 text-xl text-gray-600 hover:text-green-600"
+                    >
                       {savedPosts.some(
                         (savedPost) => savedPost.content_id === post.content_id
-                      )
-                        ? "Saved"
-                        : "Save"}
-                    </span>
-                  </button>
-                </Tooltip>
+                      ) ? (
+                        <AiFillSave className="text-green-600" />
+                      ) : (
+                        <AiOutlineSave />
+                      )}
+                    </button>
+                  </Tooltip>
+                  <Tooltip title="Share">
+                    <button
+                      onClick={() => handleShareClick(post, index)}
+                      className="p-2 text-xl text-gray-600 hover:text-purple-600"
+                    >
+                      <AiOutlineShareAlt />
+                    </button>
+                  </Tooltip>
+                </div>
+                <div className="text-sm text-gray-500">
+                  Shares: {shares[index] || 0}
+                </div>
               </div>
             </div>
           </div>
         ))
       ) : (
-        <p>loading ...</p>
+        <Spinner />
       )}
 
       {/* Enlarged Image Modal */}
