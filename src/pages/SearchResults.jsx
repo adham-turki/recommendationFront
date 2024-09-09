@@ -78,7 +78,7 @@ const SearchResults = ({ searchTerm, filters }) => {
 
   const fetchProfileDetails = async (profileId) => {
     try {
-      const response = await axios.get(`/api/profiles/${profileId}`);
+      const response = await axios.get("http://192.168.1.136:8089/profiles/search?interests=tech/"`${profileId}`);
       setSelectedProfile(response.data);
     } catch (err) {
       setError(err);
