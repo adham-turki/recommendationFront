@@ -1,10 +1,4 @@
-<<<<<<< Updated upstream
-// App.js
-import ContentPage from './pages/AdminPage.jsx';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { useState } from 'react';
-import Header from './components/Header.jsx';
-=======
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header.jsx';
 import Login from './components/Login/Login.jsx';
@@ -20,20 +14,10 @@ import ProfilePage from './pages/ProfilePage';
 import SavedItemsPage from './pages/SavedItemsPage';
 import AdminPage from './pages/AdminPage';
 import { useState } from 'react';
->>>>>>> Stashed changes
-
 const App = () => {
-  const [darkMode, setDarkMode] = useState(false); // Manage dark mode at the top level
-
   return (
-    <Router>
-      <div className={`min-h-screen min-w-full flex flex-col ${darkMode ? 'dark' : ''} bg-[#FBFBFB]`}>
-<<<<<<< Updated upstream
-        <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-        
         <Routes>
           <Route path="/" element={<ContentPage darkMode={darkMode} setDarkMode={setDarkMode} />} />
-=======
         {/* <Header darkMode={darkMode} setDarkMode={setDarkMode} /> */}
 
         <Routes>
@@ -53,11 +37,10 @@ const App = () => {
           <Route path="/search" element={<Search />} />
           <Route path="/admin" element={<AdminPage />} />
           {/* Add more routes here as needed */}
->>>>>>> Stashed changes
         </Routes>
       </div>
     </Router>
-  );
+    );
 };
 
 export default App;
