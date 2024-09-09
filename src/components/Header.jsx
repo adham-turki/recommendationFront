@@ -1,12 +1,14 @@
-import PropTypes from 'prop-types';
-import { useState } from "react";
-import { BsMoonFill, BsSunFill, BsSearch, BsX, BsList } from "react-icons/bs"; // Added BsList for hamburger menu
-import matchifyLogo from "../assets/matchify_logo.png"; // Adjust the path according to your folder structure
 
-const Header = ({ darkMode, setDarkMode }) => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // To track the state of the search bar
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // To track sidebar visibility
-  const [activeButton, setActiveButton] = useState("Home"); // Track the active button
+import { useState } from "react";
+import { BsMoonFill, BsSunFill, BsSearch, BsX, BsList } from "react-icons/bs";
+import matchifyLogo from "../assets/matchify_logo.png";
+
+const Header = () => {
+  const [darkMode, setDarkMode] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeButton, setActiveButton] = useState();
+  const isAdmin = true; // Simulating whether the user is an admin
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -14,21 +16,23 @@ const Header = ({ darkMode, setDarkMode }) => {
 
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
-    setIsSidebarOpen(false); // Close sidebar when navigating
+
+    setIsSidebarOpen(false);
   };
 
   const handleSearchClick = () => {
-    setIsSearchOpen(!isSearchOpen); // Toggle the search bar on click
+    setIsSearchOpen(!isSearchOpen);
   };
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen); // Toggle the sidebar visibility
-    setIsSearchOpen(false); // Close search when sidebar is closed
+    setIsSidebarOpen(!isSidebarOpen);
+    setIsSearchOpen(false);
+
   };
 
   return (
     <>
-      {/* Header */}
+
       <header
         className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between whitespace-nowrap px-10 py-4 ${
           darkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-200"
@@ -36,11 +40,13 @@ const Header = ({ darkMode, setDarkMode }) => {
         style={{ fontFamily: "'Quicksand', sans-serif" }}
       >
         {/* Logo and Title */}
-        <div className="flex items-center gap-2">
+
+        <div className="flex items-center ">
           <img
             src={matchifyLogo}
             alt="Matchify Logo"
-            className="h-10 object-contain"
+            className="h-12 object-contain"
+
           />
           <h2
             className={`text-3xl font-bold leading-tight tracking-[-0.015em] ${
@@ -49,71 +55,93 @@ const Header = ({ darkMode, setDarkMode }) => {
           >
             Matchify
           </h2>
+
         </div>
 
         {/* Navigation Links */}
-        <nav className="hidden md:flex space-x-5">
-          <a
-            href="#"
-            onClick={() => handleButtonClick("Home")}
-            className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
-              activeButton === "Home"
-                ? darkMode
-                  ? "bg-[#e6e2eb] text-gray-900"
-                  : "bg-[#14044c] text-white"
-                : darkMode
-                ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
-            }`}
-          >
-            Home
-          </a>
-          <a
-            href="#"
-            onClick={() => handleButtonClick("Feeds")}
-            className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
-              activeButton === "Feeds"
-                ? darkMode
-                  ? "bg-[#e6e2eb] text-gray-900"
-                  : "bg-[#14044c] text-white"
-                : darkMode
-                ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
-            }`}
-          >
-            Feeds
-          </a>
-          <a
-            href="#"
-            onClick={() => handleButtonClick("Users")}
-            className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
-              activeButton === "Users"
-                ? darkMode
-                  ? "bg-[#e6e2eb] text-gray-900"
-                  : "bg-[#14044c] text-white"
-                : darkMode
-                ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
-            }`}
-          >
-            Users
-          </a>
-          <a
-            href="#"
-            onClick={() => handleButtonClick("Profile")}
-            className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
-              activeButton === "Profile"
-                ? darkMode
-                  ? "bg-[#e6e2eb] text-gray-900"
-                  : "bg-[#14044c] text-white"
-                : darkMode
-                ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
-            }`}
-          >
-            Profile
-          </a>
-        </nav>
+        <div className="flex-1 flex justify-center">
+          <div className="hidden md:flex space-x-5">
+            <a
+              href="/"
+              onClick={() => handleButtonClick("Home")}
+              className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+                activeButton === "Home"
+                  ? darkMode
+                    ? "bg-[#e6e2eb] text-gray-900"
+                    : "bg-[#14044c] text-white"
+                  : darkMode
+                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+              }`}
+            >
+              Home
+            </a>
+            <a
+              href="/my-feed"
+              onClick={() => handleButtonClick("Feeds")}
+              className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+                activeButton === "Feeds"
+                  ? darkMode
+                    ? "bg-[#e6e2eb] text-gray-900"
+                    : "bg-[#14044c] text-white"
+                  : darkMode
+                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+              }`}
+            >
+              Feeds
+            </a>
+            <a
+              href="/search"
+              onClick={() => handleButtonClick("Users")}
+              className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+                activeButton === "Users"
+                  ? darkMode
+                    ? "bg-[#e6e2eb] text-gray-900"
+                    : "bg-[#14044c] text-white"
+                  : darkMode
+                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+              }`}
+            >
+              Users
+            </a>
+            <a
+              href="/profile"
+              onClick={() => handleButtonClick("Profile")}
+              className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+                activeButton === "Profile"
+                  ? darkMode
+                    ? "bg-[#e6e2eb] text-gray-900"
+                    : "bg-[#14044c] text-white"
+                  : darkMode
+                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+              }`}
+            >
+              Profile
+            </a>
+
+            {/* Conditionally render Admin button */}
+            {isAdmin && (
+              <a
+                href="/admin"
+                onClick={() => handleButtonClick("Admin")}
+                className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+                  activeButton === "Admin"
+                    ? darkMode
+                      ? "bg-[#e6e2eb] text-gray-900"
+                      : "bg-[#14044c] text-white"
+                    : darkMode
+                    ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+                    : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+                }`}
+              >
+                Admin
+              </a>
+            )}
+          </div>
+        </div>
 
         {/* Search Button / Search Bar, Dark Mode Toggle, and Profile Photo */}
         <div className="flex items-center space-x-4">
@@ -122,7 +150,7 @@ const Header = ({ darkMode, setDarkMode }) => {
               onClick={handleSearchClick}
               className={`flex items-center  hover:text-[#33527A] transition duration-300 ${
                 darkMode ? "text-[#e6e2eb]" : "text-[#14044c]"
-              }` }
+              }`}
             >
               <BsSearch size={24} />
             </button>
@@ -180,7 +208,6 @@ const Header = ({ darkMode, setDarkMode }) => {
 
           {/* Profile Picture */}
           <div className="bg-[#14044c] text-white flex items-center justify-center rounded-full h-10 w-10 border border-[#14044c]">
-            {/* Placeholder for initials (or user profile image if needed) */}
             <span className="text-lg font-bold">NH</span>
           </div>
 
@@ -252,14 +279,29 @@ const Header = ({ darkMode, setDarkMode }) => {
             >
               Profile
             </a>
+
+            {/* Conditionally render Admin button */}
+            {isAdmin && (
+              <a
+                href="#"
+                onClick={() => handleButtonClick("Admin")}
+                className={`text-lg font-medium ${
+                  activeButton === "Admin"
+                    ? "bg-[#14044c] text-white"
+                    : "text-[#14044c]"
+                } py-2 px-4 rounded-lg`}
+              >
+                Admin
+              </a>
+            )}
           </nav>
         </div>
+
       </div>
     </>
   );
 };
-Header.propTypes = {
-  darkMode: PropTypes.bool.isRequired,
-  setDarkMode: PropTypes.func.isRequired, 
-};
+
+
+
 export default Header;
