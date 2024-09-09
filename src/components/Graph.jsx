@@ -12,16 +12,24 @@ const ForceDirectedGraph = ({ darkMode }) => {
   const [orangeNodes, setOrangeNodes] = useState([]);
   const [draggedNodeData, setDraggedNodeData] = useState(null);
   const [selectedNodeData, setSelectedNodeData] = useState(null);
+  const [graph, setGraph] = useState(null);
 
+ 
+  fetchData();
   useEffect(() => {
+
     const width = 928;
     const height = 890;
-
+    
     const color = d3.scaleOrdinal(d3.schemeCategory10);
+   
+    
 
-    d3.json('./graph.json').then((data) => {
-      const links = data.links.map((d) => ({ ...d }));
-      const nodes = data.nodes.map((d) => ({ ...d }));
+      console.log(graph)
+   
+    d3.json("../graph.json").then(() => {
+      const links = graph.links.map((d) => ({ ...d }));
+      const nodes = graph.nodes.map((d) => ({ ...d }));
 
       const blue = nodes.filter((d) => d.group === 'Categories');
       const orange = nodes.filter((d) => d.group === 'Users');
@@ -99,6 +107,21 @@ const ForceDirectedGraph = ({ darkMode }) => {
         .on('click', (event, d) => {
           setSelectedNodeData(d);  // Set clicked node data
           setDraggedNodeData(null);  // Clear dragged data when clicking
+           // Create a ripple effect
+  const ripple = svgContainer.append('circle')
+  .attr('cx', d.x)
+  .attr('cy', d.y)
+  .attr('r', 0)  // Start with a small radius
+  .style('fill', 'none')
+  .style('stroke', '#007BFF')  
+  .style('stroke-width', 3)
+  .style('opacity', 0.8);
+
+ripple.transition()
+  .duration(1000)  // Duration of the ripple effect
+  .attr('r', 80)  // Final size of the ripple
+  .style('opacity', 0)  // Fade out
+  .remove();  // Remove the ripple after the animation completes
         });
 
       simulation.on('tick', () => {
@@ -130,13 +153,37 @@ const ForceDirectedGraph = ({ darkMode }) => {
         event.subject.fx = null;
         event.subject.fy = null;
       }
+    }).catch((error) => {
+      console.error('Error fetching or parsing the JSON data:', error);
     });
-
     return () => {
       d3.select('#chart').selectAll('svg').remove();
     };
-  }, []);
-
+    
+  }, [graph]);
+  async function fetchData() {
+    if (graph == null) {
+      try {
+        const res = await fetch(import.meta.env.VITE_API+"/graph");
+  
+        // Check response status
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+  
+        const text = await res.text();  // Fetch as text to inspect content
+        console.log("Response text:", text);  // Log the raw response text
+  
+        // Try parsing as JSON
+        const data = JSON.parse(text);
+        setGraph(data);
+      } catch (error) {
+        console.error("Error fetching or parsing data:", error);
+      }
+    }
+  }
+  
+  
   return (
     <div className="flex h-full">
       <div className="w-full relative">

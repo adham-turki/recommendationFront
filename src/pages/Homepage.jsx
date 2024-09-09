@@ -1,79 +1,92 @@
 import "../App.css";
 import "../index.css";
-// import Footer from "../components/Footer";
 import NewspaperHeader from "../components/NewspaperHeader";
 import YouTubeVideo from "../components/YouTubeVideo";
 import { useNavigate } from "react-router-dom";
 import ServicesSection from "../components/ServicesSection";
-
-
-
-import { useState } from "react";
+import { useState , useEffect,useRef } from "react";
 import { BsMoonFill, BsSunFill, BsSearch, BsX, BsList } from "react-icons/bs"; // Added BsList for hamburger menu
 import matchifyLogo from "../assets/matchify_logo1.png"; // Adjust the path according to your folder structure
 import matchifyLogowhite from  "../assets/matchify_logo_white.png";
-const Header2 = () => {
-  const [darkMode, setDarkMode] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // To track the state of the search bar
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // To track sidebar visibility
-  const [activeButton, setActiveButton] = useState("Home"); // Track the active button
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
+const Header2 = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeButton, setActiveButton] = useState(""); // Start with no active button
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false); // New state for scroll detection
+  const dropdownRef = useRef(null);
+  const isAdmin = true; // Simulating whether the user is an admin
 
   const handleButtonClick = (buttonName) => {
-    setActiveButton(buttonName);
-    setIsSidebarOpen(false); // Close sidebar when navigating
-  };
-
-  const handleSearchClick = () => {
-    setIsSearchOpen(!isSearchOpen); // Toggle the search bar on click
+    setActiveButton(buttonName); // Set the clicked button as active
+    setIsSidebarOpen(false);
   };
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen); // Toggle the sidebar visibility
-    setIsSearchOpen(false); // Close search when sidebar is closed
+    setIsSidebarOpen(!isSidebarOpen);
   };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    console.log("Logged out");
+  };
+
+  const handleClickOutsideDropdown = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 0); // Update scroll state
+    };
+
+    document.addEventListener("scroll", handleScroll);
+    document.addEventListener("mousedown", handleClickOutsideDropdown);
+
+    return () => {
+      document.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("mousedown", handleClickOutsideDropdown);
+    };
+  }, []);
 
   return (
     <>
-      {/* Header */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between whitespace-nowrap px-10 py-4 ${
-          darkMode ? " border-gray-700" : " border-gray-200"
-        } shadow-md`}
+        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between whitespace-nowrap px-10 py-4 border-gray-200 shadow-md transition-colors duration-300 ${
+          scrolled ? "bg-white" : "bg-transparent"
+        }`}
         style={{ fontFamily: "'Quicksand', sans-serif" }}
       >
         {/* Logo and Title */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center">
           <img
             src={matchifyLogo}
             alt="Matchify Logo"
-            className="h-10 object-contain"
+            className="h-12 object-contain"
           />
           <h2
             className={`text-3xl font-bold leading-tight tracking-[-0.015em] ${
-              darkMode ? "text-white" : "text-[#14044c]"
+              scrolled ? "text-[#14044c]" : "text-white"
             }`}
           >
             Matchify
           </h2>
         </div>
 
-        {/* Navigation Links */}
-        <nav className="hidden md:flex space-x-5">
+        {/* Navigation Links (Right aligned) */}
+        <div className="flex space-x-5">
           <a
-            href="/"
+            href="/home"
             onClick={() => handleButtonClick("Home")}
             className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Home"
-                ? darkMode
-                  ? "bg-[#e6e2eb] text-gray-900"
-                  : "bg-[#14044c] text-white"
-                : darkMode
-                ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+                ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
+                : `${scrolled ? "text-[#14044c]" : "text-white"} hover:bg-[#14044c] hover:text-white`
             }`}
           >
             Home
@@ -83,107 +96,92 @@ const Header2 = () => {
             onClick={() => handleButtonClick("Feeds")}
             className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Feeds"
-                ? darkMode
-                  ? "bg-[#e6e2eb] text-gray-900"
-                  : "bg-[#14044c] text-white"
-                : darkMode
-                ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+                ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
+                : `${scrolled ? "text-[#14044c]" : "text-white"} hover:bg-[#14044c] hover:text-white`
             }`}
           >
             Feeds
           </a>
           <a
-            href="#"
+            href="/search"
             onClick={() => handleButtonClick("Users")}
             className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Users"
-                ? darkMode
-                  ? "bg-[#e6e2eb] text-gray-900"
-                  : "bg-[#14044c] text-white"
-                : darkMode
-                ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+                ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
+                : `${scrolled ? "text-[#14044c]" : "text-white"} hover:bg-[#14044c] hover:text-white`
             }`}
           >
             Users
           </a>
           <a
-            href="#"
+            href="/profile"
             onClick={() => handleButtonClick("Profile")}
             className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Profile"
-                ? darkMode
-                  ? "bg-[#e6e2eb] text-gray-900"
-                  : "bg-[#14044c] text-white"
-                : darkMode
-                ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+                ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
+                : `${scrolled ? "text-[#14044c]" : "text-white"} hover:bg-[#14044c] hover:text-white`
             }`}
           >
             Profile
           </a>
-        </nav>
 
-        {/* Search Button / Search Bar and Dark Mode Toggle */}
-        <div className="flex items-center space-x-4">
-          {!isSearchOpen ? (
-            <button
-              onClick={handleSearchClick}
-              className="flex items-center text-[#14044c] hover:text-[#33527A] transition duration-300"
+          {/* Conditionally render Admin button */}
+          {isAdmin && (
+            <a
+              href="/admin"
+              onClick={() => handleButtonClick("Admin")}
+              className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+                activeButton === "Admin"
+                  ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
+                  : `${scrolled ? "text-[#14044c]" : "text-white"} hover:bg-[#14044c] hover:text-white`
+              }`}
             >
-              <BsSearch size={24} />
-            </button>
-          ) : (
-            <div
-              className={`relative w-full md:w-96 flex items-center border-2 ${
-                darkMode ? "border-[#e6e2eb]" : "border-[#14044c]"
-              } rounded-xl`}
-            >
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <BsSearch
-                  className={`${darkMode ? "text-white" : "text-[#14044c]"}`}
-                />
-              </div>
-              <input
-                type="text"
-                placeholder="Search for articles, ads, or people"
-                className={`block w-full pl-10 p-2.5 rounded-xl shadow-sm focus:outline-none focus:ring-[#14044c] focus:border-[#14044c] ${
-                  darkMode
-                    ? "bg-gray-800 text-white border-gray-600"
-                    : "bg-[#FFFAFA] text-[#14044c] border-[#14044c]"
-                }`}
-              />
-              <button
-                onClick={handleSearchClick}
-                className="absolute right-0 mr-4"
-              >
-                <BsX
-                  className={`${darkMode ? "text-white" : "text-[#14044c]"}`}
-                  size={24}
-                />
-              </button>
-            </div>
+              Admin
+            </a>
           )}
 
-          {/* Dark Mode Toggle */}
-          <div
-            onClick={toggleDarkMode}
-            className={`relative w-14 h-8 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer ${
-              darkMode ? "bg-gray-600" : "bg-gray-200"
-            }`}
-          >
+          {/* Profile Picture with Dropdown */}
+          <div className="relative" ref={dropdownRef}>
             <div
-              className={`absolute left-1 h-6 w-6 bg-white rounded-full shadow-md transform ${
-                darkMode ? "translate-x-full" : ""
-              } transition-transform duration-300 ease-in-out`}
+              className="bg-[#14044c] text-white flex items-center justify-center rounded-full h-10 w-10 cursor-pointer"
+              onClick={toggleDropdown}
             >
-              {darkMode ? (
-                <BsMoonFill className="text-[#14044c] absolute inset-0 m-auto" />
-              ) : (
-                <BsSunFill className="text-[#14044c] absolute inset-0 m-auto" />
-              )}
+              <span className="text-lg font-bold">NH</span>
             </div>
+
+            {/* Dropdown Menu */}
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg">
+                <ul className="py-2">
+                  <li>
+                    <a
+                      href="/history"
+                      className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      History
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/saved-items"
+                      className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      Saved Items
+                    </a>
+                  </li>
+                  <hr className="my-2 border-gray-300" />
+                  <li>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-red-600 hover:bg-red-100 cursor-pointer font-semibold"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Hamburger Menu Icon for Sidebar on Small Screens */}
@@ -211,57 +209,68 @@ const Header2 = () => {
           </button>
           <nav className="flex flex-col space-y-4 p-6 pt-20">
             <a
-              href="#"
+              href="/"
               onClick={() => handleButtonClick("Home")}
               className={`text-lg font-medium ${
                 activeButton === "Home"
-                  ? "bg-[#14044c] text-white"
-                  : "text-[#14044c]"
+                  ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
+                  : `${scrolled ? "text-[#14044c]" : "text-white"}`
               } py-2 px-4 rounded-lg`}
             >
               Home
             </a>
             <a
-              href="#"
+              href="/my-feed"
               onClick={() => handleButtonClick("Feeds")}
               className={`text-lg font-medium ${
                 activeButton === "Feeds"
-                  ? "bg-[#14044c] text-white"
-                  : "text-[#14044c]"
+                  ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
+                  : `${scrolled ? "text-[#14044c]" : "text-white"}`
               } py-2 px-4 rounded-lg`}
             >
               Feeds
             </a>
             <a
-              href="#"
+              href="/search"
               onClick={() => handleButtonClick("Users")}
               className={`text-lg font-medium ${
                 activeButton === "Users"
-                  ? "bg-[#14044c] text-white"
-                  : "text-[#14044c]"
+                  ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
+                  : `${scrolled ? "text-[#14044c]" : "text-white"}`
               } py-2 px-4 rounded-lg`}
             >
               Users
             </a>
             <a
-              href="#"
+              href="/profile"
               onClick={() => handleButtonClick("Profile")}
               className={`text-lg font-medium ${
                 activeButton === "Profile"
-                  ? "bg-[#14044c] text-white"
-                  : "text-[#14044c]"
+                  ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
+                  : `${scrolled ? "text-[#14044c]" : "text-white"}`
               } py-2 px-4 rounded-lg`}
             >
               Profile
             </a>
+            {isAdmin && (
+              <a
+                href="/admin"
+                onClick={() => handleButtonClick("Admin")}
+                className={`text-lg font-medium ${
+                  activeButton === "Admin"
+                    ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
+                    : `${scrolled ? "text-[#14044c]" : "text-white"}`
+                } py-2 px-4 rounded-lg`}
+              >
+                Admin
+              </a>
+            )}
           </nav>
         </div>
       </div>
     </>
   );
 };
-
-
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -343,17 +352,26 @@ const PersonalizedSection = () => {
   );
 };
 
+
 const ArticleCard = ({ image, title, readTime }) => {
+  // Encode the title for use in a URL
+  const searchQuery = encodeURIComponent(title);
+
   return (
     <div className="flex flex-col gap-3 pb-3">
       <div
-        className="bg-center bg-no-repeat aspect-video bg-cover rounded-xl "
+        className="bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
         style={{ backgroundImage: `url("${image}")` }}
       ></div>
       <div>
-        <p className="text-[#1D3557] text-xl font-medium leading-normal">
+        <a
+          href={`https://www.google.com/search?q=${searchQuery}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#1D3557] text-xl font-medium leading-normal hover:underline"
+        >
           {title}
-        </p>
+        </a>
         <p className="text-[#25303f] text-base font-normal leading-normal">
           {readTime} min read
         </p>
@@ -361,6 +379,7 @@ const ArticleCard = ({ image, title, readTime }) => {
     </div>
   );
 };
+
 
 const Homepage = () => {
   const youtubeUrl = "https://www.youtube.com/watch?v=lkkGlVWvkLk"; // Replace with your YouTube video URL

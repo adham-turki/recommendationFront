@@ -3,6 +3,7 @@ import "../index.css";
 import Header from "../components/Header";
 // npm install @mui/material @emotion/react @emotion/styled
 import RandomPosts from "../components/RandomPosts";
+import Footer from "../components/Footer";
 
 const MyFeed = () => {
   return (
@@ -26,7 +27,7 @@ const MyFeed = () => {
         </div>
       </div>
 
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomLineChart from './LineChart.jsx';
 import CustomPieChart from './PieChart.jsx';
 import CustomBarChart from './BarChart.jsx';
@@ -7,82 +7,89 @@ import PropTypes from 'prop-types';
 
 const Dashboard = ({ darkMode }) => {  // Add darkMode prop
   const [timeRange, setTimeRange] = useState('Last 30 Days'); // Default time range
+  const [statistics, setStatistics] = useState([]);
 
 
-  // // Mock data for different time ranges
-  // let data =await fetch('http://192.168.1.136:8089/contents/1')
-  // .then(async (response) => {
-  //   console.log(await response.json())
-
-  //   // return response.json();
-  // })
-  // .catch((err) => {
-  //   console.log(err);
-    
-  // })
-  // console.log(data)
+  useEffect(() => {
+    async function fetchData() {
+      const res = await fetch(`${import.meta.env.VITE_API}/statistics`);
+      const data = await res.json();
+      setStatistics(data);
+    }
+    fetchData();
+    console.log(statistics)
+  }, []);
+   // Transform categoryCounts into an array of objects with name and value properties
+   const getCategoryCountsData = () => {
+    if (!statistics.categoryCounts) return [];
+    return Object.entries(statistics.categoryCounts).map(([name, value]) => ({
+      name,
+      value
+    }));
+  };
+  
   const getDataForTimeRange = (range) => {
     switch (range) {
       case 'Last Week':
         return [
-          { name: 'Sat', performance: 1000 },
-          { name: 'Sun', performance: 1200 },
-          { name: 'Mon', performance: 1100 },
-          { name: 'Tue', performance: 1050 },
-          { name: 'Wed', performance: 1300 },
-          { name: 'Thu', performance: 1250 },
-          { name: 'Fri', performance: 1400 },
+          { name: 'Sat', interaction: 1000 },
+          { name: 'Sun', interaction: 1200 },
+          { name: 'Mon', interaction: 1100 },
+          { name: 'Tue', interaction: 1050 },
+          { name: 'Wed', interaction: 1300 },
+          { name: 'Thu', interaction: 1250 },
+          { name: 'Fri', interaction: 1400 },
         ];
       case 'Last 30 Days':
         return [
-          { name: '2024-07-30', performance: 1200 },
-          { name: '2024-07-31', performance: 1500 },
-          { name: '2024-08-01', performance: 1700 },
-          { name: '2024-08-02', performance: 1600 },
-          { name: '2024-08-03', performance: 1400 },
-          { name: '2024-08-04', performance: 1300 },
-          { name: '2024-08-05', performance: 1500 },
-          { name: '2024-08-06', performance: 1600 },
-          { name: '2024-08-07', performance: 1750 },
-          { name: '2024-08-08', performance: 1650 },
-          { name: '2024-08-09', performance: 1550 },
-          { name: '2024-08-10', performance: 1450 },
-          { name: '2024-08-11', performance: 1400 },
-          { name: '2024-08-12', performance: 1600 },
-          { name: '2024-08-13', performance: 1700 },
-          { name: '2024-08-14', performance: 1800 },
-          { name: '2024-08-15', performance: 1900 },
-          { name: '2024-08-16', performance: 2000 },
-          { name: '2024-08-17', performance: 2100 },
-          { name: '2024-08-18', performance: 2200 },
-          { name: '2024-08-19', performance: 2300 },
-          { name: '2024-08-20', performance: 2400 },
-          { name: '2024-08-21', performance: 2500 },
-          { name: '2024-08-22', performance: 2600 },
-          { name: '2024-08-23', performance: 2700 },
-          { name: '2024-08-24', performance: 2800 },
-          { name: '2024-08-25', performance: 2900 },
-          { name: '2024-08-26', performance: 3000 },
-          { name: '2024-08-27', performance: 3100 },
-          { name: '2024-08-28', performance: 3200 },
-          { name: '2024-08-29', performance: 3300 },
-          { name: '2024-08-30', performance: 3400 },
-          { name: '2024-08-31', performance: 3500 },
+          { name: '2024-07-30', interaction: 1200 },
+          { name: '2024-07-31', interaction: 1500 },
+          { name: '2024-08-01', interaction: 1700 },
+          { name: '2024-08-02', interaction: 1600 },
+          { name: '2024-08-03', interaction: 1400 },
+          { name: '2024-08-04', interaction: 1300 },
+          { name: '2024-08-05', interaction: 1500 },
+          { name: '2024-08-06', interaction: 1600 },
+          { name: '2024-08-07', interaction: 1750 },
+          { name: '2024-08-08', interaction: 1650 },
+          { name: '2024-08-09', interaction: 1550 },
+          { name: '2024-08-10', interaction: 1450 },
+          { name: '2024-08-11', interaction: 1400 },
+          { name: '2024-08-12', interaction: 1600 },
+          { name: '2024-08-13', interaction: 1700 },
+          { name: '2024-08-14', interaction: 1800 },
+          { name: '2024-08-15', interaction: 1900 },
+          { name: '2024-08-16', interaction: 2000 },
+          { name: '2024-08-17', interaction: 2100 },
+          { name: '2024-08-18', interaction: 2200 },
+          { name: '2024-08-19', interaction: 2300 },
+          { name: '2024-08-20', interaction: 2400 },
+          { name: '2024-08-21', interaction: 2500 },
+          { name: '2024-08-22', interaction: 2600 },
+          { name: '2024-08-23', interaction: 2700 },
+          { name: '2024-08-24', interaction: 2800 },
+          { name: '2024-08-25', interaction: 2900 },
+          { name: '2024-08-26', interaction: 3000 },
+          { name: '2024-08-27', interaction: 3100 },
+          { name: '2024-08-28', interaction: 3200 },
+          { name: '2024-08-29', interaction: 3300 },
+          { name: '2024-08-30', interaction: 3400 },
+          { name: '2024-08-31', interaction: 3500 },
         ];
       case 'Last 1 Year':
         return [
-          { name: 'Jan', performance: 4000 },
-          { name: 'Feb', performance: 3000 },
-          { name: 'Mar', performance: 1000 },
-          { name: 'Apr', performance: 2780 },
-          { name: 'May', performance: 1890 },
-          { name: 'Jun', performance: 390 },
-          { name: 'Jul', performance: 3490 },
-          { name: 'Aug', performance: 2000 },
-          { name: 'Sep', performance: 2780 },
-          { name: 'Oct', performance: 890 },
-          { name: 'Nov', performance: 2390 },
-          { name: 'Dec', performance: 3490 },
+          { name: 'Jan', interaction: 4000 },
+          { name: 'Feb', interaction: 3000 },
+          { name: 'Mar', interaction: 1000 },
+          { name: 'Apr', interaction: 2780 },
+          { name: 'May', interaction: 1890 },
+          { name: 'Jun', interaction: 390 },
+          { name: 'Jul', interaction: 3490 },
+          { name: 'Aug', interaction: 2000 },
+          { name: 'Sep', interaction: 2780 },
+          { name: 'Oct', interaction: 890 },
+          { name: 'Nov', interaction: 2390 },
+          { name: 'Dec', interaction: 3490 },
         ];
       default:
         return [];
@@ -99,7 +106,7 @@ const Dashboard = ({ darkMode }) => {  // Add darkMode prop
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <StatisticsBox
           title="Total Users"
-          value="1,234"
+          value={statistics.totalUsers}
           darkMode={darkMode} // Pass darkMode to StatisticsBox if needed
         />
         <StatisticsBox
@@ -116,12 +123,12 @@ const Dashboard = ({ darkMode }) => {  // Add darkMode prop
         />
         <StatisticsBox
           title="Total Posts"
-          value="987"
+          value={statistics.totalPosts}
           darkMode={darkMode} // Pass darkMode to StatisticsBox if needed
         />
       </section>
 
-      {/* Performance Chart Section */}
+      {/* interaction Chart Section */}
       <section className={`flex flex-col rounded-3xl shadow-lg ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-[#EEEEEE]'} border p-10 mb-6`}> {/* Apply dark mode classes */}
         <h2 className="font-semibold text-[28px] leading-[1.2] tracking-[-0.015em] mb-1">Total Interactions</h2>
         <p className="mb-6 text-[14px] text-[#eeeeee]">Track number of interactions over time</p>
@@ -160,11 +167,11 @@ const Dashboard = ({ darkMode }) => {  // Add darkMode prop
       <section className={`flex flex-col rounded-3xl shadow-lg ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-[#EEEEEE]'} border p-10 mb-6`}> {/* Apply dark mode classes */}
         <h2 className="font-semibold text-[28px] leading-[1.2] tracking-[-0.015em] mb-1">Total Posts Distribution</h2>
         <p className="mb-6 text-[14px] text-[#eeeeee]">A pie chart showing the distribution of different categories. Each slice represents the proportion of total interactions attributed to that category.</p>
-        <CustomPieChart darkMode={darkMode} />
+        <CustomPieChart data={getCategoryCountsData()} darkMode={darkMode} />
         </section>
       <section className={`flex flex-col justify-self-center rounded-3xl shadow-lg ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-[#EEEEEE]'} border p-10`}> {/* Apply dark mode classes */}
         <h2 className="font-semibold text-[28px] leading-[1.2] tracking-[-0.015em] mb-1">Profile Searching</h2>
-        <p className="mb-6 text-[14px] text-[#eeeeee]">A bar chart displaying the performance metrics for each month over the past year. Each bar represents the total performance for that month.</p>
+        <p className="mb-6 text-[14px] text-[#eeeeee]">A bar chart displaying the interaction metrics for each month over the past year. Each bar represents the total interaction for that month.</p>
         <div className='flex mx-auto'>
         <CustomBarChart data={getDataForTimeRange('Last 1 Year')} darkMode={darkMode} />
         </div>
