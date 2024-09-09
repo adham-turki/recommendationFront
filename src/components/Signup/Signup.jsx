@@ -1,51 +1,15 @@
-import { useState } from 'react'; // Import useState for managing loading and error state
+// Signup.jsx
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for programmatic navigation
+import { useState } from 'react';
 import backgroundImage from '../../assets/signup.jpeg'; // Import background image
 import './Signup.css'; // Import CSS for styling
 
 const Signup = () => {
-  // State for handling loading and error
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const navigate = useNavigate(); // Initialize useNavigate
 
-  // Handle Google Signup
-  const handleGoogleSignup = async () => {
-    await handleThirdPartySignup('Google');
-  };
-
-  // Handle GitHub Signup
-  const handleGithubSignup = async () => {
-    await handleThirdPartySignup('GitHub');
-  };
-
-  // Generalized function for handling third-party signup
-  const handleThirdPartySignup = async (provider) => {
-    setLoading(true); // Set loading state to true while submitting
-    setError(''); // Clear any existing errors
-
-    try {
-      // Mocked request payload, adjust as needed
-      const payload = { thirdParty: provider };
-
-      // Make POST request to backend API for signup
-      const response = await fetch('/register3p', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        // If signup is successful, redirect to login page
-        window.location.href = '/home';
-      } else {
-        // Handle different error responses from the backend
-        const data = await response.json();
-        setError(data.message || 'Failed to sign up. Please try again.');
-      }
-    } catch (err) {
-      setError('An error occurred. Please try again.');
-    } finally {
-      setLoading(false); // Set loading state to false after submission
-    }
+  // Handle successful signup
+  const handleSignupSuccess = () => {
+    navigate('/interests'); // Redirect to Interest page
   };
 
   return (
@@ -64,32 +28,27 @@ const Signup = () => {
           <div className="p-2">
             {/* Logo image or SVG can be added here */}
           </div>
-          <h2 className="text-5xl text-[#fff] mb-5">MATCHIFY</h2>
+          <h2 className="txt text-5xl text-[#fff] mb-5">MATCHIFY</h2>
         </div>
-
-        {/* Error Message */}
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
         {/* Signup Buttons */}
         <button
           type="button"
-          className="button type1 mb-5"
-          onClick={handleGoogleSignup}
-          disabled={loading}
+          className="button type4 mb-5"
+          onClick={handleSignupSuccess} // Trigger navigation on click
         >
         </button>
         <button
           type="button"
-          className="button type2"
-          onClick={handleGithubSignup}
-          disabled={loading}
+          className="button type5"
+          onClick={handleSignupSuccess} // Trigger navigation on click
         >
         </button>
 
         {/* Login Link */}
-        <p className="text-sm text-[#fff] type3 mt-4">
+        <p className="txt text-sm text-[#fff] type6 mt-4">
           Already have an account?{' '}
-          <a href="/login" className="text-[#fff] font-bold hover:underline">
+          <a href="/login" className="txt text-[#fff] font-bold hover:underline">
             Log in
           </a>
         </p>
