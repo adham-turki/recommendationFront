@@ -10,7 +10,7 @@ const CustomLineChart = ({ data, darkMode }) => {
         <YAxis stroke={darkMode ? '#ddd' : '#333'} />
         <Tooltip contentStyle={{ backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#000' }} />
         <Legend />
-        <Line type="monotone" dataKey="performance" stroke={darkMode ? '#82ca9d' : '#A18249'} activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="interaction" stroke={darkMode ? '#82ca9d' : '#A18249'} activeDot={{ r: 8 }} />
       </LineChart>
     </ResponsiveContainer>
   );
@@ -21,7 +21,7 @@ CustomLineChart.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-      performance: PropTypes.number.isRequired,
+      interaction: PropTypes.number.isRequired,
     })
   ).isRequired,
   darkMode: PropTypes.bool.isRequired, // Add darkMode prop

@@ -12,12 +12,12 @@ import Search from './pages/Search';
 import ProfilePage from './pages/ProfilePage';
 import SavedItemsPage from './pages/SavedItemsPage';
 import AdminPage from './pages/AdminPage';
-import { useState } from 'react';
 
 const App = () => {
 
   return (
     <Router>
+
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Signup />} />
@@ -26,7 +26,6 @@ const App = () => {
         <Route path="/skills" element={<ChooseSkills />} />
         <Route path="/extension-guide" element={<ExtensionGuidePage />} />
         <Route path="/home" element={<Homepage />} />
-
         {/* Authenticated routes */}
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/saved-items" element={<SavedItemsPage />} />
