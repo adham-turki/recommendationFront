@@ -9,8 +9,9 @@ import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
 
 
-const ContentPage = ({ darkMode }) => { 
+const ContentPage = () => { 
   const [activeComponent, setActiveComponent] = useState('dashboard'); // Default to Dashboard
+  const [darkMode, setDarkMode] = useState(false);
 
   const renderComponent = () => {
     switch (activeComponent) {
@@ -30,7 +31,7 @@ const ContentPage = ({ darkMode }) => {
   return (
     <div>
 <div className={`flex flex-1 ${darkMode ? 'dark' : ''} bg-gray-100 dark:bg-gray-900`}>
-      <Header/> 
+      <Header darkmode={darkMode} setDarkMode={setDarkMode} /> 
       <div className="flex flex-1 mt-20">
         <Sidebar onNavClick={setActiveComponent} darkMode={darkMode} />
         <main className="flex-1 overflow-auto"> {/* Ensures content can scroll */}

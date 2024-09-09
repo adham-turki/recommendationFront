@@ -21,24 +21,49 @@ const Users = ({ darkMode }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState(null);
+  const [error, setError] = useState(null); // State to handle errors
+
   const usersPerPage = 5;
-  async function fetchData() {
-    const res = await fetch("http://192.168.1.123:2505/users");
-    setUsers( await res.json());
-  }
+  
 
+  
   useEffect(() => {
-    if(users === null){
-
-      fetchData(); 
+    async function fetchData() {
+      try {
+        const res = await fetch("http://192.168.1.123:2505/users");
+        if (!res.ok) {
+          throw new Error('Failed to fetch users');
+        }
+        const data = await res.json();
+        setUsers(data);
+      } catch (err) {
+        setError(err.message); // Set the error message in case of failure
+      }
     }
+
+    fetchData();
+    console.log(users)
   }, []);
 
-   
-  console.log(users)
+  // If error occurs, display error message
+  if (error) {
+    return (
+      <div className={`layout-content-container flex flex-col max-w-[1960px] flex-1 ${darkMode ? 'bg-gray-900 text-white' : 'text-black'}`}>
+        <p className="text-red-500 p-4">Error: {error}</p>
+      </div>
+    );
+  }
+
+  if (!users) {
+    return (
+      <div className={`layout-content-container flex flex-col max-w-[1960px] flex-1 ${darkMode ? 'bg-gray-900 text-white' : 'text-black'}`}>
+        <p className="p-4">Loading users...</p>
+      </div>
+    );
+  }
 
   // Filter users based on search term
-  const filteredUsers = initialUsers.filter(user =>
+  const filteredUsers = users.filter(user =>
     user.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -82,7 +107,7 @@ const Users = ({ darkMode }) => {
               <thead>
                 <tr className={darkMode ? 'bg-gray-700 text-white' : 'bg-white'}>
                   <th className="px-4 py-3 text-left w-[400px] text-sm font-medium leading-normal">Profile</th>
-                  <th className="px-4 py-3 text-left w-[400px] text-sm font-medium leading-normal">Name`</th>
+                  <th className="px-4 py-3 text-left w-[400px] text-sm font-medium leading-normal">Name</th>
                   <th className="px-4 py-3 text-left w-[400px] text-sm font-medium leading-normal">Email</th>
                   <th className="px-4 py-3 text-left w-[400px] text-sm font-medium leading-normal">Phone</th>
                   <th className="px-4 py-3 text-left w-[400px] text-sm font-medium leading-normal">Likes</th>
@@ -114,30 +139,31 @@ const Users = ({ darkMode }) => {
             </table>
           </div>
           {/* Pagination Controls */}
-      <div className="px-4 py-3 flex justify-between items-center">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className={`px-4 py-2 rounded-md text-sm font-medium ${darkMode ? 'bg-gray-700 text-gray-100' : 'bg-[#dbd7d7] text-black'} ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          Previous
-        </button>
-        <span className="text-sm font-medium">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className={`px-4 py-2 rounded-md text-sm font-medium ${darkMode ? 'bg-gray-700 text-gray-100' : 'bg-[#dbd7d7] text-black'} ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          Next
-        </button>
-      </div>
+          <div className="px-4 py-3 flex justify-between items-center">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 rounded-md text-sm font-medium ${darkMode ? 'bg-gray-700 text-gray-100' : 'bg-[#dbd7d7] text-black'} ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              Previous
+            </button>
+            <span className="text-sm font-medium">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`px-4 py-2 rounded-md text-sm font-medium ${darkMode ? 'bg-gray-700 text-gray-100' : 'bg-[#dbd7d7] text-black'} ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
+
 Users.propTypes = {
   darkMode: PropTypes.bool.isRequired,
 };

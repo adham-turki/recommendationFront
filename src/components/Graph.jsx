@@ -107,6 +107,21 @@ const ForceDirectedGraph = ({ darkMode }) => {
         .on('click', (event, d) => {
           setSelectedNodeData(d);  // Set clicked node data
           setDraggedNodeData(null);  // Clear dragged data when clicking
+           // Create a ripple effect
+  const ripple = svgContainer.append('circle')
+  .attr('cx', d.x)
+  .attr('cy', d.y)
+  .attr('r', 0)  // Start with a small radius
+  .style('fill', 'none')
+  .style('stroke', '#007BFF')  
+  .style('stroke-width', 3)
+  .style('opacity', 0.8);
+
+ripple.transition()
+  .duration(1000)  // Duration of the ripple effect
+  .attr('r', 80)  // Final size of the ripple
+  .style('opacity', 0)  // Fade out
+  .remove();  // Remove the ripple after the animation completes
         });
 
       simulation.on('tick', () => {

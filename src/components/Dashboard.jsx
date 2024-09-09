@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomLineChart from './LineChart.jsx';
 import CustomPieChart from './PieChart.jsx';
 import CustomBarChart from './BarChart.jsx';
@@ -7,20 +7,27 @@ import PropTypes from 'prop-types';
 
 const Dashboard = ({ darkMode }) => {  // Add darkMode prop
   const [timeRange, setTimeRange] = useState('Last 30 Days'); // Default time range
+  const [statistics, setStatistics] = useState([]);
 
 
-  // // Mock data for different time ranges
-  // let data =await fetch('http://192.168.1.136:8089/contents/1')
-  // .then(async (response) => {
-  //   console.log(await response.json())
-
-  //   // return response.json();
-  // })
-  // .catch((err) => {
-  //   console.log(err);
-    
-  // })
-  // console.log(data)
+  useEffect(() => {
+    async function fetchData() {
+      const res = await fetch(`${import.meta.env.VITE_API}/statistics`);
+      const data = await res.json();
+      setStatistics(data);
+    }
+    fetchData();
+    console.log(statistics)
+  }, []);
+   // Transform categoryCounts into an array of objects with name and value properties
+   const getCategoryCountsData = () => {
+    if (!statistics.categoryCounts) return [];
+    return Object.entries(statistics.categoryCounts).map(([name, value]) => ({
+      name,
+      value
+    }));
+  };
+  
   const getDataForTimeRange = (range) => {
     switch (range) {
       case 'Last Week':
@@ -99,7 +106,7 @@ const Dashboard = ({ darkMode }) => {  // Add darkMode prop
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <StatisticsBox
           title="Total Users"
-          value="1,234"
+          value={statistics.totalUsers}
           darkMode={darkMode} // Pass darkMode to StatisticsBox if needed
         />
         <StatisticsBox
@@ -116,7 +123,7 @@ const Dashboard = ({ darkMode }) => {  // Add darkMode prop
         />
         <StatisticsBox
           title="Total Posts"
-          value="987"
+          value={statistics.totalPosts}
           darkMode={darkMode} // Pass darkMode to StatisticsBox if needed
         />
       </section>
@@ -160,7 +167,7 @@ const Dashboard = ({ darkMode }) => {  // Add darkMode prop
       <section className={`flex flex-col rounded-3xl shadow-lg ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-[#EEEEEE]'} border p-10 mb-6`}> {/* Apply dark mode classes */}
         <h2 className="font-semibold text-[28px] leading-[1.2] tracking-[-0.015em] mb-1">Total Posts Distribution</h2>
         <p className="mb-6 text-[14px] text-[#eeeeee]">A pie chart showing the distribution of different categories. Each slice represents the proportion of total interactions attributed to that category.</p>
-        <CustomPieChart darkMode={darkMode} />
+        <CustomPieChart data={getCategoryCountsData()} darkMode={darkMode} />
         </section>
       <section className={`flex flex-col justify-self-center rounded-3xl shadow-lg ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-[#EEEEEE]'} border p-10`}> {/* Apply dark mode classes */}
         <h2 className="font-semibold text-[28px] leading-[1.2] tracking-[-0.015em] mb-1">Profile Searching</h2>
