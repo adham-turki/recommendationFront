@@ -105,8 +105,14 @@ const Login = () => {
 
   // Handler for third-party login
   const handleLogin = (provider) => {
-    // Redirect to home page based on provider
-    window.location.href = '/home';
+    if(provider == "google"){
+
+      window.location.href = 'http://localhost:2505/oauth2/authorization/google';
+    }else{
+
+      window.location.href = 'http://localhost:2505/oauth2/authorization/github';
+    }
+    
   };
 
   return (
