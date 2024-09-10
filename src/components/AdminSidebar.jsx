@@ -4,7 +4,15 @@ import PropTypes from 'prop-types';
 const Sidebar = ({ onNavClick, darkMode }) => {
   const [activeItem, setActiveItem] = useState('dashboard');
   const [data, setData] = useState([]);
-  
+  useEffect(()=>{
+    async function fetchUserData(){
+      const response = await fetch(`${import.meta.env.VITE_API}/profile`);
+      const userData = await response.json();
+      setData(userData);
+    }
+    fetchUserData();
+    console.log(data)
+  },[])
 
   const handleNavClick = (item) => {
     setActiveItem(item);
@@ -26,7 +34,7 @@ const Sidebar = ({ onNavClick, darkMode }) => {
               }}
             />
             <div className="flex flex-col">
-              <h1 className="text-base font-medium leading-normal">{data.firstname}</h1>
+              <h1 className="text-base font-medium leading-normal">{data.firstName}</h1>
               <p className="text-sm font-normal leading-normal">Admin</p>
             </div>
           </div>

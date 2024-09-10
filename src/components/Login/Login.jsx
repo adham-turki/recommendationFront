@@ -107,7 +107,7 @@ const Login = () => {
   const handleLogin = (provider) => {
     if(provider == "google"){
 
-      window.location.href = 'http://localhost:2505/oauth2/authorization/google';
+      window.location.href = 'http://192.168.1.123:2505/oauth2/authorization/google';
     }else{
 
       window.location.href = 'http://localhost:2505/oauth2/authorization/github';

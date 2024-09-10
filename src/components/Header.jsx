@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { BsX, BsList } from "react-icons/bs";
 import matchifyLogo from "../assets/matchify_logo.png";
-
+import {Link} from "react-router-dom"
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeButton, setActiveButton] = useState(""); // Start with no active button
@@ -77,8 +77,9 @@ const Header = () => {
           >
             Home
           </a>
-          <a
-            href="/my-feed"
+          <Link
+              to="/my-feed"
+            
             onClick={() => handleButtonClick("Feeds")}
             className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Feeds"
@@ -87,7 +88,7 @@ const Header = () => {
             }`}
           >
             Feeds
-          </a>
+          </Link>
           <a
             href="/search"
             onClick={() => handleButtonClick("Users")}
@@ -205,8 +206,8 @@ const Header = () => {
             >
               Home
             </a>
-            <a
-              href="/my-feed"
+            <Link
+              to="/my-feed"
               onClick={() => handleButtonClick("Feeds")}
               className={`text-lg font-medium ${
                 activeButton === "Feeds"
@@ -215,7 +216,7 @@ const Header = () => {
               } py-2 px-4 rounded-lg`}
             >
               Feeds
-            </a>
+            </Link>
             <a
               href="/search"
               onClick={() => handleButtonClick("Users")}
