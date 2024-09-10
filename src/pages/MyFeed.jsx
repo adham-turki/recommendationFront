@@ -4,6 +4,7 @@ import Header from "../components/Header";
 // npm install @mui/material @emotion/react @emotion/styled
 import RandomPosts from "../components/RandomPosts";
 import Footer from "../components/Footer";
+import Recommendations from "../components/Recommendations";
 
 const MyFeed = () => {
   return (
@@ -21,7 +22,7 @@ const MyFeed = () => {
           <div className="px-40 flex flex-1 justify-center ">
             <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
               
-              <RandomPosts />
+              <Recommendations />
             </div>
           </div>
         </div>
