@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { useNavigate } from 'react-router-dom';
 import InterestTile from './InterestTile';
 import Button from './Button';
 import ParticleBackground from './ParticleBackground';
@@ -11,9 +11,10 @@ const interests = [
 
 const ChooseInterest = () => {
   const [selectedInterests, setSelectedInterests] = useState([]);
+  const [error, setError] = useState('');
   const containerRef = useRef(null);
   const [lines, setLines] = useState([]);
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
 
   const handleSelect = (interest) => {
     setSelectedInterests((prev) =>
@@ -25,9 +26,9 @@ const ChooseInterest = () => {
 
   const handleContinue = () => {
     if (selectedInterests.length >= 5) {
-      navigate('/skills'); // Navigate to ChooseSkills page
+      navigate('/skills');
     } else {
-      alert('Please select at least 5 interests.'); // Show error message
+      setError('Please select at least 5 interests.');
     }
   };
 
@@ -68,10 +69,11 @@ const ChooseInterest = () => {
 
   return (
     <div className="relative min-h-screen flex flex-col justify-between bg-[#e6e2eb] overflow-hidden">
-      <div className="relative flex flex-col items-center justify-center flex-grow z-10 mt-24">
+      <div className="relative flex flex-col items-center justify-center flex-grow z-10 mt-10 md:mt-5 px-4 md:px-8 lg:px-16">
         <ParticleBackground className="absolute inset-0 z-0" />
-        <h1 className="text-4xl font-bold text-[#352872] mb-8 z-10">Choose Your Interests</h1>
-        <div ref={containerRef} className="relative flex flex-wrap gap-6 justify-center z-10 max-w-5xl mx-auto">
+        <h1 className="text-3xl md:text-5xl font-bold text-[#352872] mb-3 md:mb-5 z-10">Choose Your Interests</h1>
+        {error && <p className="text-red-600 mb-4 text-sm md:text-base">{error}</p>}
+        <div ref={containerRef} className="relative flex flex-wrap gap-4 sm:gap-6 md:gap-8 justify-center z-10 max-w-4xl sm:max-w-5xl mx-auto">
           <svg className="absolute inset-0 w-full h-full z-0" viewBox="0 0 1000 1000">
             {lines.map((line, index) => (
               <line
@@ -96,8 +98,13 @@ const ChooseInterest = () => {
             />
           ))}
         </div>
-        <div className="flex gap-4 mt-8 z-10">
-          <Button label="Continue" onClick={handleContinue} />
+        <div className="flex flex-col sm:flex-row gap-4 m-6 md:m-8 z-10">
+          <Button
+            label="Continue"
+            onClick={handleContinue}
+            style={{ backgroundColor: selectedInterests.length >= 5 ? '#352872' : '#d1d1d1' }}
+            className="w-full sm:w-auto"
+          />
         </div>
       </div>
     </div>
