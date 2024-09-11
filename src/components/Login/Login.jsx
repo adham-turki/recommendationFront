@@ -30,7 +30,6 @@ const Login = () => {
           onClick={() => handleLogin('google')}
         >
         </button>
-
         {/* GitHub Login Button */}
         <button 
           type="button" 
