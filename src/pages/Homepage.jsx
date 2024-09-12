@@ -7,8 +7,13 @@ import ServicesSection from "../components/ServicesSection";
 import { useState, useEffect, useRef } from "react";
 import { BsMoonFill, BsSunFill, BsSearch, BsX, BsList } from "react-icons/bs"; // Added BsList for hamburger menu
 import matchifyLogo from "../assets/matchify_logo1.png"; // Adjust the path according to your folder structure
+
+
+
+
 import matchifyLogowhite from "../assets/matchify_logo_white.png";
 import Topmovie2 from "../components/Topmovie2";
+
 
 const Header2 = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -445,9 +450,11 @@ const Homepage = () => {
         </div>
       </div>
 
+
       <div>
         <Footer />
       </div>
+
     </div>
   );
 };

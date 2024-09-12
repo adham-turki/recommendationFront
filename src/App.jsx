@@ -12,6 +12,11 @@ import ProfilePage from './pages/ProfilePage';
 import SavedItemsPage from './pages/SavedItemsPage';
 import AdminPage from './pages/AdminPage';
 
+import EditSkills from './components/EditSkills.jsx';
+
+import { useState } from 'react';
+
+
 const App = () => {
 
   return (
@@ -24,6 +29,7 @@ const App = () => {
         <Route path="/skills" element={<ChooseSkills />} />
         <Route path="/extension-guide" element={<ExtensionGuidePage />} />
         <Route path="/home" element={<Homepage />} />
+
         {/* Authenticated routes */}
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/saved-items" element={<SavedItemsPage />} />
@@ -31,6 +37,7 @@ const App = () => {
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/search" element={<Search />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/edit-skills" element={<EditSkills />} /> 
         {/* Add more routes here as needed */}
       </Routes>
     </Router>
