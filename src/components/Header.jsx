@@ -46,6 +46,7 @@ const Header = () => {
         style={{ fontFamily: "'Quicksand', sans-serif" }}
       >
         {/* Logo and Title */}
+
         <div className="flex items-center ">
           <img
             src={matchifyLogo}
@@ -64,7 +65,7 @@ const Header = () => {
           <a
             href="/home"
             onClick={() => handleButtonClick("Home")}
-            className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+            className={`no-underline !no-underline text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Home"
                 ? "bg-[#14044c] text-white"
                 : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
@@ -75,7 +76,7 @@ const Header = () => {
           <a
             href="/my-feed"
             onClick={() => handleButtonClick("Feeds")}
-            className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+            className={`no-underline !no-underline  text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Feeds"
                 ? "bg-[#14044c] text-white"
                 : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
@@ -86,7 +87,7 @@ const Header = () => {
           <a
             href="/search"
             onClick={() => handleButtonClick("Users")}
-            className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+            className={`no-underline !no-underline text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Users"
                 ? "bg-[#14044c] text-white"
                 : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
@@ -97,7 +98,7 @@ const Header = () => {
           <a
             href="/profile"
             onClick={() => handleButtonClick("Profile")}
-            className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+            className={`no-underline !no-underline text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Profile"
                 ? "bg-[#14044c] text-white"
                 : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
@@ -111,7 +112,7 @@ const Header = () => {
             <a
               href="/admin"
               onClick={() => handleButtonClick("Admin")}
-              className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
+              className={`no-underline !no-underline text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
                 activeButton === "Admin"
                   ? "bg-[#14044c] text-white"
                   : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
@@ -137,7 +138,7 @@ const Header = () => {
                   <li>
                     <a
                       href="/history"
-                      className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      className="block px-4 py-2 hover:bg-gray-100 cursor-pointer no-underline !no-underline"
                     >
                       History
                     </a>
@@ -145,7 +146,7 @@ const Header = () => {
                   <li>
                     <a
                       href="/saved-items"
-                      className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      className="block px-4 py-2 hover:bg-gray-100 cursor-pointer no-underline !no-underline"
                     >
                       Saved Items
                     </a>
@@ -154,7 +155,7 @@ const Header = () => {
                   <li>
                     <a
                       href="#"
-                      className="block px-4 py-2 text-red-600 hover:bg-red-100 cursor-pointer font-semibold"
+                      className="block px-4 py-2 text-red-600 hover:bg-red-100 cursor-pointer font-semibold no-underline !no-underline"
                       onClick={handleLogout}
                     >
                       Logout
@@ -192,7 +193,7 @@ const Header = () => {
             <a
               href="/"
               onClick={() => handleButtonClick("Home")}
-              className={`text-lg font-medium ${
+              className={`no-underline !no-underline text-lg font-medium ${
                 activeButton === "Home"
                   ? "bg-[#14044c] text-white"
                   : "text-[#14044c]"
@@ -203,7 +204,7 @@ const Header = () => {
             <a
               href="/my-feed"
               onClick={() => handleButtonClick("Feeds")}
-              className={`text-lg font-medium ${
+              className={`no-underline !no-underline text-lg font-medium ${
                 activeButton === "Feeds"
                   ? "bg-[#14044c] text-white"
                   : "text-[#14044c]"
@@ -214,7 +215,7 @@ const Header = () => {
             <a
               href="/search"
               onClick={() => handleButtonClick("Users")}
-              className={`text-lg font-medium ${
+              className={`no-underline !no-underline text-lg font-medium ${
                 activeButton === "Users"
                   ? "bg-[#14044c] text-white"
                   : "text-[#14044c]"
@@ -225,7 +226,7 @@ const Header = () => {
             <a
               href="/profile"
               onClick={() => handleButtonClick("Profile")}
-              className={`text-lg font-medium ${
+              className={`no-underline !no-underline  text-lg font-medium ${
                 activeButton === "Profile"
                   ? "bg-[#14044c] text-white"
                   : "text-[#14044c]"
@@ -239,7 +240,7 @@ const Header = () => {
               <a
                 href="#"
                 onClick={() => handleButtonClick("Admin")}
-                className={`text-lg font-medium ${
+                className={`no-underline !no-underline text-lg font-medium ${
                   activeButton === "Admin"
                     ? "bg-[#14044c] text-white"
                     : "text-[#14044c]"

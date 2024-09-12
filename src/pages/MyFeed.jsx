@@ -27,7 +27,7 @@ const MyFeed = () => {
         </div>
       </div>
 
-      <Footer />
+     <Footer className="w-full bg-white border-t border-gray-200" />
     </div>
   );
 };

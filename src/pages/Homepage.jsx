@@ -8,7 +8,7 @@ import { useState , useEffect,useRef } from "react";
 import { BsMoonFill, BsSunFill, BsSearch, BsX, BsList } from "react-icons/bs"; // Added BsList for hamburger menu
 import matchifyLogo from "../assets/matchify_logo1.png"; // Adjust the path according to your folder structure
 import matchifyLogowhite from  "../assets/matchify_logo_white.png";
-
+import Footer from "../components/Footer";
 const Header2 = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeButton, setActiveButton] = useState(""); // Start with no active button
@@ -442,7 +442,7 @@ const Homepage = () => {
         </div>
       </div>
 
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };
