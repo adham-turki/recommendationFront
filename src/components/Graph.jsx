@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import GraphSidebar from './graphSidebar';
 import PropTypes from 'prop-types';
+import { ClipLoader } from 'react-spinners';
+
 
 
 const ForceDirectedGraph = ({ darkMode }) => {
@@ -197,6 +199,13 @@ ripple.transition()
     } catch (error) {
         console.error("Error fetching or parsing data:", error);
       }
+  }
+  if (!graph) {
+    return (
+      <div className={`layout-content-container flex flex-col min-h-screen items-center justify-center ${darkMode ? 'bg-gray-900 text-white' : 'text-black'}`}>
+        <ClipLoader speedMultiplier={0.7} color={darkMode ? "#ffffff" : "#000000"} loading={true} size={60} />
+      </div>
+    );
   }
   
   
