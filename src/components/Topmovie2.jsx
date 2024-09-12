@@ -3,7 +3,7 @@ import axios from "axios";
 import "../Card2animate.css"; // Make sure the CSS above is included in this file
 import Spinner from "./Spinner";
 import { LiaImdb } from "react-icons/lia";
-
+import { ImSpinner2 } from "react-icons/im";
 
 const Topmovie2 = () => {
   const [combinedData, setCombinedData] = useState([]);
@@ -63,8 +63,6 @@ const Topmovie2 = () => {
                     />
                     <div className="overlay rounded-xl">
                       <div className="text pt-5 px-5">
-                      
-
                         <h1 className="text-lg text-[#5342a9] font-semibold mb-2 text-center">
                           {item.content.title}
                         </h1>
@@ -91,14 +89,16 @@ const Topmovie2 = () => {
                             )
                           }
                         >
-                         go to IMDB
+                          go to IMDB
                         </button>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                <Spinner />
+                <div className="flex justify-center items-center h-64">
+                <ImSpinner2 className="w-14 h-14 text-[#5342a9] animate-spin" />
+              </div>
               )}
             </div>
           </div>
