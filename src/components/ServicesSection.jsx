@@ -1,5 +1,3 @@
-// ServicesSection.jsx
-
 import ServiceCard from "./ServiceCard";
 import { FaUserFriends, FaSearch, FaStar } from "react-icons/fa"; // Importing icons
 
@@ -26,11 +24,11 @@ const ServicesSection = () => {
   ];
 
   return (
-    <div className="py-10 min-h-[480px]">
-      <h2 className="text-center text-4xl font-bebas-neue  font-bold text-[#14044C] mb-8">
+    <div className="py-10 min-h-[480px] sm:min-h-[480px] px-4 sm:px-6 lg:px-8 ">
+      <h2 className="text-center text-3xl sm:text-4xl font-bebas-neue font-bold text-[#14044C] mb-6 sm:mb-8">
         Our Services
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
         {services.map((service, index) => (
           <ServiceCard
             key={index}

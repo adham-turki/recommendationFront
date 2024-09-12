@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 const Sidebar = ({ onNavClick, darkMode }) => {
   const [activeItem, setActiveItem] = useState('dashboard');
+  const [data, setData] = useState([]);
+  
 
   const handleNavClick = (item) => {
     setActiveItem(item);
@@ -20,11 +22,11 @@ const Sidebar = ({ onNavClick, darkMode }) => {
             <div
               className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
               style={{
-                backgroundImage: 'url("https://cdn.usegalileo.ai/stability/90e338a6-2c0e-44ba-81c4-acb4b89c363b.png")'
+                backgroundImage: `url("${data.profilePicture}")`
               }}
             />
             <div className="flex flex-col">
-              <h1 className="text-base font-medium leading-normal">Alex</h1>
+              <h1 className="text-base font-medium leading-normal">{data.firstname}</h1>
               <p className="text-sm font-normal leading-normal">Admin</p>
             </div>
           </div>

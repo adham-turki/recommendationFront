@@ -13,6 +13,7 @@ const ForceDirectedGraph = ({ darkMode }) => {
   const [draggedNodeData, setDraggedNodeData] = useState(null);
   const [selectedNodeData, setSelectedNodeData] = useState(null);
   const [graph, setGraph] = useState(null);
+  const [userData, setUserData] = useState(null);
 
  
   fetchData();
@@ -25,7 +26,6 @@ const ForceDirectedGraph = ({ darkMode }) => {
    
     
 
-      console.log(graph)
    
     d3.json("../graph.json").then(() => {
       const links = graph.links.map((d) => ({ ...d }));
@@ -105,7 +105,11 @@ const ForceDirectedGraph = ({ darkMode }) => {
         .on('drag', dragged)
         .on('end', dragended))
         .on('click', (event, d) => {
-          setSelectedNodeData(d);  // Set clicked node data
+          setSelectedNodeData(d);
+          console.log(d);
+          if(d.group == "Users"){
+            fetchUserData(d.userId);
+          }  
           setDraggedNodeData(null);  // Clear dragged data when clicking
            // Create a ripple effect
   const ripple = svgContainer.append('circle')
@@ -145,6 +149,9 @@ ripple.transition()
         event.subject.fx = event.x;
         event.subject.fy = event.y;
         setDraggedNodeData(event.subject);
+        if(event.subject.group == "Users"){
+          fetchUserData(event.subject.userId);
+        } 
         setSelectedNodeData(null);  // Clear selected data when dragging
       }
 
@@ -182,6 +189,15 @@ ripple.transition()
       }
     }
   }
+  async function fetchUserData(userId){
+    try {
+    const res  = await fetch(import.meta.env.VITE_API+"/user/"+userId);
+    const data = await res.json();
+    setUserData(data);
+    } catch (error) {
+        console.error("Error fetching or parsing data:", error);
+      }
+  }
   
   
   return (
@@ -192,9 +208,10 @@ ripple.transition()
         </div>
 
        {/* Display dragged node data */}
-       {draggedNodeData && (
-  <div className={`fixed bottom-80 top-20 right-72 2xl:right-1/4 w-80 p-6 shadow-lg border overflow-auto rounded-3xl mt-6
+{draggedNodeData && (
+  <div className={`fixed bottom-80 top-20 right-72 2xl:right-1/4 w-96 p-6 shadow-lg border overflow-auto rounded-3xl mt-6 
     ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-[#F8F9FA] border-[#E0E0E0]'}`}>
+
     {/* Profile Image and ID */}
     <div className="mb-4 flex flex-col items-center">
       {draggedNodeData.group === 'Users' && (
@@ -213,19 +230,57 @@ ripple.transition()
       )}
       <h3 className={`mt-4 text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>{draggedNodeData.id}</h3>
     </div>
-    <ul className={`mt-2 list-disc ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-      {Object.entries(draggedNodeData).slice(0, 2).map(([key, value]) => (
-        <li key={key} className="mb-1"><strong>{key}:</strong> {value.toString()}</li>
-      ))}
-    </ul>
+
+    {/* Display user data if available */}
+    {draggedNodeData.group === 'Users' && userData && (
+      <ul className={`mt-2 space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+        {Object.entries(userData)
+          .filter(([key]) => key !== 'user_id' && key !== 'profilePicture' && key !== 'role' && key !== 'firstName' && key !== 'lastName' && key !== 'interest') // Remove unnecessary fields
+          .map(([key, value]) => {
+            if (key === 'enabled') {
+              return (
+                <li key={key} className="mb-1 flex items-center space-x-2">
+                  <strong>Status:</strong>
+                  <span className={`font-semibold ${value ? 'text-green-600' : 'text-red-600'}`}>
+                    {value ? 'Active' : 'Inactive'}
+                  </span>
+                </li>
+              );
+            } else if (key === 'interests' && Array.isArray(value)) {
+              return (
+                <li key={key} className="mb-1">
+                  <strong>Interests:</strong>
+                  <ul className="mt-1 ml-5 list-disc space-y-1 ">
+                    {value.map((interest) =>
+                      Object.keys(interest).map((interestKey) => (
+                        <li key={interestKey} className="text-blue-500"> {interestKey}</li>
+                      ))
+                    )}
+                  </ul>
+                </li>
+              );
+            } else {
+              return (
+                
+                <li key={key} className="mb-1">
+                  <strong>{key}:</strong> {value!=null && value.toString()}
+                </li>
+              );
+            }
+          })}
+      </ul>
+    )}
+
     <button onClick={() => setDraggedNodeData(null)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors">✕</button>
   </div>
 )}
 
+
 {/* Display selected node data */}
 {selectedNodeData && (
-  <div className={`fixed bottom-80 top-20 right-72 2xl:right-1/4 w-80 p-6 shadow-lg border overflow-auto rounded-3xl mt-6
+  <div className={`fixed bottom-80 top-20 right-72 2xl:right-1/4 w-96 p-6 shadow-lg border overflow-auto rounded-3xl mt-6 
     ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-[#F8F9FA] border-[#E0E0E0]'}`}>
+    
     {/* Profile Image and ID */}
     <div className="mb-4 flex flex-col items-center">
       {selectedNodeData.group === 'Users' && (
@@ -238,20 +293,66 @@ ripple.transition()
       {selectedNodeData.group === 'Categories' && (
         <div className={`w-24 h-24 rounded-full flex items-center justify-center border-4 ${darkMode ? 'bg-blue-500 border-[#3b82f6]' : 'bg-[#1f77b4] border-[#007BFF]'}`}>
           <span className="text-4xl text-white">
-            {selectedNodeData.id.charAt(0).toUpperCase()}
+            {selectedNodeData.id?.charAt(0).toUpperCase()}
           </span>
         </div>
       )}
       <h3 className={`mt-4 text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>{selectedNodeData.id}</h3>
     </div>
-    <ul className={`mt-2 list-disc ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-      {Object.entries(selectedNodeData).slice(1, 2).map(([key, value]) => (
-        <li key={key} className="mb-1"><strong>{key}:</strong> {value.toString()}</li>
-      ))}
+
+    {/* Display user data only if available */}
+    {selectedNodeData.group === 'Users' && userData && (
+      <ul className={`mt-2 space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+      {Object.entries(userData)
+        .filter(([key, value]) => key !== 'user_id' && key !== 'profilePicture'&& key !== 'role'&& key !== 'firstName'&& key !== 'lastName'&& key !== 'interest') // Remove duplicate interest
+        .map(([key, value]) => {
+          if (key === 'enabled') {
+            // Handling "enabled" to show Active/Inactive with color
+            return (
+              <li key={key} className="mb-1 flex items-center space-x-2">
+                <strong>Status:</strong>
+                <span
+                  className={`font-semibold ${
+                    value ? 'text-green-600' : 'text-red-600'
+                  }`}
+                >
+                  {value ? 'Active' : 'Inactive'}
+                </span>
+              </li>
+            );
+          } else if (key === 'interests' && Array.isArray(value)) {
+            // Handling interests: Show only keys
+            return (
+              <li key={key} className="mb-1">
+                <strong>Interests:</strong>
+                <ul className="mt-1 ml-5 list-disc space-y-1">
+                  {value.map((interest, index) =>
+                    Object.keys(interest).map((interestKey) => (
+                      <li key={index} className="text-blue-500">{interestKey}</li>
+                    ))
+                  )}
+                </ul>
+              </li>
+            );
+          } else {
+            // Handling other fields, excluding nulls
+            return (
+              <li key={key} className="mb-1">
+                <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {value ? value.toString() : 'N/A'}
+              </li>
+            );
+          }
+        })}
     </ul>
+    
+    )}
+
+   
+
     <button onClick={() => setSelectedNodeData(null)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors">✕</button>
   </div>
 )}
+
 
 
 

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const ExtensionGuidePage = () => {
   const navigate = useNavigate(); // Initialize navigate
-  const downloadFileUrl = "https://drive.google.com/file/d/17ZA1lqivFySzwQLb0pFzOGiW6FMc42bm/view?usp=sharing"; // Replace with your actual file URL
+  const downloadFileUrl = "https://drive.google.com/file/d/1dLkNh9VcWBYwnX2nKPxK-JlWe98CNC2v/view?usp=sharing"; // Replace with your actual file URL
 
   return (
     <div className="min-h-screen bg-[#e6e2eb] flex flex-col">

@@ -418,6 +418,7 @@ const HistoryPage = () => {
                       filter === "dislike" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
                     } transition-all duration-300`}
                   >
+                    
                     <FaThumbsDown className={`text-lg ${filter === "dislike" ? "text-white" : "text-[#14044c]"}`} />
                     <span className="ml-2 text-lg">Dislike</span>
                   </div>
