@@ -16,7 +16,7 @@ const Users = ({ darkMode }) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch("http://localhost:2505/users");
+        const res = await fetch("https://rsserviceplan-rsapp.azuremicroservices.io/users");
         if (!res.ok) {
           throw new Error('Failed to fetch users');
         }
