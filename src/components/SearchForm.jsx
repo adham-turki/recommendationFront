@@ -1,16 +1,27 @@
 import { useState } from "react";
 import { AiOutlineShareAlt } from "react-icons/ai";
 import { MdOutlineImageNotSupported } from "react-icons/md";
-import { ImSpinner2 } from "react-icons/im"; 
+import { ImSpinner2 } from "react-icons/im";
+import {
+  AiFillLike,
+  AiOutlineLike,
+  AiFillDislike,
+  AiOutlineDislike,
+  AiFillSave,
+  AiOutlineSave,
+} from "react-icons/ai";
+import Tooltip from "@mui/material/Tooltip";
 
 const SearchForm = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [likes, setLikes] = useState([]);
+  const [dislikes, setDislikes] = useState([]);
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    setLoading(true); 
+    setLoading(true);
 
     try {
       const response = await fetch(`http://192.168.1.136:5001/search/${query}`);
@@ -25,13 +36,121 @@ const SearchForm = () => {
     } catch (error) {
       console.error("Error parsing or fetching data:", error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   const handleClearResults = () => {
     setResults([]); // clear search results
     setQuery(""); // clear search bar
+  };
+
+  const handleSave = async (movie) => {
+    try {
+      const response = await fetch(
+        "http://192.168.1.136:8089/interactions", //change to right api
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(movie),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to save the movie");
+      }
+      const data = await response.json();
+      console.log("Movie saved successfully:", data);
+      alert("Movie saved successfully!");
+    } catch (error) {
+      console.error("Error saving movie:", error);
+      alert("Failed to save the movie.");
+    }
+  };
+
+  const handleShareClick = (url) => {
+    navigator.clipboard.writeText(url).then(
+      () => {
+        alert("Link copied to clipboard!");
+      },
+      (err) => {
+        console.error("Failed to copy the link: ", err);
+      }
+    );
+
+    window.open(url, "_blank");
+  };
+
+  const toggleLike = (index) => {
+    // const content_id = recommendations[index].content_id;
+
+    setLikes((prevLikes) => {
+      const newLikes = [...prevLikes];
+      const newDislikes = [...dislikes];
+
+      if (newLikes[index]) {
+        newLikes[index] = false;
+      } else {
+        newLikes[index] = true;
+        newDislikes[index] = false;
+      }
+
+      if (newLikes[index]) {
+        // sendUserActionToBackend(content_id, "like");
+      } else {
+        // sendUserActionToBackend(content_id, "unlike");
+      }
+
+      setDislikes(newDislikes);
+      return newLikes;
+    });
+  };
+
+  const toggleDislike = (index) => {
+    // const content_id = recommendations[index].content_id; //uncomment when u connect
+
+    setDislikes((prevDislikes) => {
+      const newDislikes = [...prevDislikes];
+      const newLikes = [...likes];
+
+      if (newDislikes[index]) {
+        newDislikes[index] = false;
+        // sendUserActionToBackend(content_id, "dislike");  when u connect to backend uncomment
+      } else {
+        newDislikes[index] = true;
+        newLikes[index] = false;
+      }
+
+      setLikes(newLikes);
+      return newDislikes;
+    });
+  };
+
+  const sendUserActionToBackend = async (
+    content_id,
+    action,
+    additionalData = {}
+  ) => {
+    try {
+      const interactionData = {
+        contentId: 1,
+        userId: 1,
+        interactionType: action,
+        ...additionalData,
+      };
+
+      await fetch(`http://192.168.1.136:8089/interactions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(interactionData),
+      });
+    } catch (error) {
+      console.error("Error sending data to backend:", error);
+    }
   };
 
   return (
@@ -113,18 +232,33 @@ const SearchForm = () => {
                 {/* middle part  */}
                 <div className="flex p-5 space-x-4 h-[300px]">
                   {/* image on left */}
-                  <div className="flex-shrink-0">
+                  <div className="flex-shrink-0 ">
                     {movie.Poster && movie.Poster !== "N/A" ? (
                       <img
                         src={movie.Poster}
                         alt={movie.title}
-                        className="w-24 h-32 object-cover rounded-lg shadow-md"
+                        className="w-24 h-32  object-cover rounded-lg shadow-md"
                       />
                     ) : (
                       <div className="w-24 h-32 bg-gray-200 flex items-center justify-center rounded-lg shadow-md">
                         <MdOutlineImageNotSupported />
                       </div>
                     )}
+
+                    <a
+                      href={
+                        movie.homepage && movie.homepage !== "N/A"
+                          ? movie.homepage
+                          : `https://www.imdb.com/find?q=${encodeURIComponent(
+                              movie.title
+                            )}`
+                      }
+                      className="text-[#5342a9]  hover:underline text-sm font-semibold"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Watch Movie
+                    </a>
                   </div>
 
                   {/* text on right */}
@@ -138,35 +272,58 @@ const SearchForm = () => {
                       <strong>Genres:</strong> {movie.genres}
                     </p>
                     <p className="text-sm text-gray-600 mb-2">
-                      <strong>IMDB Score:</strong> {movie["IMDB Score"] || "N/A"}
+                      <strong>IMDB Score:</strong>{" "}
+                      {movie["IMDB Score"] || "N/A"}
                     </p>
                   </div>
                 </div>
 
                 {/*  Buttons */}
                 <div className="bg-gray-50 border-t border-slate-200 py-3 px-4 flex justify-between items-center">
-               
-                  <a
-                    href={
-                      movie.homepage && movie.homepage !== "N/A"
-                        ? movie.homepage
-                        : `https://www.imdb.com/find?q=${encodeURIComponent(
-                            movie.title
-                          )}`
-                    }
-                    className="text-[#5342a9] hover:underline text-sm font-semibold"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Watch Movie
-                  </a>
+                  <Tooltip title="Like">
+                    <button
+                      onClick={() => toggleLike(index)}
+                      className="p-2 text-2xl text-[#352872] hover:text-blue-600"
+                    >
+                      {likes[index] ? (
+                        <AiFillLike className="text-blue-600" />
+                      ) : (
+                        <AiOutlineLike />
+                      )}
+                    </button>
+                  </Tooltip>
+                  <Tooltip title="Dislike">
+                    <button
+                      onClick={() => toggleDislike(index)}
+                      className="p-2 text-2xl text-[#352872] hover:text-red-600"
+                    >
+                      {dislikes[index] ? (
+                        <AiFillDislike className="text-red-600" />
+                      ) : (
+                        <AiOutlineDislike />
+                      )}
+                    </button>
+                  </Tooltip>
 
-              
                   <div className="flex space-x-2">
-                    <button className="text-white bg-[#352872] hover:bg-[#3f399c] text-sm px-4 py-2 rounded-lg shadow-sm">
+                    <button
+                      onClick={() => handleSave(movie)}
+                      className="text-white bg-[#352872] hover:bg-[#3f399c] text-sm px-4 py-2 rounded-lg shadow-sm"
+                    >
                       Save
                     </button>
-                    <button className="text-white bg-[#352872] hover:bg-[#3f399c] text-sm px-4 py-2 rounded-lg shadow-sm">
+                    <button
+                      onClick={() =>
+                        handleShareClick(
+                          movie.homepage && movie.homepage !== "N/A"
+                            ? movie.homepage
+                            : `https://www.imdb.com/find?q=${encodeURIComponent(
+                                movie.title
+                              )}`
+                        )
+                      }
+                      className="text-white bg-[#352872] hover:bg-[#3f399c] text-sm px-4 py-2 rounded-lg shadow-sm"
+                    >
                       <AiOutlineShareAlt />
                     </button>
                   </div>

@@ -8,7 +8,6 @@ import {
   AiOutlineSave,
   AiOutlineShareAlt,
 } from "react-icons/ai";
-import Spinner from "./Spinner";
 import Tooltip from "@mui/material/Tooltip";
 import { BiCameraMovie } from "react-icons/bi";
 import { TiSocialYoutubeCircular } from "react-icons/ti";
@@ -17,6 +16,8 @@ import LazyLoad from "react-lazyload";
 import { TbArticleOff } from "react-icons/tb";
 import Search from "../pages/Search";
 import SearchForm from "./SearchForm";
+import { ImSpinner2 } from "react-icons/im"; 
+
 
 const Recommendations = () => {
   const [recommendations, setRecommendations] = useState([]);
@@ -83,6 +84,20 @@ const Recommendations = () => {
     }
   }, [filterType, recommendations]);
 
+  useEffect(() => {
+    
+    const fetchShares = async () => {
+      try {
+        const response = await fetch('/api/getShares');//fix api
+        const data = await response.json();
+        setShares(data.shares);
+      } catch (error) {
+        console.error('Error fetching shares:', error);
+      }
+    };
+
+    fetchShares();
+  }, []);
   const handleImageClick = (image) => {
     setEnlargedImage(image);
   };
@@ -441,7 +456,9 @@ const Recommendations = () => {
             </div>
           ))
         ) : (
-          <Spinner />
+          <div className="flex justify-center items-center h-64">
+          <ImSpinner2 className="w-16 h-16 text-[#5342a9] animate-spin" />
+        </div>
         )}
 
         {/* make image bigger */}
