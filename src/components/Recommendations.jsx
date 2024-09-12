@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import {
   AiFillLike,
@@ -19,9 +20,24 @@ import SearchForm from "./SearchForm";
 import { ImSpinner2 } from "react-icons/im"; 
 
 
+
 const Recommendations = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [filteredRecommendations, setFilteredRecommendations] = useState([]);
+
+
+  useEffect(() => {
+    // Fetch data from the API
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://192.168.1.123:2505/recommendations',{
+                         credentials:'include'
+            });
+        const data = await response.json();
+        setRecommendations(data.recommendations);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+
   const [filterType, setFilterType] = useState("All");
   const [likes, setLikes] = useState([]);
   const [dislikes, setDislikes] = useState([]);
@@ -68,6 +84,7 @@ const Recommendations = () => {
         setFilteredRecommendations([movie], ...data.recommendations);
       } catch (error) {
         console.error("Error fetching data:", error);
+
       }
     };
 
@@ -75,6 +92,7 @@ const Recommendations = () => {
   }, []);
 
   useEffect(() => {
+
     if (filterType === "All") {
       setFilteredRecommendations(recommendations);
     } else {
@@ -481,6 +499,7 @@ const Recommendations = () => {
         )}
       </div>
     </LazyLoad>
+
   );
 };
 
