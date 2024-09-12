@@ -422,7 +422,7 @@ const PublicAPIPosts = () => {
                   </Tooltip>
                   <Tooltip title="Share">
                     <button
-                      onClick={() => handleShareClick(post, index)}
+                      onClick={() => handleShareClick(post.url, index)}
                       className="p-2 text-xl text-gray-600 hover:text-purple-600"
                     >
                       <AiOutlineShareAlt />

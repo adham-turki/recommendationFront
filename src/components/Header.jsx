@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { BsX, BsList } from "react-icons/bs";
 import matchifyLogo from "../assets/matchify_logo.png";
@@ -41,6 +42,7 @@ const Header = () => {
 
   return (
     <>
+
       <header
         className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between whitespace-nowrap px-10 py-4 bg-white border-gray-200 shadow-md`}
         style={{ fontFamily: "'Quicksand', sans-serif" }}
@@ -52,12 +54,14 @@ const Header = () => {
             src={matchifyLogo}
             alt="Matchify Logo"
             className="h-12 object-contain"
+
           />
           <h2
             className={`text-3xl font-bold leading-tight tracking-[-0.015em] text-[#14044c]`}
           >
             Matchify
           </h2>
+
         </div>
 
         {/* Navigation Links (Right aligned) */}
@@ -251,9 +255,11 @@ const Header = () => {
             )}
           </nav>
         </div>
+
       </div>
     </>
   );
 };
+
 
 export default Header;

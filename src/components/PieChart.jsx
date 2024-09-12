@@ -1,20 +1,9 @@
-// src/components/PieChart.jsx
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
-const data = [
-  { name: 'Category A', value: 400 },
-  { name: 'Category B', value: 150 },
-  { name: 'Category C', value: 300 },
-  { name: 'Category D', value: 200 },
-  { name: 'Category E', value: 100 },
-  { name: 'Category G', value: 300 }
-
-
-];
+import PropTypes from 'prop-types';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042','#9c6200','#9c9700'];
 
-const CustomPieChart = () => {
+const CustomPieChart = ({ data }) => {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <PieChart>
@@ -28,6 +17,15 @@ const CustomPieChart = () => {
       </PieChart>
     </ResponsiveContainer>
   );
+};
+
+CustomPieChart.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
+    })
+  ).isRequired,
 };
 
 export default CustomPieChart;

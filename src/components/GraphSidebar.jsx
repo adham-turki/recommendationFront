@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {  useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLayerGroup, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -6,6 +6,7 @@ import { faUser, faLayerGroup, faChevronDown, faChevronRight } from '@fortawesom
 const GraphSidebar = ({ blueNodes, orangeNodes, darkMode }) => {
   const [expandedSection, setExpandedSection] = useState(null);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
+  
 
   const handleToggleSection = (section) => {
     setExpandedSection(expandedSection === section ? null : section);

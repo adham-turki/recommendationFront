@@ -12,16 +12,24 @@ const ForceDirectedGraph = ({ darkMode }) => {
   const [orangeNodes, setOrangeNodes] = useState([]);
   const [draggedNodeData, setDraggedNodeData] = useState(null);
   const [selectedNodeData, setSelectedNodeData] = useState(null);
+  const [graph, setGraph] = useState(null);
+  const [userData, setUserData] = useState(null);
 
+ 
+  fetchData();
   useEffect(() => {
+
     const width = 928;
     const height = 890;
-
+    
     const color = d3.scaleOrdinal(d3.schemeCategory10);
+   
+    
 
-    d3.json('./graph.json').then((data) => {
-      const links = data.links.map((d) => ({ ...d }));
-      const nodes = data.nodes.map((d) => ({ ...d }));
+   
+    d3.json("../graph.json").then(() => {
+      const links = graph.links.map((d) => ({ ...d }));
+      const nodes = graph.nodes.map((d) => ({ ...d }));
 
       const blue = nodes.filter((d) => d.group === 'Categories');
       const orange = nodes.filter((d) => d.group === 'Users');
@@ -97,8 +105,27 @@ const ForceDirectedGraph = ({ darkMode }) => {
         .on('drag', dragged)
         .on('end', dragended))
         .on('click', (event, d) => {
-          setSelectedNodeData(d);  // Set clicked node data
+          setSelectedNodeData(d);
+          console.log(d);
+          if(d.group == "Users"){
+            fetchUserData(d.userId);
+          }  
           setDraggedNodeData(null);  // Clear dragged data when clicking
+           // Create a ripple effect
+  const ripple = svgContainer.append('circle')
+  .attr('cx', d.x)
+  .attr('cy', d.y)
+  .attr('r', 0)  // Start with a small radius
+  .style('fill', 'none')
+  .style('stroke', '#007BFF')  
+  .style('stroke-width', 3)
+  .style('opacity', 0.8);
+
+ripple.transition()
+  .duration(1000)  // Duration of the ripple effect
+  .attr('r', 80)  // Final size of the ripple
+  .style('opacity', 0)  // Fade out
+  .remove();  // Remove the ripple after the animation completes
         });
 
       simulation.on('tick', () => {
@@ -122,6 +149,9 @@ const ForceDirectedGraph = ({ darkMode }) => {
         event.subject.fx = event.x;
         event.subject.fy = event.y;
         setDraggedNodeData(event.subject);
+        if(event.subject.group == "Users"){
+          fetchUserData(event.subject.userId);
+        } 
         setSelectedNodeData(null);  // Clear selected data when dragging
       }
 
@@ -130,13 +160,46 @@ const ForceDirectedGraph = ({ darkMode }) => {
         event.subject.fx = null;
         event.subject.fy = null;
       }
+    }).catch((error) => {
+      console.error('Error fetching or parsing the JSON data:', error);
     });
-
     return () => {
       d3.select('#chart').selectAll('svg').remove();
     };
-  }, []);
-
+    
+  }, [graph]);
+  async function fetchData() {
+    if (graph == null) {
+      try {
+        const res = await fetch(import.meta.env.VITE_API+"/graph");
+  
+        // Check response status
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+  
+        const text = await res.text();  // Fetch as text to inspect content
+        console.log("Response text:", text);  // Log the raw response text
+  
+        // Try parsing as JSON
+        const data = JSON.parse(text);
+        setGraph(data);
+      } catch (error) {
+        console.error("Error fetching or parsing data:", error);
+      }
+    }
+  }
+  async function fetchUserData(userId){
+    try {
+    const res  = await fetch(import.meta.env.VITE_API+"/user/"+userId);
+    const data = await res.json();
+    setUserData(data);
+    } catch (error) {
+        console.error("Error fetching or parsing data:", error);
+      }
+  }
+  
+  
   return (
     <div className="flex h-full">
       <div className="w-full relative">
@@ -145,9 +208,10 @@ const ForceDirectedGraph = ({ darkMode }) => {
         </div>
 
        {/* Display dragged node data */}
-       {draggedNodeData && (
-  <div className={`fixed bottom-80 top-20 right-72 2xl:right-1/4 w-80 p-6 shadow-lg border overflow-auto rounded-3xl mt-6
+{draggedNodeData && (
+  <div className={`fixed bottom-80 top-20 right-72 2xl:right-1/4 w-96 p-6 shadow-lg border overflow-auto rounded-3xl mt-6 
     ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-[#F8F9FA] border-[#E0E0E0]'}`}>
+
     {/* Profile Image and ID */}
     <div className="mb-4 flex flex-col items-center">
       {draggedNodeData.group === 'Users' && (
@@ -166,19 +230,57 @@ const ForceDirectedGraph = ({ darkMode }) => {
       )}
       <h3 className={`mt-4 text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>{draggedNodeData.id}</h3>
     </div>
-    <ul className={`mt-2 list-disc ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-      {Object.entries(draggedNodeData).slice(0, 2).map(([key, value]) => (
-        <li key={key} className="mb-1"><strong>{key}:</strong> {value.toString()}</li>
-      ))}
-    </ul>
+
+    {/* Display user data if available */}
+    {draggedNodeData.group === 'Users' && userData && (
+      <ul className={`mt-2 space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+        {Object.entries(userData)
+          .filter(([key]) => key !== 'user_id' && key !== 'profilePicture' && key !== 'role' && key !== 'firstName' && key !== 'lastName' && key !== 'interest') // Remove unnecessary fields
+          .map(([key, value]) => {
+            if (key === 'enabled') {
+              return (
+                <li key={key} className="mb-1 flex items-center space-x-2">
+                  <strong>Status:</strong>
+                  <span className={`font-semibold ${value ? 'text-green-600' : 'text-red-600'}`}>
+                    {value ? 'Active' : 'Inactive'}
+                  </span>
+                </li>
+              );
+            } else if (key === 'interests' && Array.isArray(value)) {
+              return (
+                <li key={key} className="mb-1">
+                  <strong>Interests:</strong>
+                  <ul className="mt-1 ml-5 list-disc space-y-1 ">
+                    {value.map((interest) =>
+                      Object.keys(interest).map((interestKey) => (
+                        <li key={interestKey} className="text-blue-500"> {interestKey}</li>
+                      ))
+                    )}
+                  </ul>
+                </li>
+              );
+            } else {
+              return (
+                
+                <li key={key} className="mb-1">
+                  <strong>{key}:</strong> {value!=null && value.toString()}
+                </li>
+              );
+            }
+          })}
+      </ul>
+    )}
+
     <button onClick={() => setDraggedNodeData(null)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors">✕</button>
   </div>
 )}
 
+
 {/* Display selected node data */}
 {selectedNodeData && (
-  <div className={`fixed bottom-80 top-20 right-72 2xl:right-1/4 w-80 p-6 shadow-lg border overflow-auto rounded-3xl mt-6
+  <div className={`fixed bottom-80 top-20 right-72 2xl:right-1/4 w-96 p-6 shadow-lg border overflow-auto rounded-3xl mt-6 
     ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-[#F8F9FA] border-[#E0E0E0]'}`}>
+    
     {/* Profile Image and ID */}
     <div className="mb-4 flex flex-col items-center">
       {selectedNodeData.group === 'Users' && (
@@ -191,20 +293,66 @@ const ForceDirectedGraph = ({ darkMode }) => {
       {selectedNodeData.group === 'Categories' && (
         <div className={`w-24 h-24 rounded-full flex items-center justify-center border-4 ${darkMode ? 'bg-blue-500 border-[#3b82f6]' : 'bg-[#1f77b4] border-[#007BFF]'}`}>
           <span className="text-4xl text-white">
-            {selectedNodeData.id.charAt(0).toUpperCase()}
+            {selectedNodeData.id?.charAt(0).toUpperCase()}
           </span>
         </div>
       )}
       <h3 className={`mt-4 text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>{selectedNodeData.id}</h3>
     </div>
-    <ul className={`mt-2 list-disc ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-      {Object.entries(selectedNodeData).slice(1, 2).map(([key, value]) => (
-        <li key={key} className="mb-1"><strong>{key}:</strong> {value.toString()}</li>
-      ))}
+
+    {/* Display user data only if available */}
+    {selectedNodeData.group === 'Users' && userData && (
+      <ul className={`mt-2 space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+      {Object.entries(userData)
+        .filter(([key, value]) => key !== 'user_id' && key !== 'profilePicture'&& key !== 'role'&& key !== 'firstName'&& key !== 'lastName'&& key !== 'interest') // Remove duplicate interest
+        .map(([key, value]) => {
+          if (key === 'enabled') {
+            // Handling "enabled" to show Active/Inactive with color
+            return (
+              <li key={key} className="mb-1 flex items-center space-x-2">
+                <strong>Status:</strong>
+                <span
+                  className={`font-semibold ${
+                    value ? 'text-green-600' : 'text-red-600'
+                  }`}
+                >
+                  {value ? 'Active' : 'Inactive'}
+                </span>
+              </li>
+            );
+          } else if (key === 'interests' && Array.isArray(value)) {
+            // Handling interests: Show only keys
+            return (
+              <li key={key} className="mb-1">
+                <strong>Interests:</strong>
+                <ul className="mt-1 ml-5 list-disc space-y-1">
+                  {value.map((interest, index) =>
+                    Object.keys(interest).map((interestKey) => (
+                      <li key={index} className="text-blue-500">{interestKey}</li>
+                    ))
+                  )}
+                </ul>
+              </li>
+            );
+          } else {
+            // Handling other fields, excluding nulls
+            return (
+              <li key={key} className="mb-1">
+                <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {value ? value.toString() : 'N/A'}
+              </li>
+            );
+          }
+        })}
     </ul>
+    
+    )}
+
+   
+
     <button onClick={() => setSelectedNodeData(null)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors">✕</button>
   </div>
 )}
+
 
 
 

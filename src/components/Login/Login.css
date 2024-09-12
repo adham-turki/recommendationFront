@@ -24,6 +24,7 @@
   align-items: center;
   justify-content: center;
   font-family: 'Georgia', serif;
+  margin-bottom: 28px;
 }
 
 /* Button Hover Effect */
@@ -33,7 +34,7 @@
 
 /* Google Button Styles */
 .type1::after {
-  content: "Welcome";
+  content: "🔓Welcome";
   height: 50px;
   width: 250px;
   background-color: #fff;
@@ -51,7 +52,7 @@
 }
 
 .type1::before {
-  content: " Login with Google";
+  content: "🌐 Continue with Google";
   height: 50px;
   width: 250px;
   background-color: #fff;
@@ -78,7 +79,7 @@
 
 /* GitHub Button Styles */
 .type2::after {
-  content: "Welcome";
+  content: "🔓 Welcome";
   height: 50px;
   width: 250px;
   background-color: #fff;
@@ -96,7 +97,7 @@
 }
 
 .type2::before {
-  content: "Login with GitHub";
+  content: "🐙 Continue with GitHub";
   height: 50px;
   width: 250px;
   background-color: #fff;
@@ -121,11 +122,110 @@
   transform: translateY(-50px) scale(0) rotate(120deg);
 }
 
-/* Sign Up Link */
-a {
-  text-decoration: none;
-}
 
-a:hover {
-  text-decoration: underline;
+/* Responsive Styles */
+@media (max-width: 1921px ) and (min-width:1500px) {
+  .login-container {
+    background-image: url('../../assets/login.jpg'); 
+    background-size: cover;
+    background-position: center;
+  }
+  .mainDiv {
+    margin-left: 15%;
+  }
+  .txt {
+    font-size: 66px;
+    margin-bottom: 40px;
+  }
+  .button, .type1::after, .type1::before, .type2::after, .type2::before {
+    height: 55px;
+    width: 350px;
+    padding: 15px;
+    font-size: 20px;
+    margin-bottom: 25px;
+  }
+}
+@media (min-width: 992px) and (max-width: 1500px) {
+  .login-container {
+    background-image: url('../../assets/login.jpg');
+    background-size: cover;
+    background-position: center;
+    justify-content: flex-start;
+  }
+   .mainDiv {
+    margin-left: 10%;
+  }
+  .txt {
+    font-size: 45px;
+    margin-bottom: 25px;
+  }
+  .button, .type1::after, .type1::before, .type2::after, .type2::before {
+    height: 45px;
+    width: 270px;
+    padding: 20px;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+}
+@media (min-width: 768px) and (max-width: 992px)  {
+  .login-container {
+    background-image: url('../../assets/login.jpg');
+    background-size: cover;
+    background-position: center;
+    justify-content: flex-start;
+  }
+   .mainDiv {
+    margin-left: 10%;
+  }
+  .txt {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  .button, .type1::after, .type1::before, .type2::after, .type2::before {
+    height: 35px;
+    width: 230px;
+    padding: 20px;
+    font-size: 13px;
+    margin-bottom: 15px;
+  }
+}
+@media (min-width: 576px) and (max-width: 768px) {
+  .login-container {
+    background-image: url('../../assets/tsttt.png');
+    background-size: cover;
+    background-position: center;
+    justify-content: center;
+
+  }
+  .txt {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  .button, .type1::after, .type1::before, .type2::after, .type2::before {
+    height: 30px;
+    width: 200px;
+    padding: 20px;
+    font-size: 12px;
+    margin-bottom: 15px;
+  }
+}
+@media (max-width: 576px) {
+  .login-container {
+    background-image: url('../../assets/tsttt.png');
+    background-size: cover;
+    background-position: center;
+    justify-content: center;
+  }
+  .txt {
+    font-size: 30px; 
+    margin-bottom: 15px;
+  }
+
+  .button, .type1::after, .type1::before, .type2::after, .type2::before {
+    height: 30px;
+    width: 200px;
+    padding: 20px;
+    font-size: 12px; 
+    margin-bottom: 15px;
+  } 
 }

@@ -4,7 +4,8 @@
             "id": "Sport",
             "group": "Categories",
             "radius": 2,
-            "citing_patents_count": 2
+            "citing_patents_count": 2,
+            "img" : "null"
         },
         {
             "id": "Technology ",

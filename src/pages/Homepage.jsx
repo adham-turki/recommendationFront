@@ -1,24 +1,30 @@
 import "../App.css";
 import "../index.css";
-import NewspaperHeader from "../components/NewspaperHeader";
+import Footer from "../components/Footer";
 import YouTubeVideo from "../components/YouTubeVideo";
 import { useNavigate } from "react-router-dom";
 import ServicesSection from "../components/ServicesSection";
-import { useState , useEffect,useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { BsMoonFill, BsSunFill, BsSearch, BsX, BsList } from "react-icons/bs"; // Added BsList for hamburger menu
 import matchifyLogo from "../assets/matchify_logo1.png"; // Adjust the path according to your folder structure
-import matchifyLogowhite from  "../assets/matchify_logo_white.png";
-import Footer from "../components/Footer";
+
+
+
+
+import matchifyLogowhite from "../assets/matchify_logo_white.png";
+import Topmovie2 from "../components/Topmovie2";
+
+
 const Header2 = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeButton, setActiveButton] = useState(""); // Start with no active button
+  const [activeButton, setActiveButton] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false); // New state for scroll detection
+  const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef(null);
-  const isAdmin = true; // Simulating whether the user is an admin
+  const isAdmin = true;
 
   const handleButtonClick = (buttonName) => {
-    setActiveButton(buttonName); // Set the clicked button as active
+    setActiveButton(buttonName);
     setIsSidebarOpen(false);
   };
 
@@ -42,7 +48,7 @@ const Header2 = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 0); // Update scroll state
+      setScrolled(window.scrollY > 0);
     };
 
     document.addEventListener("scroll", handleScroll);
@@ -86,7 +92,9 @@ const Header2 = () => {
             className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Home"
                 ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
-                : `${scrolled ? "text-[#14044c]" : "text-white"} hover:bg-[#14044c] hover:text-white`
+                : `${
+                    scrolled ? "text-[#14044c]" : "text-white"
+                  } hover:bg-[#14044c] hover:text-white`
             }`}
           >
             Home
@@ -97,7 +105,9 @@ const Header2 = () => {
             className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Feeds"
                 ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
-                : `${scrolled ? "text-[#14044c]" : "text-white"} hover:bg-[#14044c] hover:text-white`
+                : `${
+                    scrolled ? "text-[#14044c]" : "text-white"
+                  } hover:bg-[#14044c] hover:text-white`
             }`}
           >
             Feeds
@@ -108,7 +118,9 @@ const Header2 = () => {
             className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Users"
                 ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
-                : `${scrolled ? "text-[#14044c]" : "text-white"} hover:bg-[#14044c] hover:text-white`
+                : `${
+                    scrolled ? "text-[#14044c]" : "text-white"
+                  } hover:bg-[#14044c] hover:text-white`
             }`}
           >
             Users
@@ -119,7 +131,9 @@ const Header2 = () => {
             className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
               activeButton === "Profile"
                 ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
-                : `${scrolled ? "text-[#14044c]" : "text-white"} hover:bg-[#14044c] hover:text-white`
+                : `${
+                    scrolled ? "text-[#14044c]" : "text-white"
+                  } hover:bg-[#14044c] hover:text-white`
             }`}
           >
             Profile
@@ -133,7 +147,9 @@ const Header2 = () => {
               className={`text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 ${
                 activeButton === "Admin"
                   ? `bg-[#14044c] ${scrolled ? "text-white" : "text-white"}`
-                  : `${scrolled ? "text-[#14044c]" : "text-white"} hover:bg-[#14044c] hover:text-white`
+                  : `${
+                      scrolled ? "text-[#14044c]" : "text-white"
+                    } hover:bg-[#14044c] hover:text-white`
               }`}
             >
               Admin
@@ -280,12 +296,12 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="flex min-h-[550px] flex-col gap-6 items-center justify-center bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl px-4 pb-10 @[480px]:px-10">
+    <div className="flex flex-col items-center justify-center min-h-[550px] bg-center bg-no-repeat bg-cover px-4 pb-10 gap-6 sm:gap-8 sm:px-10 rounded-xl">
       <div className="flex flex-col gap-2 text-center">
-        <h1 className="text-white  text-6xl font-black  fontleading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
+        <h1 className="text-white text-5xl font-extrabold tracking-tight sm:text-6xl md:text-7xl">
           Welcome to Matchify!
         </h1>
-        <h2 className="text-white text-3xl font-medium  font-quicksand  px-20 leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
+        <h2 className="text-white text-lg font-medium px-4 leading-normal sm:text-xl md:text-2xl lg:px-20">
           For the love of articles, movies, TV, and video games. Get ready for a
           world of exclusive content, from in-depth articles to original videos,
           all tailored to your tastes.
@@ -295,7 +311,7 @@ const HeroSection = () => {
       <div className="flex justify-center mt-6">
         <button
           onClick={handleGetStartedClick}
-          className="flex items-center justify-center min-w-[200px] min-h-14 max-w-[200px] cursor-pointer overflow-hidden rounded-xl h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#3e237d98] hover:bg-[#382857]  text-white text-2xl font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
+          className="flex items-center justify-center min-w-[150px] min-h-12 max-w-[200px] cursor-pointer rounded-xl px-4 py-2 bg-[#3e237d98] hover:bg-[#382857] text-white text-base font-bold tracking-tight sm:min-w-[200px] sm:px-5 sm:py-3 md:text-lg lg:min-w-[200px] lg:px-6"
         >
           <span className="truncate">Get started</span>
         </button>
@@ -352,9 +368,7 @@ const PersonalizedSection = () => {
   );
 };
 
-
 const ArticleCard = ({ image, title, readTime }) => {
-  // Encode the title for use in a URL
   const searchQuery = encodeURIComponent(title);
 
   return (
@@ -380,7 +394,6 @@ const ArticleCard = ({ image, title, readTime }) => {
   );
 };
 
-
 const Homepage = () => {
   const youtubeUrl = "https://www.youtube.com/watch?v=lkkGlVWvkLk"; // Replace with your YouTube video URL
 
@@ -393,17 +406,17 @@ const Homepage = () => {
       </div>
 
       {/* service */}
+
       <div
-        className=" pt-10 relative flex size-full min-h-screen flex-col bg-[#f6f1fa] group/design-root overflow-x-hidden"
+        className="pt-10 relative flex min-h-screen flex-col bg-[#f6f1fa] group/design-root overflow-x-hidden"
         style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}
       >
-        <div className="layout-container flex h-full grow flex-col">
-          <div className="px-40 flex flex-1 justify-center py-5  ">
+        <div className="layout-container flex flex-col h-full grow">
+          <div className="px-4 sm:px-10 lg:px-40 flex flex-1 justify-center py-5">
             <ServicesSection />
           </div>
         </div>
       </div>
-
 
       <div
         className=" pt-10 relative flex size-full min-h-screen flex-col bg-[#b3a1cd] group/design-root overflow-x-hidden"
@@ -412,25 +425,20 @@ const Homepage = () => {
         <div className="layout-container flex h-full grow flex-col">
           <div className=" flex flex-1 justify-center py-5  ">
             <div className="layout-content-container flex flex-col max-w-full flex-1">
-              <NewspaperHeader />
-
-             
+              <Topmovie2 />
+              {/* <NewspaperHeader/> */}
             </div>
           </div>
         </div>
       </div>
 
-
-
       <div
-        className=" pt-10 relative flex size-full min-h-screen flex-col bg-[#f6f1fa] group/design-root overflow-x-hidden"
+        className="pt-10 relative flex min-h-screen flex-col bg-[#f6f1fa] group/design-root overflow-x-hidden"
         style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}
       >
-        <div className="layout-container flex h-full grow flex-col">
-          <div className="px-40 flex flex-1 justify-center py-5  ">
-            <div className="layout-content-container flex flex-col max-w-full flex-1">
-             
-
+        <div className="flex flex-col h-full grow">
+          <div className="px-4 md:px-10 flex flex-1 justify-center py-5">
+            <div className="w-full max-w-4xl flex flex-col">
               <PersonalizedSection />
               <YouTubeVideo
                 url={youtubeUrl}
@@ -442,7 +450,11 @@ const Homepage = () => {
         </div>
       </div>
 
-      <Footer />
+
+      <div>
+        <Footer />
+      </div>
+
     </div>
   );
 };

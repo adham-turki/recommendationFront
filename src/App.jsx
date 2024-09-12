@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header.jsx';
 import Login from './components/Login/Login.jsx';
-import Signup from './components/Signup/Signup.jsx';
 import ChooseInterest from './components/ChooseInterest.jsx';
 import ChooseSkills from './components/ChooseSkills.jsx';
 import ExtensionGuidePage from './components/ExtensionGuidePage.jsx';
@@ -12,23 +11,24 @@ import Search from './pages/Search';
 import ProfilePage from './pages/ProfilePage';
 import SavedItemsPage from './pages/SavedItemsPage';
 import AdminPage from './pages/AdminPage';
+
 import EditSkills from './components/EditSkills.jsx';
 
 import { useState } from 'react';
+
 
 const App = () => {
 
   return (
     <Router>
+
       <Routes>
         {/* Public routes */}
-        <Route path="/" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/interests" element={<ChooseInterest />} />  
         <Route path="/skills" element={<ChooseSkills />} />
         <Route path="/extension-guide" element={<ExtensionGuidePage />} />
         <Route path="/home" element={<Homepage />} />
-        
 
         {/* Authenticated routes */}
         <Route path="/profile" element={<ProfilePage />} />
