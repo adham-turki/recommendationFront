@@ -4,16 +4,37 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const Posts = ({ darkMode }) => {
-  
- 
+
+
+
+  const [categories, setCategories] = useState([]);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [newPostUrl, setNewPostUrl] = useState('');
   const [newPostCategory, setNewPostCategory] = useState('');
+  const [newImage, setNewImage] = useState('');
+  const [newBody, setNewBody] = useState('');
+  const [newTitle, setNewTitle] = useState('');
   const [posts, setPosts] = useState([]);
+  const [editPostId, setEditPostId] = useState(null);
+  const [editPostUrl, setEditPostUrl] = useState('');
+  const [editPostCategory, setEditPostCategory] = useState('');
+  const [editImage, setEditImage] = useState('');
+  const [editBody, setEditBody] = useState('');
+  const [editTitle, setEditTitle] = useState('');
+
 
   const postsPerPage = 5;
+  useEffect(() => {
+    async function fetchCategories() {
+      const res = await fetch(`${import.meta.env.VITE_API}/categories`);
+      const data = await res.json();
+      setCategories(data);
+    }
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -22,7 +43,7 @@ const Posts = ({ darkMode }) => {
       setPosts(data);
     }
     fetchData();
-  }, []);
+  }, [posts]);
 
   const filteredPosts = posts.filter(post =>
     post.title?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -36,11 +57,123 @@ const Posts = ({ darkMode }) => {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  const handleOpenModal = () => setShowModal(true);
+  const handleOpenModal = (post = null) => {
+    if (post) {
+      setEditPostId(post.contentId);
+      setEditPostUrl(post.url);
+      setEditPostCategory(post.category);
+      setEditImage(post.imageUrl);
+      setEditBody(post.body);
+      setEditTitle(post.title);
+      setShowModal(true);
+    } else {
+      console.log("QERWTEfhgj")
+      setEditPostId(null);
+      setNewPostUrl('');
+      setNewPostCategory('');
+      setNewImage('');
+      setNewBody('');
+      setNewTitle('');
+      setShowModal(true);
+    }
+  };
+  const handleEditSubmit = async () => {
+    const updatedPost = {
+      title: editTitle,
+      body: editBody,
+      url: editPostUrl,
+      category: editPostCategory,
+      imageUrl: editImage,
+    };
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API}/contents/${editPostId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedPost),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to update post');
+      }
+
+      // Refresh posts data after successful update
+      setPosts(prevPosts =>
+        prevPosts.map(post =>
+          post.id === editPostId ? { ...post, ...updatedPost } : post
+        )
+      );
+      
+
+      // Clear form fields and close modal
+      setEditPostUrl('');
+      setEditPostCategory('');
+      setEditImage('');
+      setEditBody('');
+      setEditTitle('');
+      setEditPostId(null);
+      handleCloseModal();
+    } catch (error) {
+      console.error('Error updating post:', error);
+    }
+  };
+  const handleDelete = async (id) => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API}/contents/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to delete post');
+      }
+
+      // Refresh posts data after successful deletion
+      setPosts(prevPosts => prevPosts.filter(post => post.id !== id));
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
+
+
   const handleCloseModal = () => setShowModal(false);
-  const handleSubmit = () => {
-    // Add your submit logic here
-    handleCloseModal();
+
+  const handleSubmit = async () => {
+    const newPost = {
+      title: newTitle,
+      body: newBody,
+      url: newPostUrl,
+      category: newPostCategory,
+      imageUrl: newImage,
+    };
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API}/contents`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newPost),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to create new post');
+      }
+
+      // Refresh posts data after successful post creation
+      setPosts(prevPosts => [newPost, ...prevPosts]);
+
+      // Clear form fields and close modal
+      setNewPostUrl('');
+      setNewPostCategory('');
+      setNewImage('');
+      setNewBody('');
+      setNewTitle('');
+      handleCloseModal();
+    } catch (error) {
+      console.error('Error creating new post:', error);
+    }
   };
 
   return (
@@ -98,10 +231,10 @@ const Posts = ({ darkMode }) => {
                   <td className={`px-4 py-2 text-sm font-normal leading-normal ${darkMode ? 'text-gray-400' : 'text-neutral-500'}`}>{post.dislikes}</td>
                   <td className={`px-4 py-2 text-sm font-normal leading-normal ${darkMode ? 'text-gray-400' : 'text-neutral-500'}`}>{post.date}</td>
                   <td className={`px-4 py-2 text-sm font-normal leading-normal ${darkMode ? 'text-gray-400' : 'text-neutral-500'}`}>
-                    <button className="text-blue-700 hover:text-blue-900 mr-2">
+                    <button className="text-blue-700 hover:text-blue-900 mr-2" onClick={() => handleOpenModal(post)}>
                       <FontAwesomeIcon icon={faEdit} size="lg" />
                     </button>
-                    <button className="text-red-600 hover:text-red-800">
+                    <button className="text-red-600 hover:text-red-800" onClick={() => handleDelete(post.contentId)}>
                       <FontAwesomeIcon icon={faTrash} size="lg" />
                     </button>
                   </td>
@@ -149,22 +282,56 @@ const Posts = ({ darkMode }) => {
                 <input
                   type="text"
                   className={`form-input w-full rounded-md border ${darkMode ? 'bg-gray-800 text-gray-100' : 'border-gray-300'} px-3 py-2`}
-                  value={newPostUrl}
-                  onChange={(e) => setNewPostUrl(e.target.value)}
+                  value={editPostUrl}
+                  onChange={(e) => setEditPostUrl(e.target.value)}
                 />
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">Category</label>
+                <select
+                  className={`form-select w-full rounded-md border ${darkMode ? 'bg-gray-800 text-gray-100' : 'border-gray-300'} px-3 py-2`}
+                  value={editPostCategory}
+                  onChange={(e) => setEditPostCategory(e.target.value)}
+                >
+                  <option value="">Select Category</option>
+                  {categories.map(category => (
+                    <option key={category.id} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mb-4">
+
+                <label className="block text-sm font-medium mb-1">Image URL</label>
+
                 <input
                   type="text"
                   className={`form-input w-full rounded-md border ${darkMode ? 'bg-gray-800 text-gray-100' : 'border-gray-300'} px-3 py-2`}
-                  value={newPostCategory}
-                  onChange={(e) => setNewPostCategory(e.target.value)}
+                  value={editImage}
+                  onChange={(e) => setEditImage(e.target.value)}
+                />
+                <label className="block text-sm font-medium mb-1">Title</label>
+
+                <input
+                  type="text"
+                  className={`form-input w-full rounded-md border ${darkMode ? 'bg-gray-800 text-gray-100' : 'border-gray-300'} px-3 py-2`}
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                />
+                <label className="block text-sm font-medium mb-1">Description</label>
+
+                <textarea
+                  type="text"
+                  className={`form-input w-full rounded-md border ${darkMode ? 'bg-gray-800 text-gray-100' : 'border-gray-300'} px-3 py-2`}
+                  value={editBody}
+                  onChange={(e) => setEditBody(e.target.value)}
                 />
               </div>
               <div className="flex justify-end">
-                <button onClick={handleSubmit} className="px-4 py-2 bg-blue-500 text-white rounded-md">Submit</button>
-              </div>
+                <button onClick={editPostId ? handleEditSubmit : handleSubmit} className="px-4 py-2 bg-blue-500 text-white rounded-md">
+                  {editPostId ? 'Update' : 'Submit'}
+                </button>              </div>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLayerGroup, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -6,14 +6,7 @@ import { faUser, faLayerGroup, faChevronDown, faChevronRight } from '@fortawesom
 const GraphSidebar = ({ blueNodes, orangeNodes, darkMode }) => {
   const [expandedSection, setExpandedSection] = useState(null);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
-  const [first, setFirst] = useState(null);
-  useEffect(() => {
-    async function fetchData() {
-      const res = await fetch(`${import.meta.env.VITE_API}/profile`);
-      setFirst(await res.json);
-    }
-    fetchData();
-  }, []);
+  
 
   const handleToggleSection = (section) => {
     setExpandedSection(expandedSection === section ? null : section);
