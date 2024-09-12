@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/Login/Login.jsx';
-import Signup from './components/Signup/Signup.jsx';
 import ChooseInterest from './components/ChooseInterest.jsx';
 import ChooseSkills from './components/ChooseSkills.jsx';
 import ExtensionGuidePage from './components/ExtensionGuidePage.jsx';
@@ -19,8 +18,7 @@ const App = () => {
 
       <Routes>
         {/* Public routes */}
-        <Route path="/" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/interests" element={<ChooseInterest />} />  
         <Route path="/skills" element={<ChooseSkills />} />
         <Route path="/extension-guide" element={<ExtensionGuidePage />} />

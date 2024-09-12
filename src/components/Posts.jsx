@@ -6,7 +6,9 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 const Posts = ({ darkMode }) => {
 
 
+
   const [categories, setCategories] = useState([]);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
