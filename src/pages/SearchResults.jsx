@@ -1,12 +1,188 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { motion } from 'framer-motion';
+// import { useState, useEffect } from "react";
+// import axios from "axios";
+// import { motion } from "framer-motion";
 
-// Example profiles
+// // Example profiles
+// const initialProfiles = [
+//   {
+//     user_id: 1,
+//     firstName: "John",
+//     last_name: "Doe",
+//     email: "john.doe@example.com",
+//     address: "123 Main St, Anytown, USA",
+//     interests: ["Coding", "Music", "Travel"],
+//     job_status: "Employed",
+//     account_status: "Active",
+//     skills: ["JavaScript", "React"],
+//     imgSrc:
+//       "https://ui-avatars.com/api/?name=John+Doe&background=352872&color=fff",
+//   },
+//   {
+//     user_id: 2,
+//     firstName: "Jane",
+//     last_name: "Smith",
+//     email: "jane.smith@example.com",
+//     address: "456 Oak Rd, Sometown, USA",
+//     interests: ["Reading", "Photography", "Yoga"],
+//     job_status: "Freelancer",
+//     account_status: "Inactive",
+//     skills: ["Photoshop"],
+//     imgSrc:
+//       "https://ui-avatars.com/api/?name=Jane+Smith&background=34b3a0&color=fff",
+//   },
+//   {
+//     user_id: 3,
+//     firstName: "Alex",
+//     last_name: "Johnson",
+//     email: "alex.johnson@example.com",
+//     address: "789 Pine Ave, Othercity, USA",
+//     interests: ["Gaming", "Traveling", "Music"],
+//     job_status: "Student",
+//     account_status: "Active",
+//     skills: ["AI"],
+//     imgSrc:
+//       "https://ui-avatars.com/api/?name=Alex+Johnson&background=ff5722&color=fff",
+//   },
+//   // Add more profiles as needed
+// ];
+
+// const SearchResults = ({ searchTerm, filters }) => {
+//   const [profiles, setProfiles] = useState(initialProfiles);
+//   const [selectedProfiles, setSelectedProfiles] = useState([]);
+//   const [similarityResult, setSimilarityResult] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+//   useEffect(() => {
+//     const fetchProfiles = async () => {
+//       try {
+//         setLoading(true);
+//         setError(null);
+
+//         const params = {
+//           Interests: filters,
+//           skill: filters,
+//           url: searchTerm,
+//         };
+
+//         const response = await axios.get(
+//           "http://192.168.1.123:2505/profiles/search"
+//         );
+//         console.log(response.data);
+//         setProfiles(response.data || []);
+//       } catch (err) {
+//         setError(err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchProfiles();
+//   }, [searchTerm, filters]);
+
+//   const handleProfileSelect = (profile) => {
+//     if (selectedProfiles.includes(profile)) {
+//       setSelectedProfiles((prev) =>
+//         prev.filter((p) => p.user_id !== profile.user_id)
+//       );
+//     } else if (selectedProfiles.length < 2) {
+//       setSelectedProfiles((prev) => [...prev, profile]);
+//     }
+//   };
+
+//   const calculateSimilarity = (profile1, profile2) => {
+//     const commonInterests = profile1.interests.filter((interest) =>
+//       profile2.interests.includes(interest)
+//     );
+//     const commonSkills = profile1.skills.filter((skill) =>
+//       profile2.skills.includes(skill)
+//     );
+
+//     const interestPercentage =
+//       (commonInterests.length / profile1.interests.length) * 50;
+//     const skillPercentage = (commonSkills.length / profile1.skills.length) * 50;
+
+//     const similarityPercentage = interestPercentage + skillPercentage;
+
+//     return {
+//       similarityPercentage: Math.min(similarityPercentage, 100),
+//       mostCommonInterest: commonInterests[0] || "No common interests",
+//     };
+//   };
+
+//   const handleCalculateSimilarity = () => {
+//     if (selectedProfiles.length === 2) {
+//       const [profile1, profile2] = selectedProfiles;
+//       const result = calculateSimilarity(profile1, profile2);
+//       setSimilarityResult(result);
+//     }
+//   };
+
+//   return (
+//     <div className="relative p-4 bg-[#e6e2eb] min-h-screen">
+//       <div className="mt-16">
+//         <h1 className="text-4xl font-bold mb-6 text-[#352872]">
+//           Search Results
+//         </h1>
+//         {loading && <p>Loading...</p>}
+//         {error && <p>Error: {error.message}</p>}
+//         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+//           {profiles.map((profile) => (
+//             <div
+//               key={profile.user_id}
+//               className={`bg-white shadow-lg rounded-3xl overflow-hidden border border-gray-300 p-6 flex flex-col items-center text-center transition-transform transform ${
+//                 selectedProfiles.includes(profile)
+//                   ? "border-[#352872] scale-105"
+//                   : "hover:scale-105 hover:shadow-xl"
+//               }`}
+//               onClick={() => handleProfileSelect(profile)}
+//             >
+//               <div className="w-24 h-24 overflow-hidden rounded-full border-4 border-[#352872] mb-4">
+//                 <img
+//                   src={profile.imgSrc}
+//                   alt={`${profile.firstname} ${profile.lastName} Profile`}
+//                   className="w-full h-full object-cover"
+//                 />
+//               </div>
+//               <div>
+//                 <h3 className="text-xl font-semibold text-[#352872] mb-2">{`${profile.firstName} ${profile.lastName}`}</h3>
+//                 <p className="text-gray-600 mb-4 text-sm">{profile.email}</p>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//         {selectedProfiles.length === 2 && (
+//           <button
+//             onClick={handleCalculateSimilarity}
+//             className="mt-6 px-4 py-2 bg-[#352872] text-white rounded-lg hover:bg-[#5342a9] transition duration-300"
+//           >
+//             Calculate Similarity
+//           </button>
+//         )}
+//         {similarityResult && (
+//           <div className="mt-6">
+//             <h2 className="text-2xl font-bold">
+//               Similarity: {similarityResult.similarityPercentage}%
+//             </h2>
+//             <p className="text-lg">
+//               Most Common Interest: {similarityResult.mostCommonInterest}
+//             </p>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default SearchResults;
+
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 const initialProfiles = [
   {
     user_id: 1,
-    first_name: "John",
+    firstName: "John",
     last_name: "Doe",
     email: "john.doe@example.com",
     address: "123 Main St, Anytown, USA",
@@ -14,11 +190,12 @@ const initialProfiles = [
     job_status: "Employed",
     account_status: "Active",
     skills: ["JavaScript", "React"],
-    imgSrc: "https://ui-avatars.com/api/?name=John+Doe&background=352872&color=fff"
+    imgSrc:
+      "https://ui-avatars.com/api/?name=John+Doe&background=352872&color=fff",
   },
   {
     user_id: 2,
-    first_name: "Jane",
+    firstName: "Jane",
     last_name: "Smith",
     email: "jane.smith@example.com",
     address: "456 Oak Rd, Sometown, USA",
@@ -26,11 +203,12 @@ const initialProfiles = [
     job_status: "Freelancer",
     account_status: "Inactive",
     skills: ["Photoshop"],
-    imgSrc: "https://ui-avatars.com/api/?name=Jane+Smith&background=34b3a0&color=fff"
+    imgSrc:
+      "https://ui-avatars.com/api/?name=Jane+Smith&background=34b3a0&color=fff",
   },
   {
     user_id: 3,
-    first_name: "Alex",
+    firstName: "Alex",
     last_name: "Johnson",
     email: "alex.johnson@example.com",
     address: "789 Pine Ave, Othercity, USA",
@@ -38,18 +216,19 @@ const initialProfiles = [
     job_status: "Student",
     account_status: "Active",
     skills: ["AI"],
-    imgSrc: "https://ui-avatars.com/api/?name=Alex+Johnson&background=ff5722&color=fff"
+    imgSrc:
+      "https://ui-avatars.com/api/?name=Alex+Johnson&background=ff5722&color=fff",
   },
   // Add more profiles as needed
 ];
 
-
 const SearchResults = ({ searchTerm, filters }) => {
   const [profiles, setProfiles] = useState(initialProfiles);
-  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [selectedProfiles, setSelectedProfiles] = useState([]);
+  const [similarityResult, setSimilarityResult] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [similarityPercentage, setSimilarityPercentage] = useState(null);
+  const [selectedProfile, setSelectedProfile] = useState(null); // State to hold the selected profile for modal
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -63,7 +242,9 @@ const SearchResults = ({ searchTerm, filters }) => {
           url: searchTerm,
         };
 
-        const response = await axios.get('http://192.168.1.136:8089/profiles/search?interests=tech'); // Change URL as needed
+        const response = await axios.get(
+          "https://rsserviceplan-rsapp.azuremicroservices.io/users"
+        );
         console.log(response.data);
         setProfiles(response.data || []);
       } catch (err) {
@@ -76,89 +257,132 @@ const SearchResults = ({ searchTerm, filters }) => {
     fetchProfiles();
   }, [searchTerm, filters]);
 
-  const fetchProfileDetails = async (profileId) => {
-    try {
-      const response = await axios.get("http://192.168.1.136:8089/profiles/search?interests=tech/"`${profileId}`);
-      setSelectedProfile(response.data);
-    } catch (err) {
-      setError(err);
+  //   useEffect(() => {
+  //     const fetchProfiles = async () => {
+  //       try {
+  //         setLoading(true);
+  //         setError(null);
+
+  //         const { interests, skills } = filters;
+
+  //         // Construct the search URL based on interests and skills
+  //         const url = `http://192.168.1.123:2505/profiles/search?interests=${interests}&skills=${skills}`;
+
+  //         // Make the API request
+  //         const response = await axios.get(url);
+
+  //         console.log(response.data);
+
+  //         // Set profiles based on the response data
+  //         setProfiles(response.data || []);
+  //       } catch (err) {
+  //         setError(err);
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
+
+  //     // Trigger the profile fetching only when filters change or searchTerm is updated
+  //     fetchProfiles();
+  //   }, [searchTerm, filters]);
+
+  const handleProfileSelect = (profile) => {
+    if (selectedProfiles.includes(profile)) {
+      setSelectedProfiles((prev) =>
+        prev.filter((p) => p.user_id !== profile.user_id)
+      );
+    } else if (selectedProfiles.length < 2) {
+      setSelectedProfiles((prev) => [...prev, profile]);
     }
   };
 
-  const fetchSimilarProfiles = async (profileId) => {
-    try {
-      const response = await axios.get('http://192.168.1.136:8089/similar-users/1?method-type=2&partner-id=2', {
-        params: { user_id: profileId }
-      });
-      const similarUsers = response.data.similar_users || [];
-      setProfiles(similarUsers);
-    } catch (err) {
-      setError(err);
-    }
-  };
-
-  const handleOpenDetails = (profile) => {
-    setSelectedProfile(profile);
-    fetchProfileDetails(profile.user_id); // Fetch profile details if needed
-  };
-
-  const handleCloseDetails = () => {
-    setSelectedProfile(null);
-  };
-
-  // Define mock currentUserProfile
-  const currentUserProfile = {
-    job: "Software Engineer",
-    skills: ["Leadership", "Coding", "AI"]
-  };
-
-  // Define mock viewedProfile
-  const viewedProfile = selectedProfile || {
-    job: "Product Manager",
-    skills: ["Leadership", "Public Speaking", "Team Management"]
-  };
-
-  // Function to calculate similarity (mock logic)
-  const calculateSimilarity = () => {
-    let similarity = 0;
-
-    // Check if jobs are the same
-    if (currentUserProfile.job === viewedProfile.job) {
-      similarity += 30; // Job match percentage
-    }
-
-    // Check for skill overlap
-    const commonSkills = currentUserProfile.skills.filter(skill =>
-      viewedProfile.skills.includes(skill)
+  const calculateSimilarity = (profile1, profile2) => {
+    const commonInterests = profile1.interests.filter((interest) =>
+      profile2.interests.includes(interest)
     );
-    similarity += commonSkills.length * 20; // Add 20% per matching skill
+    const commonSkills = profile1.skills.filter((skill) =>
+      profile2.skills.includes(skill)
+    );
 
-    // Clamp similarity percentage to 100%
-    return Math.min(similarity, 100);
+    const interestPercentage =
+      (commonInterests.length / profile1.interests.length) * 50;
+    const skillPercentage = (commonSkills.length / profile1.skills.length) * 50;
+
+    const similarityPercentage = interestPercentage + skillPercentage;
+
+    return {
+      similarityPercentage: Math.min(similarityPercentage, 100),
+      mostCommonInterest: commonInterests[0] || "No common interests",
+    };
   };
 
-  // Handle button click
-  const handleSeeSimilarity = () => {
-    const similarity = calculateSimilarity();
-    setSimilarityPercentage(similarity);
+  const handleCalculateSimilarity = async () => {
+    if (selectedProfiles.length === 2) {
+      const [profile1, profile2] = selectedProfiles;
+
+      // Check if user_ids are valid
+      if (!profile1.user_id || !profile2.user_id) {
+        console.error("Invalid user_id values");
+        return;
+      }
+
+      // Construct the URL
+      const url = `http://192.168.1.136:8089/similar-users/${profile1.user_id}?method-type=1&partner-id=${profile2.user_id}`;
+
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Make the API request
+        const response = await axios.get(url);
+        console.log(response.data);
+
+        // Update the state with the similarity result
+        setSimilarityResult({
+          similarityPercentage: response.data.similarityScore, // Adjust based on actual response format
+          mostCommonInterest: response.data.mostCommonInterest, // Adjust based on actual response format
+        });
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const viewDetails = (profile) => {
+    // Handle showing detailed profile information here
+    console.log("Viewing details for:", profile);
+    // You might want to show a modal or navigate to a details page
+    setSelectedProfile(profile); // Open the modal with the selected profile
+  };
+  const closeModal = () => {
+    setSelectedProfile(null); // Close the modal
   };
 
   return (
     <div className="relative p-4 bg-[#e6e2eb] min-h-screen">
       <div className="mt-16">
-        <h1 className="text-4xl font-bold mb-6 text-[#352872]">Search Results</h1>
+        <h1 className="text-4xl font-bold mb-6 text-[#352872]">
+          Search Results
+        </h1>
         {loading && <p>Loading...</p>}
         {error && <p>Error: {error.message}</p>}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {profiles.map((profile) => (
             <div
               key={profile.user_id}
-              className="bg-white shadow-lg rounded-3xl overflow-hidden border border-gray-300 p-6 flex flex-col items-center text-center transition-transform transform hover:scale-105 hover:shadow-xl"
+              className={`bg-white shadow-lg rounded-3xl overflow-hidden border border-gray-300 p-6 flex flex-col items-center text-center transition-transform transform ${
+                selectedProfiles.includes(profile)
+                  ? "border-[#352872] scale-105"
+                  : "hover:scale-105 hover:shadow-xl"
+              }`}
+              onClick={() => handleProfileSelect(profile)}
             >
               <div className="w-24 h-24 overflow-hidden rounded-full border-4 border-[#352872] mb-4">
                 <img
                   src={profile.imgSrc}
-                  alt={`${profile.firstname} ${profile.lastName} Profile`}
+                  alt={`${profile.firstName} ${profile.lastName} Profile`}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -166,8 +390,8 @@ const SearchResults = ({ searchTerm, filters }) => {
                 <h3 className="text-xl font-semibold text-[#352872] mb-2">{`${profile.firstName} ${profile.lastName}`}</h3>
                 <p className="text-gray-600 mb-4 text-sm">{profile.email}</p>
                 <button
-                  onClick={() => handleOpenDetails(profile)}
-                  className="px-4 py-2 bg-[#352872] text-white rounded-lg hover:bg-[#5342a9] transition duration-300 text-sm font-semibold"
+                  onClick={() => viewDetails(profile)}
+                  className="mt-2 px-4 py-2 bg-[#352872] text-white rounded hover:bg-[#352850] transition duration-300"
                 >
                   View Details
                 </button>
@@ -175,69 +399,108 @@ const SearchResults = ({ searchTerm, filters }) => {
             </div>
           ))}
         </div>
-      </div>
 
-      {selectedProfile && (
-        <motion.div
-          className="fixed top-[60px] right-0 w-full sm:w-1/3 md:w-1/4 h-full bg-white shadow-lg border-l border-gray-200 p-8 flex flex-col overflow-y-auto"
-          initial={{ x: '100%' }}
-          animate={{ x: 0 }}
-          exit={{ x: '100%' }}
-          transition={{ type: 'spring', stiffness: 50 }}
-        >
+        {selectedProfiles.length === 2 && (
           <button
-            onClick={handleCloseDetails}
-            className="text-[#352872] text-xl font-semibold absolute top-4 right-4 hover:text-[#5342a9] transition duration-300"
+            onClick={handleCalculateSimilarity}
+            className="mt-6 px-4 py-2 bg-[#352872] text-white rounded-lg hover:bg-[#5342a9] transition duration-300"
           >
-            &times;
+            Calculate Similarity
           </button>
-          <div className="w-full flex flex-col items-center mt-12">
-            <div className="w-24 h-24 overflow-hidden rounded-full border-4 border-[#352872] mb-4">
-              <img
-                src={selectedProfile.imgSrc}
-                alt={`${selectedProfile.first_name} ${selectedProfile.last_name} Profile`}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <h3 className="text-xl font-semibold text-[#352872] mb-2">{`${selectedProfile.first_name} ${selectedProfile.last_name}`}</h3>
-            <p className="text-gray-700 text-sm mb-4">{selectedProfile.email}</p>
-            
-            <p className="text-gray-700 text-sm mb-3"><strong>Interests:</strong> {selectedProfile.interests.join(', ')}</p>
-            <p className="text-gray-700 text-sm mb-3"><strong>Job Status:</strong> {selectedProfile.job_status}</p>
-            <p className="text-gray-700 text-sm mb-3"><strong>Skills:</strong></p>
-            <ul className="list-disc pl-5 text-sm mb-4">
-              {selectedProfile.skills.map((skill, index) => (
-                <li key={index} className="text-gray-700">{skill}</li>
-              ))}
-            </ul>
-            <button
-              onClick={() => fetchSimilarProfiles(selectedProfile.user_id)}
-              className="mt-4 bg-gradient-to-r from-[#352872] to-[#c293dd] text-white px-4 py-2 rounded-md hover:bg-purple-600 transition"
-            >
-              See Similar Profiles
-            </button>
-            <button
-              onClick={handleSeeSimilarity}
-              className="mt-4 bg-gradient-to-r from-[#352872] to-[#c293dd] text-white px-4 py-2 rounded-md hover:bg-purple-600 transition"
-            >
-              See Similarity
-            </button>
-            {similarityPercentage !== null && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-4 text-lg font-semibold text-gray-700"
-              >
-                Similarity: {similarityPercentage}%
-              </motion.div>
-            )}
+        )}
+        {similarityResult && (
+          <div className="mt-6">
+            <h2 className="text-2xl font-bold">
+              Similarity: {similarityResult.similarityPercentage}%
+            </h2>
+            <p className="text-lg">
+              Most Common Interest: {similarityResult.mostCommonInterest}
+            </p>
           </div>
-        </motion.div>
-      )}
+        )}
+        {/* Modal for displaying selected profile details */}
+        {selectedProfile && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white rounded-lg p-6 w-96 relative">
+              <button
+                className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+                onClick={closeModal}
+              >
+                &times;
+              </button>
+              <div className="flex flex-col items-center">
+                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[#352872] mb-4">
+                  <img
+                    src={selectedProfile.image}
+                    alt={`${selectedProfile.username} Profile`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h3 className="text-xl font-semibold text-[#352872] mb-2">
+                  {selectedProfile.username}
+                </h3>
+                <p className="text-gray-600 mb-4">{selectedProfile.email}</p>
+                <div className="text-left w-full">
+                  <p>
+                    <strong>Address:</strong> {selectedProfile.address || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Gender:</strong> {selectedProfile.gender || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Phone:</strong> {selectedProfile.phone || "N/A"}
+                  </p>
+                  <p>
+                    <strong>email</strong> {selectedProfile.email}
+                  </p>
+                </div>
+                <button
+                  className="mt-4 px-4 py-2 bg-[#352872] text-white rounded-lg hover:bg-[#5342a9] transition duration-300"
+                  onClick={closeModal}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
 export default SearchResults;
 
-
+// {/* Detailed Profile Information */}
+// {selectedProfile && (
+//   <div className="mt-8 p-6 bg-white shadow-lg rounded-3xl border border-gray-300">
+//     <h2 className="text-2xl font-bold text-[#352872] mb-4">Profile Details</h2>
+//     <div className="flex items-center mb-4">
+//       <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[#352872]">
+//         <img
+//           src={selectedProfile.imgSrc}
+//           alt={`${selectedProfile.firstName} ${selectedProfile.lastName} Profile`}
+//           className="w-full h-full object-cover"
+//         />
+//       </div>
+//       <div className="ml-4">
+//         <h3 className="text-2xl font-semibold text-[#352872]">
+//           {`${selectedProfile.firstName} ${selectedProfile.lastName}`}
+//         </h3>
+//         <p className="text-gray-600">{selectedProfile.email}</p>
+//       </div>
+//     </div>
+//     <div className="text-gray-800">
+//       <p><strong>Address:</strong> {selectedProfile.address}</p>
+//       <p><strong>JobStatus:</strong> {selectedProfile.job_status}</p>
+//       <p><strong>Account Status:</strong> {selectedProfile.account_status}</p>
+//       <p><strong>Interests:</strong> {selectedProfile.interests.join(', ')}</p>
+//       <p><strong>Skills:</strong> {selectedProfile.skills.join(', ')}</p>
+//     </div>
+//     <button
+//       onClick={() => setSelectedProfile(null)}
+//       className="mt-4 px-4 py-2 bg-[#352872] text-white rounded hover:bg-[#352850] transition duration-300"
+//     >
+//       Close
+//     </button>
+//   </div>
