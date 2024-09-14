@@ -5,10 +5,13 @@ import { FaGlobe, FaBriefcase, FaSearch } from "react-icons/fa";
 import { motion } from "framer-motion";
 import SearchResults from "./SearchResults";
 import PeopleYouMayKnowSection from "./PeopleYouMayKnowSection";
+import { useSelector } from "react-redux";
 
 const FilterCard = ({ title, icon, options, onFilterChange, reset }) => {
   const [selectedOptions, setSelectedOptions] = React.useState([]);
   const [isOpen, setIsOpen] = React.useState(true);
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
 
   React.useEffect(() => {
     if (reset) {
@@ -25,17 +28,20 @@ const FilterCard = ({ title, icon, options, onFilterChange, reset }) => {
   };
 
   return (
-    <div className="w-full bg-[#e6e2eb] backdrop-blur-lg p-3 rounded-lg shadow-lg border border-gray-200 transition-transform duration-300 hover:scale-105">
-      <div
-        className="flex items-center gap-2 text-[#352872] cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)}
-      >
+    <div
+      className={`w-full p-3 rounded-lg shadow-lg border transition-transform duration-300 hover:scale-105 ${darkMode
+        ? "bg-gray-900 border-gray-700 text-gray-300"
+        : "bg-[#e6e2eb] border-gray-200 text-gray-900"
+        }`}
+    >      <div
+      className={`flex items-center gap-2 ${darkMode ? 'text-[#a695f4]' : 'text-[#352872]'}  cursor-pointer`}
+      onClick={() => setIsOpen(!isOpen)}
+    >
         <div className="text-xl">{icon}</div>
         <h2 className="text-sm font-semibold">{title}</h2>
         <div
-          className={`ml-auto transition-transform duration-200 ${
-            isOpen ? "rotate-180" : "rotate-0"
-          }`}
+          className={`ml-auto transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"
+            }`}
         >
           <FaSearch />
         </div>
@@ -47,11 +53,13 @@ const FilterCard = ({ title, icon, options, onFilterChange, reset }) => {
               <div
                 key={option}
                 onClick={() => handleToggle(option)}
-                className={`cursor-pointer py-1 px-1 rounded-lg text-xs border transition duration-200 text-center ${
-                  selectedOptions.includes(option)
-                    ? "bg-gradient-to-r from-[#352872] to-[#5342a9] text-white shadow-md"
+                className={`cursor-pointer py-1 px-1 rounded-lg text-xs border transition duration-200 text-center ${selectedOptions.includes(option)
+                  ? "bg-gradient-to-r from-purple-700 to-purple-500 text-white shadow-md"
+                  : `${darkMode
+                    ? "bg-gray-700 text-white hover:bg-gray-600"
                     : "bg-white text-gray-700 hover:bg-gray-300"
-                }`}
+                  }`
+                  }`}
               >
                 {option}
               </div>
@@ -82,6 +90,8 @@ const Search = () => {
   const [peopleYouMayKnow, setPeopleYouMayKnow] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
 
   // Define fallback data
   const fallbackProfiles = [
@@ -159,36 +169,42 @@ const Search = () => {
 
   return (
     <div>
-      <div className="w-full max-w-8xl p-4 bg-[#e6e2eb] min-h-screen flex flex-col">
+      <div className={`min-h-screen ${darkMode ? "bg-gray-800 text-white" : "bg-[#e6e2eb]"}`}>
 
-        <main className="relative flex flex-1 bg-[#e6e2eb]">
+        <main className={`relative flex flex-1 ${darkMode ? "bg-gray-800 text-white  "  : "bg-[#e6e2eb]"}`}>
           {/* Sidebar */}
-          <div className="lg:w-1/4 w-full p-6 bg-white backdrop-blur-lg shadow-lg rounded-xl lg:min-h-screen lg:sticky lg:top-0 overflow-y-auto mt-20 mb-8">
-            <div className="w-full max-w-md p-4 bg-[#e6e2eb] rounded-xl shadow-lg transition hover:shadow-2xl hover:scale-105">
-              <h1 className="text-lg font-extrabold mb-3 text-[#352872]">
-                Search
-              </h1>
-              <div className="relative mb-4">
-                {/* <input
-                  type="text"
-                  placeholder="Search for people"
-                  className="w-full px-4 py-2 rounded-lg bg-white border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#352872]/50 transition-shadow"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                /> */}
-                <FaSearch className="absolute right-3 top-3 text-[#352872]" />
-              </div>
-              <button
-                className="w-full py-2 bg-gradient-to-r from-[#352872] to-[#c293dd] text-white font-semibold rounded-lg shadow-md hover:shadow-lg focus:outline-none transition-all duration-300 text-sm hover:scale-105"
-                onClick={handleSearch}
-              >
-                Search
-              </button>
-            </div>
+          <div
+            className={`lg:w-1/4 w-full p-6 shadow-lg  lg:min-h-screen lg:sticky lg:top-0 overflow-y-auto mt-20 mb-8 ${darkMode ? "bg-gray-900 text-gray-300 " : "bg-white text-gray-900"
+              }`}
+          >
+           <div
+  className={`w-full max-w-md p-4 rounded-xl shadow-lg transition hover:shadow-2xl hover:scale-105 ${darkMode ? "bg-gray-900 text-gray-300" : "bg-[#e6e2eb] text-[#352872]"}`}
+>
+  <h1 className={`text-lg font-extrabold mb-3 ${darkMode ? 'text-[#a695f4]' : 'text-[#352872]'}`}>
+    Search
+  </h1>
+  <div className="relative mb-4">
+    <input
+      type="text"
+      placeholder="Search for people"
+      className={`w-full px-4 py-2 rounded-lg border text-sm transition-shadow focus:outline-none focus:ring-2 ${darkMode ? "bg-gray-700 border-gray-600 text-white focus:ring-gray-500" : "bg-white border-gray-300 text-black focus:ring-[#352872]/50"}`}
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+    />
+    <FaSearch className={`absolute right-3 top-3 ${darkMode ? "text-gray-400" : "text-[#352872]"}`} />
+  </div>
+  <button
+    className={`w-full py-2 text-white font-semibold rounded-lg shadow-md focus:outline-none transition-all duration-300 text-sm hover:scale-105 bg-gradient-to-r from-[#352872] to-[#c293dd] hover:shadow-lg`}
+    onClick={handleSearch}
+  >
+    Search
+  </button>
+</div>
+
 
             {/* Filters Section */}
             <div className="mt-6">
-              <h1 className="text-xl md:text-2xl font-bold mb-4 text-[#352872]">
+              <h1 className={`text-xl md:text-2xl font-bold mb-4 ${darkMode ? 'text-[#a695f4]' : 'text-[#352872]'}`}>
                 Filters
               </h1>
 
@@ -265,7 +281,6 @@ const Search = () => {
           </div>
         </main>
 
-        <Footer />
       </div>
     </div>
   );

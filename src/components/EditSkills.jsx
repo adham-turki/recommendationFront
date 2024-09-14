@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import { FaCode, FaPaintBrush, FaDatabase, FaUser, FaMobileAlt, FaNetworkWired, FaServer, FaRobot, FaCloud, FaLock, FaBug, FaBriefcase, FaMusic, FaPen, FaChartLine, FaLanguage, FaCogs, FaPlane } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import {
+  FaCode, FaPaintBrush, FaDatabase, FaUser, FaMobileAlt, FaNetworkWired, FaServer, FaRobot, FaCloud,
+  FaLock, FaBug, FaBriefcase, FaMusic, FaPen, FaChartLine, FaLanguage, FaCogs, FaPlane
+} from 'react-icons/fa';
 import Button from './Button';
 import ParticleBackground from './ParticleBackground';
 import Header from './Header';
 import Footer from './Footer';
+import { useSelector } from 'react-redux';
 
 // Skill icons
 const icons = {
@@ -30,24 +34,8 @@ const icons = {
 
 // Skill categories
 const skills = [
-  'Coding',
-  'Design',
-  'Database',
-  'Management',
-  'Mobile',
-  'Networking',
-  'DevOps',
-  'AI',
-  'Cloud',
-  'Security',
-  'Debugging',
-  'Business',
-  'Music',
-  'Writing',
-  'Marketing',
-  'Languages',
-  'Engineering',
-  'Travel',
+  'Coding', 'Design', 'Database', 'Management', 'Mobile', 'Networking', 'DevOps', 'AI', 'Cloud',
+  'Security', 'Debugging', 'Business', 'Music', 'Writing', 'Marketing', 'Languages', 'Engineering', 'Travel'
 ];
 
 const EditSkills = () => {
@@ -55,6 +43,7 @@ const EditSkills = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
 
   // Fetch existing user skills
   useEffect(() => {
@@ -131,22 +120,30 @@ const EditSkills = () => {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-between bg-gradient-to-b from-[#e6e2eb] to-[#e6e2eb]">
+    <div className={`relative min-h-screen flex flex-col justify-between ${darkMode ? 'bg-gray-800 text-gray-200' : 'bg-[#e6e2eb] text-gray-900'}`}>
       {/* Header */}
       <Header />
+
+     
 
       {/* Main content */}
       <div className="relative flex flex-col items-center justify-center flex-grow z-10 mt-24">
         <ParticleBackground className="absolute inset-0 z-0" />
 
-        <h1 className="text-3xl font-bold text-[#352872] mb-6 z-10">Edit Your Skills</h1>
+        <h1 className={`text-3xl font-bold mb-6 z-10 ${darkMode ? 'text-white' : 'text-[#352872]'}`}>
+          Edit Your Skills
+        </h1>
 
         <div className="relative flex flex-wrap gap-4 justify-center z-10 max-w-5xl mx-auto">
           {skills.map((skill) => (
             <div
               key={skill}
               className={`relative w-32 h-32 text-white rounded-full flex flex-col items-center justify-center cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg hover:shadow-xl m-2 p-3 ${
-                selectedSkills.includes(skill) ? 'bg-[#8554a9]' : 'bg-[#352872]'
+                selectedSkills.includes(skill)
+                  ? 'bg-[#8554a9]'
+                  : darkMode
+                  ? 'bg-[#222831]'
+                  : 'bg-[#352872]'
               }`}
               onClick={() => handleSelect(skill)}
             >
@@ -164,11 +161,12 @@ const EditSkills = () => {
       {/* Confirmation dialog */}
       {showConfirmation && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div className="bg-white p-6 rounded-md shadow-lg">
-            <h3 className="text-xl mb-4">Are you sure you want to save changes?</h3>
+          <div className={`bg-white dark:bg-[#2b2c34] p-6 rounded-md shadow-lg`}>
+            <h3 className="text-xl mb-4 dark:text-gray-200">
+              Are you sure you want to save changes?
+            </h3>
             <div className="flex justify-end gap-4">
               <Button label="Cancel" onClick={cancelSave} />
-              {/* Using Link to navigate to the profile page after saving */}
               <Link to="/profile">
                 <Button label="Sure" onClick={confirmSave} />
               </Link>

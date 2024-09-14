@@ -1,8 +1,11 @@
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 // Define the CustomBarChart component
-const CustomBarChart = ({ data, darkMode }) => {
+const CustomBarChart = ({ data }) => {
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
   return (
     <BarChart width={800} height={400} data={data}>
       <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#555' : '#ccc'} />

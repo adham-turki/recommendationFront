@@ -6,16 +6,18 @@ import * as d3 from 'd3';
 import GraphSidebar from './graphSidebar';
 import PropTypes from 'prop-types';
 import { ClipLoader } from 'react-spinners';
+import { useSelector } from 'react-redux';
 
 
 
-const ForceDirectedGraph = ({ darkMode }) => {
+const ForceDirectedGraph = () => {
   const [blueNodes, setBlueNodes] = useState([]);
   const [orangeNodes, setOrangeNodes] = useState([]);
-  const [draggedNodeData, setDraggedNodeData] = useState(null);
   const [selectedNodeData, setSelectedNodeData] = useState(null);
   const [graph, setGraph] = useState(null);
   const [userData, setUserData] = useState(null);
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
 
  
   fetchData();
@@ -112,7 +114,6 @@ const ForceDirectedGraph = ({ darkMode }) => {
           if(d.group == "Users"){
             fetchUserData(d.userId);
           }  
-          setDraggedNodeData(null);  // Clear dragged data when clicking
            // Create a ripple effect
   const ripple = svgContainer.append('circle')
   .attr('cx', d.x)
@@ -150,7 +151,6 @@ ripple.transition()
       function dragged(event) {
         event.subject.fx = event.x;
         event.subject.fy = event.y;
-        setDraggedNodeData(event.subject);
         if(event.subject.group == "Users"){
           fetchUserData(event.subject.userId);
         } 
@@ -173,7 +173,14 @@ ripple.transition()
   async function fetchData() {
     if (graph == null) {
       try {
-        const res = await fetch(import.meta.env.VITE_API+"/graph");
+        const res = await fetch(import.meta.env.VITE_API+"/graph",
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+          }
+  }
+        );
   
         // Check response status
         if (!res.ok) {
@@ -193,7 +200,14 @@ ripple.transition()
   }
   async function fetchUserData(userId){
     try {
-    const res  = await fetch(import.meta.env.VITE_API+"/user/"+userId);
+    const res  = await fetch(import.meta.env.VITE_API+"/user/"+userId,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+}
+    );
     const data = await res.json();
     setUserData(data);
     } catch (error) {
@@ -216,73 +230,7 @@ ripple.transition()
           <div id="chart" className='w-3/4' />
         </div>
 
-       {/* Display dragged node data */}
-{draggedNodeData && (
-  <div className={`fixed bottom-80 top-20 right-72 2xl:right-1/4 w-96 p-6 shadow-lg border overflow-auto rounded-3xl mt-6 
-    ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-[#F8F9FA] border-[#E0E0E0]'}`}>
 
-    {/* Profile Image and ID */}
-    <div className="mb-4 flex flex-col items-center">
-      {draggedNodeData.group === 'Users' && (
-        <img
-          src={draggedNodeData.img}
-          alt="Node"
-          className="w-24 h-24 rounded-full object-cover border-4 border-[#007BFF]"
-        />
-      )}
-      {draggedNodeData.group === 'Categories' && (
-        <div className={`w-24 h-24 rounded-full flex items-center justify-center border-4 ${darkMode ? 'bg-blue-500 border-[#3b82f6]' : 'bg-[#1f77b4] border-[#007BFF]'}`}>
-          <span className="text-4xl text-white">
-            {draggedNodeData.id.charAt(0).toUpperCase()}
-          </span>
-        </div>
-      )}
-      <h3 className={`mt-4 text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>{draggedNodeData.id}</h3>
-    </div>
-
-    {/* Display user data if available */}
-    {draggedNodeData.group === 'Users' && userData && (
-      <ul className={`mt-2 space-y-2 max-h- ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-        {Object.entries(userData)
-          .filter(([key]) => key !== 'user_id' && key !== 'profilePicture' && key !== 'role' && key !== 'firstName' && key !== 'lastName' && key !== 'interest') // Remove unnecessary fields
-          .map(([key, value]) => {
-            if (key === 'enabled') {
-              return (
-                <li key={key} className="mb-1 flex items-center space-x-2">
-                  <strong>Status:</strong>
-                  <span className={`font-semibold ${value ? 'text-green-600' : 'text-red-600'}`}>
-                    {value ? 'Active' : 'Inactive'}
-                  </span>
-                </li>
-              );
-            } else if (key === 'interests' && Array.isArray(value)) {
-              return (
-                <li key={key} className="mb-1">
-                  <strong>Interests:</strong>
-                  <ul className="mt-1 ml-5 list-disc space-y-1 ">
-                    {value.map((interest) =>
-                      Object.keys(interest).map((interestKey) => (
-                        <li key={interestKey} className="text-blue-500"> {interestKey}</li>
-                      ))
-                    )}
-                  </ul>
-                </li>
-              );
-            } else {
-              return (
-                
-                <li key={key} className="mb-1">
-                  <strong>{key}:</strong> {value!=null && value.toString()}
-                </li>
-              );
-            }
-          })}
-      </ul>
-    )}
-
-    <button onClick={() => setDraggedNodeData(null)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors">✕</button>
-  </div>
-)}
 
 
 {/* Display selected node data */}
@@ -313,7 +261,7 @@ ripple.transition()
     {selectedNodeData.group === 'Users' && userData && (
       <ul className={`mt-2 space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
       {Object.entries(userData)
-        .filter(([key, value]) => key !== 'user_id' && key !== 'profilePicture'&& key !== 'role'&& key !== 'firstName'&& key !== 'lastName'&& key !== 'interest') // Remove duplicate interest
+        .filter(([key, value]) => key !== 'user_id' && key !== 'profilePicture'&& key !== 'role'&& key !== 'firstName'&& key !== 'lastName'&& key !== 'interest' && key !== 'skills' && value !== null) // Remove duplicate interest
         .map(([key, value]) => {
           if (key === 'enabled') {
             // Handling "enabled" to show Active/Inactive with color
@@ -366,7 +314,7 @@ ripple.transition()
 
 
       </div>
-      <GraphSidebar blueNodes={blueNodes} orangeNodes={orangeNodes} darkMode={darkMode} />
+      <GraphSidebar blueNodes={blueNodes} orangeNodes={orangeNodes}  />
     </div>
   );
 };

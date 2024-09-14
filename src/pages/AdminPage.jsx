@@ -6,23 +6,26 @@ import Users from '../components/Users.jsx';
 import ForceDirectedGraph from '../components/Graph.jsx';
 import { useState } from 'react';
 import Footer from '../components/Footer.jsx';
+import { useSelector } from 'react-redux';
 
 
-const ContentPage = ({darkMode}) => { 
+const ContentPage = () => { 
   const [activeComponent, setActiveComponent] = useState('dashboard'); // Default to Dashboard
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
 
   const renderComponent = () => {
     switch (activeComponent) {
       case 'dashboard':
-        return <Dashboard darkMode={darkMode} />;
+        return <Dashboard  />;
       case 'posts':
-        return <Posts darkMode={darkMode} />;
+        return <Posts />;
       case 'users':
-        return <Users darkMode={darkMode} />;
+        return <Users />;
       case 'graph':
-        return <ForceDirectedGraph darkMode={darkMode} />;
+        return <ForceDirectedGraph  />;
       default:
-        return <Dashboard darkMode={darkMode} />;
+        return <Dashboard  />;
     }
   };
 

@@ -4,50 +4,59 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ClipLoader } from 'react-spinners';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  fetchUsersStart,
+  fetchUsersSuccess,
+  fetchUsersFailure,
+  toggleUserStatus,
+} from '../redux/userSlice';
 
 
-const Users = ({ darkMode }) => {
-  const [users, setUsers] = useState(null);
-  const [error, setError] = useState(null); // State to handle errors
+const Users = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 5;
 
+  const dispatch = useDispatch();
+  const { users, loading, error } = useSelector((state) => state.users);
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
   useEffect(() => {
     async function fetchData() {
+      dispatch(fetchUsersStart());
       try {
-        const res = await fetch("https://rsserviceplan-rsapp.azuremicroservices.io/users");
+        const res = await fetch(`${import.meta.env.VITE_API}/users`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         if (!res.ok) {
           throw new Error('Failed to fetch users');
         }
         const data = await res.json();
-        setUsers(data);
+        dispatch(fetchUsersSuccess(data));
       } catch (err) {
-        setError(err.message); // Set the error message in case of failure
+        dispatch(fetchUsersFailure(err.message));
       }
     }
     fetchData();
-  }, []);
-
+  }, [dispatch]);
 
   const handleActivateDeactivate = async (userId, isEnabled) => {
     const url = isEnabled
-      ? `http://192.168.1.123:2505/user/deactivate/${userId}`
-      : `http://192.168.1.123:2505/user/activate/${userId}`;
+      ? `${import.meta.env.VITE_API}/user/deactivate/${userId}`
+      : `${import.meta.env.VITE_API}/user/activate/${userId}`;
 
     try {
       const res = await fetch(url, { method: 'PATCH' });
       if (!res.ok) {
         throw new Error(`Failed to ${isEnabled ? 'deactivate' : 'activate'} user`);
       }
-
-      setUsers(prevUsers =>
-        prevUsers.map(user =>
-          user.id === userId ? { ...user, enabled: !isEnabled } : user
-        )
-      );
+      dispatch(toggleUserStatus({ userId, isEnabled }));
     } catch (err) {
-      setError(err.message); // Handle errors
+      dispatch(fetchUsersFailure(err.message));
     }
   };
 

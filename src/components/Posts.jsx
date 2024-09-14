@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
 
-const Posts = ({ darkMode }) => {
+const Posts = () => {
 
 
 
@@ -24,6 +25,8 @@ const Posts = ({ darkMode }) => {
   const [editImage, setEditImage] = useState('');
   const [editBody, setEditBody] = useState('');
   const [editTitle, setEditTitle] = useState('');
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
 
 
   const postsPerPage = 5;

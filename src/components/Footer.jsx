@@ -1,4 +1,5 @@
-
+import matchifyLogo from "../assets/matchify_logo1.png";
+import matchifyLogo_white from "../assets/matchify_logo_white.png";
 import {
   FaFacebookF,
   FaTwitter,
@@ -7,62 +8,49 @@ import {
   FaPhoneAlt,
   FaMapMarkerAlt,
 } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const Footer = () => {
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
   return (
-    <footer className="bg-white text-[#1D3557] py-0 px-12 shadow-lg">
-      <div className=" mx-auto flex flex-col md:flex-row justify-between items-start">
+    <footer
+      className={`py-0 px-12 shadow-lg ${darkMode ? "bg-gray-800 text-gray-300" : "bg-white text-[#1D3557]"}`}
+    >
+      <div className="mx-auto flex flex-col md:flex-row justify-between items-start">
         <div className="pt-5 mb-8 md:mb-0">
-          
           <div className="flex items-center mb-4">
             <img
-              src=".\src\assets\matchify_logo1.png" // Use the imported logo as it is, without embedding it into a circle
+              src={darkMode ? matchifyLogo_white : matchifyLogo}
               alt="Logo"
-              className="h-12 object-contain "
+              className="h-12 object-contain"
             />
-            <span className="text-3xl font-bold text-[#14044c]">Matchify</span>
+            <span className={`text-3xl font-bold ${darkMode ? "text-gray-100" : "text-[#14044c]"}`}>
+              Matchify
+            </span>
           </div>
-          <p className="max-w-sm text-[#14044c]">
+          <p className={`max-w-sm ${darkMode ? "text-gray-400" : "text-[#14044c]"}`}>
             Connects you with personalized content and matches your profile with
             similar interests to keep you engaged and informed.
           </p>
         </div>
 
-        {/* Profile Picture and Description */}
-        {/* <div className="mb-8 md:mb-0">
-          
-
-          <div className="flex items-center mb-4 py-2">
-            <img
-              src=".\src\assets\matchify_logo1.png"
-              alt="Logo"
-              className="w-20 mr-3 border-opacity-0  pb-0"
-            />
-            <span className="pt-0 text-2xl font-bold text-[#1D3557]">Matchify</span>
-          </div>
-          <p className="max-w-sm  text-[#1D3557]">
-            connects you with personalized content and matches your profile with
-            similar interests to keep you engaged and informed.
-          </p>
-        </div>
-        */}
-
         {/* Contact Information */}
         <div className="mb-8 md:mb-0 py-10">
-          <h3 className="text-xl font-semibold mb-4 text-[#1D3557]">
+          <h3 className={`text-xl font-semibold mb-4 ${darkMode ? "text-gray-100" : "text-[#1D3557]"}`}>
             Contact Us
           </h3>
           <ul>
-            <li className="flex items-center mb-2 text-[#1D3557]">
-              <FaMapMarkerAlt className="mr-3 text-[#1D3557]" />
-              <span> Ramallah, Palestine</span>
+            <li className={`flex items-center mb-2 ${darkMode ? "text-gray-400" : "text-[#1D3557]"}`}>
+              <FaMapMarkerAlt className={`mr-3 ${darkMode ? "text-gray-400" : "text-[#1D3557]"}`} />
+              <span>Ramallah, Palestine</span>
             </li>
-            <li className="flex items-center mb-2 text-[#1D3557]">
-              <FaPhoneAlt className="mr-3 text-[#1D3557]" />
+            <li className={`flex items-center mb-2 ${darkMode ? "text-gray-400" : "text-[#1D3557]"}`}>
+              <FaPhoneAlt className={`mr-3 ${darkMode ? "text-gray-400" : "text-[#1D3557]"}`} />
               <span>+970 597333313</span>
             </li>
-            <li className="flex items-center text-[#1D3557]">
-              <FaEnvelope className="mr-3 text-[#1D3557]" />
+            <li className={`flex items-center ${darkMode ? "text-gray-400" : "text-[#1D3557]"}`}>
+              <FaEnvelope className={`mr-3 ${darkMode ? "text-gray-400" : "text-[#1D3557]"}`} />
               <span>contact@Matchifyk.com</span>
             </li>
           </ul>
@@ -70,7 +58,7 @@ const Footer = () => {
 
         {/* Social Media Links */}
         <div className="py-10">
-          <h3 className="text-xl font-semibold mb-4 text-[#1D3557]">
+          <h3 className={`text-xl font-semibold mb-4 ${darkMode ? "text-gray-100" : "text-[#1D3557]"}`}>
             Follow Us
           </h3>
           <div className="flex space-x-4">
@@ -78,7 +66,7 @@ const Footer = () => {
               href="https://www.facebook.com/525K.io"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-[#1D3557] hover:bg-[#33527A] hover:text-white hover:scale-105 transform transition duration-300 shadow-md"
+              className={`w-10 h-10 flex items-center justify-center rounded-full ${darkMode ? "bg-gray-700 text-gray-100 hover:bg-gray-600" : "bg-white text-[#1D3557] hover:bg-[#33527A]"} hover:text-white hover:scale-105 transform transition duration-300 shadow-md`}
             >
               <FaFacebookF />
             </a>
@@ -86,7 +74,7 @@ const Footer = () => {
               href="https://x.com/525K_io"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-[#1D3557] hover:bg-[#33527A] hover:text-white hover:scale-105 transform transition duration-300 shadow-md"
+              className={`w-10 h-10 flex items-center justify-center rounded-full ${darkMode ? "bg-gray-700 text-gray-100 hover:bg-gray-600" : "bg-white text-[#1D3557] hover:bg-[#33527A]"} hover:text-white hover:scale-105 transform transition duration-300 shadow-md`}
             >
               <FaTwitter />
             </a>
@@ -94,7 +82,7 @@ const Footer = () => {
               href="https://www.linkedin.com/company/525k/"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-[#1D3557] hover:bg-[#33527A] hover:text-white hover:scale-105 transform transition duration-300 shadow-md"
+              className={`w-10 h-10 flex items-center justify-center rounded-full ${darkMode ? "bg-gray-700 text-gray-100 hover:bg-gray-600" : "bg-white text-[#1D3557] hover:bg-[#33527A]"} hover:text-white hover:scale-105 transform transition duration-300 shadow-md`}
             >
               <FaLinkedinIn />
             </a>
@@ -103,11 +91,13 @@ const Footer = () => {
       </div>
 
       {/* Footer Bottom */}
-      <div className="mt-0 border-t-2 border-gray-40000 pt-4 text-center">
-        <p className="text-[#1D3557]">
+      <div className={`mt-0 border-t-2 ${darkMode ? "border-gray-600" : "border-gray-400"} pt-4 text-center`}>
+        <p className={`${darkMode ? "text-gray-400" : "text-[#1D3557]"}`}>
           &copy; {new Date().getFullYear()} Matchify. All rights reserved.
         </p>
       </div>
+
+
     </footer>
   );
 };

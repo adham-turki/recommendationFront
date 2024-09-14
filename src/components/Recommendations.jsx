@@ -24,26 +24,31 @@ import { ImSpinner2 } from "react-icons/im";
 const Recommendations = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [filteredRecommendations, setFilteredRecommendations] = useState([]);
-
-
-  useEffect(() => {
-    // Fetch data from the API
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://192.168.1.123:2505/recommendations',{
-                         credentials:'include'
-            });
-        const data = await response.json();
-        setRecommendations(data.recommendations);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
   const [filterType, setFilterType] = useState("All");
   const [likes, setLikes] = useState([]);
   const [dislikes, setDislikes] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [shares, setShares] = useState([]);
   const [enlargedImage, setEnlargedImage] = useState(null);
+
+
+  useEffect(() => {
+    // Fetch data from the API
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API}/recommendations`,
+                        {
+                          headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        }
+            });
+        const data = await response.json();
+        setRecommendations(data.recommendations);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+ 
 
   const movie = {
     IMDBscore: 7.9,
@@ -60,7 +65,14 @@ const Recommendations = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://192.168.1.123:2505/recommendations");
+      const response = await fetch(`${import.meta.env.VITE_API}/recommendations` , 
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }
+}
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -73,11 +85,13 @@ const Recommendations = () => {
       }
 
       try {
-        const response = await fetch(
-          "http://192.168.1.123:2505/recommendations",
+        const response = await fetch(`${import.meta.env.VITE_API}/recommendations` , 
           {
-            credentials: "include",
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
           }
+  }
         );
         const data = await response.json();
         

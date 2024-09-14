@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const CustomLineChart = ({ data, darkMode }) => {
+const CustomLineChart = ({ data }) => {
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
   return (
     <ResponsiveContainer width="100%" height={300}>
       <LineChart data={data}>
