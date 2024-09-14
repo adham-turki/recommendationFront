@@ -1,4 +1,4 @@
-import {  useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLayerGroup, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -6,14 +6,41 @@ import { faUser, faLayerGroup, faChevronDown, faChevronRight } from '@fortawesom
 const GraphSidebar = ({ blueNodes, orangeNodes, darkMode }) => {
   const [expandedSection, setExpandedSection] = useState(null);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
-  
+  const [userData, setUserData] = useState(null);
 
   const handleToggleSection = (section) => {
     setExpandedSection(expandedSection === section ? null : section);
   };
 
-  const handleToggleNode = (nodeId) => {
+  useEffect(() => {
+    console.log(userData); // Log userData for debugging
+  }, [userData]);
+
+  const handleToggleNode = async (nodeId) => {
     setSelectedNodeId(selectedNodeId === nodeId ? null : nodeId);
+  };
+
+  const handleToggleOrangeNode = async (nodeId,id) => {
+    if (selectedNodeId === nodeId) {
+      setSelectedNodeId(null);
+      setUserData(null); // Clear user data if the same node is clicked again
+    } else {
+      setSelectedNodeId(id);
+      await fetchUserData(nodeId);
+    }
+  };
+
+  const fetchUserData = async (userId) => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API}/user/${userId}`);
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await res.json();
+      setUserData(data);
+    } catch (error) {
+      console.error("Error fetching or parsing data:", error);
+    }
   };
 
   return (
@@ -54,7 +81,7 @@ const GraphSidebar = ({ blueNodes, orangeNodes, darkMode }) => {
                   <ul className={`ml-4 mt-2 list-disc ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                     {Object.entries(node).map(([key, value]) => (
                       <li key={key} className="ml-4">
-                        <strong>{key}:</strong> {value.toString()}
+                        <strong>{key}:</strong> {value}
                       </li>
                     ))}
                   </ul>
@@ -83,7 +110,7 @@ const GraphSidebar = ({ blueNodes, orangeNodes, darkMode }) => {
               <li
                 key={node.id}
                 className={`cursor-pointer p-2 ${darkMode ? 'text-white' : 'text-gray-700'}`}
-                onClick={() => handleToggleNode(node.id)}
+                onClick={() => handleToggleOrangeNode(node.userId,node.id)}
               >
                 <div className={`flex items-center justify-between ${darkMode ? (index % 2 === 0 ? 'bg-gray-900' : 'bg-gray-900') : (index % 2 === 0 ? 'bg-white' : 'bg-gray-100')}`}>
                   <div className="flex items-baseline">
@@ -95,14 +122,21 @@ const GraphSidebar = ({ blueNodes, orangeNodes, darkMode }) => {
                     <div>{node.id}</div>
                   </div>
                 </div>
-                {selectedNodeId === node.id && (
+                {selectedNodeId === node.id && userData && (
                   <ul className={`ml-4 mt-2 list-disc ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    {Object.entries(node).map(([key, value]) => (
+                    {Object.entries(userData).map(([key, value]) => (
                       <li key={key} className="ml-4">
-                        <strong>{key}:</strong> {value.toString()}
+                        {/* <strong>{key}:</strong> {value} */}
+                        {key !== 'profilePicture' && key !== 'role' && key !== 'skills' && key !== 'interests' && key !== 'interest' && value != null  && value}
+                        {/* <h1>jjj</h1> */}
                       </li>
                     ))}
                   </ul>
+                )}
+                {selectedNodeId === node.id && !userData && (
+                  <div className="ml-4 mt-2 text-gray-600">
+                    Loading user data...
+                  </div>
                 )}
               </li>
             ))}
@@ -122,10 +156,11 @@ GraphSidebar.propTypes = {
   orangeNodes: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
+      userId: PropTypes.string.isRequired, // Ensure userId is defined here
       group: PropTypes.string.isRequired,
     })
   ).isRequired,
-  darkMode: PropTypes.bool.isRequired, // Add darkMode to prop types
+  darkMode: PropTypes.bool.isRequired,
 };
 
 export default GraphSidebar;

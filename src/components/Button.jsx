@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 const Button = ({ label, onClick, type = 'primary' }) => {
     const baseStyles = 'px-6 py-3 rounded-full font-semibold transition duration-300 transform';
   
@@ -14,6 +15,15 @@ const Button = ({ label, onClick, type = 'primary' }) => {
         {label}
       </button>
     );
+  };
+  Button.propTypes = {
+    label: PropTypes.string.isRequired,  // label must be a string and is required
+    onClick: PropTypes.func.isRequired,  // onClick must be a function and is required
+    type: PropTypes.oneOf(['primary', 'secondary']) // type must be 'primary' or 'secondary'
+  };
+  
+  Button.defaultProps = {
+    type: 'primary',  // default type is 'primary'
   };
   
   export default Button;

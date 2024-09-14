@@ -9,7 +9,7 @@ const Login = () => {
   const handleLogin = (provider) => {
     if(provider == "google"){
 
-      window.location.href = 'http://localhost:2505/oauth2/authorization/google';
+      window.location.href = 'https://rsserviceplan-rsapp.azuremicroservices.io/oauth2/authorization/google';
     }else{
 
       window.location.href = 'http://localhost:2505/oauth2/authorization/github';
@@ -28,7 +28,7 @@ const Login = () => {
           type="button" 
           className="button type1"
           onClick={() => handleLogin('google')}
-        >
+        >ss
         </button>
         {/* GitHub Login Button */}
         <button 

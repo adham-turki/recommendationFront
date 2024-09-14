@@ -1,13 +1,12 @@
 import "../App.css";
 import "../index.css";
-import Header from "../components/Header";
+// npm install @mui/material @emotion/react @emotion/styled
 import Footer from "../components/Footer";
 import Recommendations from "../components/Recommendations";
 
 const MyFeed = () => {
   return (
     <div className="pt-10">
-      <Header />
 
       <div
         className=" pt-10 relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden"
@@ -22,7 +21,7 @@ const MyFeed = () => {
         </div>
       </div>
 
-     <Footer className="w-full bg-white border-t border-gray-200" />
+      <Footer className="w-full bg-white border-t border-gray-200" />
     </div>
   );
 };

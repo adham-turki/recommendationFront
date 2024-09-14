@@ -1,5 +1,7 @@
 import { FaChrome, FaFirefox, FaEdge, FaSafari, FaOpera, FaDownload } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import PropTypes from 'prop-types';
+
 
 const ExtensionGuidePage = () => {
   const navigate = useNavigate(); // Initialize navigate
@@ -127,6 +129,11 @@ const BrowserCard = ({ icon, title, steps }) => {
       </ol>
     </div>
   );
+};
+BrowserCard.propTypes = {
+  icon: PropTypes.element.isRequired, // icon must be a React element and is required
+  title: PropTypes.string.isRequired, // title must be a string and is required
+  steps: PropTypes.arrayOf(PropTypes.string).isRequired // steps must be an array of strings and is required
 };
 
 export default ExtensionGuidePage;
