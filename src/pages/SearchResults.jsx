@@ -178,6 +178,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const initialProfiles = [
   {
@@ -229,6 +230,7 @@ const SearchResults = ({ searchTerm, filters }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedProfile, setSelectedProfile] = useState(null); // State to hold the selected profile for modal
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -361,9 +363,9 @@ const SearchResults = ({ searchTerm, filters }) => {
   };
 
   return (
-    <div className="relative p-4 bg-[#e6e2eb] min-h-screen">
+    <div className={`relative p-4 min-h-screen ${darkMode ? "bg-gray-800 text-gray-200" : "bg-[#e6e2eb] text-[#352872]"}`}>
       <div className="mt-16">
-        <h1 className="text-4xl font-bold mb-6 text-[#352872]">
+        <h1 className={`text-4xl font-bold mb-6 ${darkMode ? "text-white" : "text-[#352872]"}`}>
           Search Results
         </h1>
         {loading && <p>Loading...</p>}
@@ -372,11 +374,10 @@ const SearchResults = ({ searchTerm, filters }) => {
           {profiles.map((profile) => (
             <div
               key={profile.user_id}
-              className={`bg-white shadow-lg rounded-3xl overflow-hidden border border-gray-300 p-6 flex flex-col items-center text-center transition-transform transform ${
-                selectedProfiles.includes(profile)
-                  ? "border-[#352872] scale-105"
-                  : "hover:scale-105 hover:shadow-xl"
-              }`}
+              className={`bg-${darkMode ? "gray-900" : "white"} shadow-lg rounded-3xl overflow-hidden border ${darkMode ? "border-gray-700" : "border-gray-300"} p-6 flex flex-col items-center text-center transition-transform transform ${selectedProfiles.includes(profile)
+                ? "border-[#352872] scale-105"
+                : "hover:scale-105 hover:shadow-xl"
+                }`}
               onClick={() => handleProfileSelect(profile)}
             >
               <div className="w-24 h-24 overflow-hidden rounded-full border-4 border-[#352872] mb-4">
@@ -387,11 +388,14 @@ const SearchResults = ({ searchTerm, filters }) => {
                 />
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-[#352872] mb-2">{`${profile.firstName} ${profile.lastName}`}</h3>
-                <p className="text-gray-600 mb-4 text-sm">{profile.email}</p>
-                <button
+                <h3 className={`text-xl font-semibold mb-2 ${darkMode ? "text-white" : "text-[#352872]"}`}>
+                  {`${profile.firstName} ${profile.lastName}`}
+                </h3>
+                <p className={`text-sm mb-4 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                  {profile.email}
+                </p>                <button
                   onClick={() => viewDetails(profile)}
-                  className="mt-2 px-4 py-2 bg-[#352872] text-white rounded hover:bg-[#352850] transition duration-300"
+                  className={`mt-2 px-4 py-2 rounded ${darkMode ? "bg-[#c293dd] " : "bg-[#352872] hover:bg-[#352850]"} text-white transition duration-300`}
                 >
                   View Details
                 </button>
@@ -403,17 +407,17 @@ const SearchResults = ({ searchTerm, filters }) => {
         {selectedProfiles.length === 2 && (
           <button
             onClick={handleCalculateSimilarity}
-            className="mt-6 px-4 py-2 bg-[#352872] text-white rounded-lg hover:bg-[#5342a9] transition duration-300"
+            className={`mt-6 px-4 py-2 rounded-lg ${darkMode ? "bg-[#9e61c1] " : "bg-[#352872] hover:bg-[#5342a9]"} text-white transition duration-300`}
           >
             Calculate Similarity
           </button>
         )}
         {similarityResult && (
           <div className="mt-6">
-            <h2 className="text-2xl font-bold">
+            <h2 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-[#352872]"}`}>
               Similarity: {similarityResult.similarityPercentage}%
             </h2>
-            <p className="text-lg">
+            <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-800"}`}>
               Most Common Interest: {similarityResult.mostCommonInterest}
             </p>
           </div>
@@ -421,9 +425,9 @@ const SearchResults = ({ searchTerm, filters }) => {
         {/* Modal for displaying selected profile details */}
         {selectedProfile && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg p-6 w-96 relative">
+            <div className={`bg-${darkMode ? "gray-800" : "white"} rounded-lg p-6 w-96 relative`}>
               <button
-                className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+                className={`absolute top-2 right-2 ${darkMode ? "text-gray-400 hover:text-gray-200" : "text-gray-600 hover:text-gray-900"}`}
                 onClick={closeModal}
               >
                 &times;
@@ -436,30 +440,31 @@ const SearchResults = ({ searchTerm, filters }) => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <h3 className="text-xl font-semibold text-[#352872] mb-2">
-                  {selectedProfile.username}
+                <h3 className={`text-xl font-semibold mb-2 ${darkMode ? "text-white" : "text-[#352872]"}`}>
+                  {selectedProfile.firstName} {selectedProfile.lastName}
                 </h3>
-                <p className="text-gray-600 mb-4">{selectedProfile.email}</p>
-                <div className="text-left w-full">
-                  <p>
-                    <strong>Address:</strong> {selectedProfile.address || "N/A"}
-                  </p>
-                  <p>
-                    <strong>Gender:</strong> {selectedProfile.gender || "N/A"}
-                  </p>
-                  <p>
-                    <strong>Phone:</strong> {selectedProfile.phone || "N/A"}
-                  </p>
-                  <p>
-                    <strong>email</strong> {selectedProfile.email}
-                  </p>
-                </div>
-                <button
-                  className="mt-4 px-4 py-2 bg-[#352872] text-white rounded-lg hover:bg-[#5342a9] transition duration-300"
-                  onClick={closeModal}
-                >
-                  Close
-                </button>
+                <p className={`text-sm mb-4 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                  {selectedProfile.email}
+                </p>                  <div className="text-left w-full">
+                    <p>
+                      <strong>Address:</strong> {selectedProfile.address || "N/A"}
+                    </p>
+                    <p>
+                      <strong>Gender:</strong> {selectedProfile.gender || "N/A"}
+                    </p>
+                    <p>
+                      <strong>Phone:</strong> {selectedProfile.phone || "N/A"}
+                    </p>
+                    <p>
+                      <strong>email</strong> {selectedProfile.email}
+                    </p>
+                  </div>
+                  <button
+                    className={`fixed bottom-4 right-4 px-4 py-2 rounded-lg ${darkMode ? "bg-gray-700 hover:bg-gray-600" : "bg-[#352872] hover:bg-[#5342a9]"} text-white transition duration-300`}
+                    onClick={closeModal}
+                  >
+                    Close
+                  </button>
               </div>
             </div>
           </div>

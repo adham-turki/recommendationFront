@@ -8,8 +8,11 @@ const Sidebar = ({ onNavClick, darkMode }) => {
   useEffect(()=>{
     async function fetchUserData(){
       const response = await fetch(`${import.meta.env.VITE_API}/profile`,{
-        credentials: 'include',
-      });
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+    });
       const userData = await response.json();
       setData(userData);
     }

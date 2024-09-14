@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { FaBookmark, FaFileAlt, FaVideo, FaFilm, FaBook } from "react-icons/fa";
-import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { RiArticleLine } from "react-icons/ri";
 import { TiSocialYoutubeCircular } from "react-icons/ti";
@@ -176,7 +175,6 @@ const SavedItemsPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
 
       {/* Add padding below header */}
       <div

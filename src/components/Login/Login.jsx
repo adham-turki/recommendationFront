@@ -9,9 +9,9 @@ const Login = () => {
   const handleLogin = (provider) => {
     let url = '';
     if (provider === "google") {
-      url = 'http://localhost:2505/oauth2/authorization/google'; 
+      url = `https://rsserviceplan-rsapp.azuremicroservices.io/oauth2/authorization/google`; 
     } else if (provider === "github") {
-      url = 'http://localhost:2505/oauth2/authorization/github'; 
+      url = 'https://rsserviceplan-rsapp.azuremicroservices.io/oauth2/authorization/github'; 
     }
 
     // Redirect to the OAuth provider
@@ -25,7 +25,7 @@ const Login = () => {
 
     if (token && refreshToken) {
       // Store tokens in localStorage
-      localStorage.setItem('authToken', token);
+      localStorage.setItem('token', token);
       localStorage.setItem('refreshToken', refreshToken);
 
       // Redirect to home page or other routes

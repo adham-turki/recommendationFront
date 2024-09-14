@@ -23,11 +23,10 @@ const GraphSidebar = ({ blueNodes, orangeNodes }) => {
   };
 
   const handleToggleOrangeNode = async (nodeId,id) => {
+    handleToggleNode(id);
     if (selectedNodeId === nodeId) {
-      setSelectedNodeId(null);
       setUserData(null); // Clear user data if the same node is clicked again
     } else {
-      setSelectedNodeId(id);
       await fetchUserData(nodeId);
     }
   };
@@ -39,6 +38,7 @@ const GraphSidebar = ({ blueNodes, orangeNodes }) => {
         throw new Error('Network response was not ok');
       }
       const data = await res.json();
+      console.log(data)
       setUserData(data);
     } catch (error) {
       console.error("Error fetching or parsing data:", error);
@@ -125,15 +125,48 @@ const GraphSidebar = ({ blueNodes, orangeNodes }) => {
                   </div>
                 </div>
                 {selectedNodeId === node.id && userData && (
-                  <ul className={`ml-4 mt-2 list-disc ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    {Object.entries(userData).map(([key, value]) => (
-                      <li key={key} className="ml-4">
-                        {/* <strong>{key}:</strong> {value} */}
-                        {key !== 'profilePicture' && key !== 'role' && key !== 'skills' && key !== 'interests' && key !== 'interest' && value != null  && value}
-                        {/* <h1>jjj</h1> */}
-                      </li>
-                    ))}
-                  </ul>
+                  <ul className={`mt-2 space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  {Object.entries(userData)
+                    .filter(([key, value]) => key !== 'user_id' && key !== 'profilePicture'&& key !== 'role'&& key !== 'firstName'&& key !== 'lastName'&& key !== 'interest' && key !== 'skills' && value !== null) // Remove duplicate interest
+                    .map(([key, value]) => {
+                      if (key === 'enabled') {
+                        // Handling "enabled" to show Active/Inactive with color
+                        return (
+                          <li key={key} className="mb-1 flex items-center space-x-2">
+                            <strong>Status:</strong>
+                            <span
+                              className={`font-semibold ${
+                                value ? 'text-green-600' : 'text-red-600'
+                              }`}
+                            >
+                              {value ? 'Active' : 'Inactive'}
+                            </span>
+                          </li>
+                        );
+                      } else if (key === 'interests' && Array.isArray(value)) {
+                        // Handling interests: Show only keys
+                        return (
+                          <li key={key} className="mb-1">
+                            <strong>Interests:</strong>
+                            <ul className="mt-1 ml-5 list-disc space-y-1">
+                              {value.map((interest, index) =>
+                                Object.keys(interest).map((interestKey) => (
+                                  <li key={index} className="text-blue-500">{interestKey}</li>
+                                ))
+                              )}
+                            </ul>
+                          </li>
+                        );
+                      } else {
+                        // Handling other fields, excluding nulls
+                        return (
+                          <li key={key} className="mb-1">
+                            <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {value ? value.toString() : 'N/A'}
+                          </li>
+                        );
+                      }
+                    })}
+                </ul>
                 )}
                 {selectedNodeId === node.id && !userData && (
                   <div className="ml-4 mt-2 text-gray-600">
