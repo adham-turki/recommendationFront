@@ -169,7 +169,6 @@ import { AiOutlineCalendar } from "react-icons/ai";
 import { FaThumbsUp, FaThumbsDown, FaShareAlt } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 // Sample static data
@@ -258,7 +257,6 @@ const HistoryPage = () => {
 
   return (
     <div className="min-h-screen bg-[#e6e2eb]">
-      <Header />
       <main className="pt-20 pb-16"> {/* Adjust padding to avoid overlap */}
         <header className="mb-6">
           <h1 className="text-4xl font-extrabold text-[#14044c] mb-6 ml-24">History</h1>

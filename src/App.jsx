@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useState } from 'react';
 import Login from './components/Login/Login.jsx';
 import ChooseInterest from './components/ChooseInterest.jsx';
 import ChooseSkills from './components/ChooseSkills.jsx';
@@ -10,27 +11,37 @@ import Search from './pages/Search';
 import ProfilePage from './pages/ProfilePage';
 import SavedItemsPage from './pages/SavedItemsPage';
 import AdminPage from './pages/AdminPage';
+import Header from './components/Header.jsx';
 
 const App = () => {
+  const authenticatedRoutes = [
+    '/profile',
+    '/saved-items',
+    '/my-feed',
+    '/history',
+    '/search',
+    '/admin',
+  ];
+  const [darkMode, setDarkMode] = useState(false);
 
   return (
     <Router>
+      {authenticatedRoutes.includes(window.location.pathname) && (
+        <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+      )}
 
       <Routes>
-        {/* Public routes */}
         <Route path="/" element={<Login />} />
-        <Route path="/interests" element={<ChooseInterest />} />  
+        <Route path="/interests" element={<ChooseInterest />} />
         <Route path="/skills" element={<ChooseSkills />} />
         <Route path="/extension-guide" element={<ExtensionGuidePage />} />
         <Route path="/home" element={<Homepage />} />
-        {/* Authenticated routes */}
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/saved-items" element={<SavedItemsPage />} />
-        <Route path="/my-feed" element={<MyFeed />} />
-        <Route path="/history" element={<HistoryPage />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/admin" element={<AdminPage />} />
-        {/* Add more routes here as needed */}
+        <Route path="/profile" element={<ProfilePage darkMode={darkMode} />} />
+        <Route path="/saved-items" element={<SavedItemsPage darkMode={darkMode} />} />
+        <Route path="/my-feed" element={<MyFeed darkMode={darkMode} />} />
+        <Route path="/history" element={<HistoryPage darkMode={darkMode} />} />
+        <Route path="/search" element={<Search darkMode={darkMode} />} />
+        <Route path="/admin" element={<AdminPage darkMode={darkMode} />} />
       </Routes>
     </Router>
   );

@@ -6,14 +6,13 @@ import matchifyLogo from "../assets/matchify_logo.png";
 import { Link, useLocation } from "react-router-dom";
 import matchifyLogo_white from "../assets/matchify_logo_white.png";
 
-const Header = ({ darkMode1, setDarkMode1 }) => {
-  const [darkMode, setDarkMode] = useState(false);
+const Header = ({ darkMode, setDarkMode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeButton, setActiveButton] = useState(""); // Start with no active button
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const isAdmin = true; 
-  const location = useLocation(); // <-- Get the current location
+  const isAdmin = true;
+  const location = useLocation();
   // Set the active button based on the current path
   useEffect(() => {
     const path = location.pathname;
@@ -22,16 +21,16 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
     else if (path === "/search") setActiveButton("Users");
     else if (path === "/profile") setActiveButton("Profile");
     else if (path === "/admin") setActiveButton("Admin");
-  }, [location]); // <-- Run this effect whenever the location changes
+  }, [location]);
 
 
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName); // Set the clicked button as active
     setIsSidebarOpen(false);
   };
-  
 
-   
+
+
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
     if (!darkMode) {
@@ -98,12 +97,12 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
             to="/home"
             onClick={() => handleButtonClick("Home")}
             className={`hidden custom-md:block text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 !no-underline ${activeButton === "Home"
-                ? darkMode
-                  ? "bg-[#e6e2eb] text-gray-900"
-                  : "bg-[#14044c] text-white"
-                : darkMode
-                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+              ? darkMode
+                ? "bg-[#e6e2eb] text-gray-900"
+                : "bg-[#14044c] text-white"
+              : darkMode
+                ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
               }`}
           >
             Home
@@ -113,12 +112,12 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
 
             onClick={() => handleButtonClick("Feeds")}
             className={`hidden custom-md:block text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 !no-underline ${activeButton === "Feeds"
-                ? darkMode
-                  ? "bg-[#e6e2eb] text-gray-900"
-                  : "bg-[#14044c] text-white"
-                : darkMode
-                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+              ? darkMode
+                ? "bg-[#e6e2eb] text-gray-900"
+                : "bg-[#14044c] text-white"
+              : darkMode
+                ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
               }`}
           >
             Feeds
@@ -127,12 +126,12 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
             to="/search"
             onClick={() => handleButtonClick("Users")}
             className={` hidden custom-md:block text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 !no-underline ${activeButton === "Users"
-                ? darkMode
-                  ? "bg-[#e6e2eb] text-gray-900"
-                  : "bg-[#14044c] text-white"
-                : darkMode
-                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+              ? darkMode
+                ? "bg-[#e6e2eb] text-gray-900"
+                : "bg-[#14044c] text-white"
+              : darkMode
+                ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
               }`}
           >
             Users
@@ -141,12 +140,12 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
             to="/profile"
             onClick={() => handleButtonClick("Profile")}
             className={` hidden custom-md:block text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 !no-underline ${activeButton === "Profile"
-                ? darkMode
-                  ? "bg-[#e6e2eb] text-gray-900"
-                  : "bg-[#14044c] text-white"
-                : darkMode
-                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+              ? darkMode
+                ? "bg-[#e6e2eb] text-gray-900"
+                : "bg-[#14044c] text-white"
+              : darkMode
+                ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+                : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
               }`}
           >
             Profile
@@ -158,12 +157,12 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
               to="/admin"
               onClick={() => handleButtonClick("Admin")}
               className={` hidden custom-md:block text-lg font-medium leading-normal py-2 px-4 rounded-full transition duration-300 !no-underline ${activeButton === "Admin"
-                  ? darkMode
-                    ? "bg-[#e6e2eb] text-gray-900"
-                    : "bg-[#14044c] text-white"
-                  : darkMode
-                    ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
-                    : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
+                ? darkMode
+                  ? "bg-[#e6e2eb] text-gray-900"
+                  : "bg-[#14044c] text-white"
+                : darkMode
+                  ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+                  : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
                 }`}
             >
               Admin
@@ -173,6 +172,7 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
           <div
             onClick={toggleDarkMode}
             className="relative w-14 h-8 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer"
+            aria-label="Toggle Dark Mode"
           >
             <div
               className={`absolute left-1 h-6 w-6 bg-white rounded-full shadow-md transform !no-underline ${darkMode ? "translate-x-full" : ""
@@ -185,6 +185,7 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
               )}
             </div>
           </div>
+
 
           {/* Profile Picture with Dropdown */}
           <div className="relative" ref={dropdownRef}>
@@ -257,8 +258,8 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
               to="/"
               onClick={() => handleButtonClick("Home")}
               className={`text-lg font-medium ${activeButton === "Home"
-                  ? "bg-[#14044c] text-white"
-                  : "text-[#14044c]"
+                ? "bg-[#14044c] text-white"
+                : "text-[#14044c]"
                 } py-2 px-4 rounded-lg`}
             >
               Home
@@ -267,8 +268,8 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
               to="/my-feed"
               onClick={() => handleButtonClick("Feeds")}
               className={`text-lg font-medium ${activeButton === "Feeds"
-                  ? "bg-[#14044c] text-white"
-                  : "text-[#14044c]"
+                ? "bg-[#14044c] text-white"
+                : "text-[#14044c]"
                 } py-2 px-4 rounded-lg`}
             >
               Feeds
@@ -277,8 +278,8 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
               to="/search"
               onClick={() => handleButtonClick("Users")}
               className={`text-lg font-medium ${activeButton === "Users"
-                  ? "bg-[#14044c] text-white"
-                  : "text-[#14044c]"
+                ? "bg-[#14044c] text-white"
+                : "text-[#14044c]"
                 } py-2 px-4 rounded-lg`}
             >
               Users
@@ -287,8 +288,8 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
               to="/profile"
               onClick={() => handleButtonClick("Profile")}
               className={`text-lg font-medium ${activeButton === "Profile"
-                  ? "bg-[#14044c] text-white"
-                  : "text-[#14044c]"
+                ? "bg-[#14044c] text-white"
+                : "text-[#14044c]"
                 } py-2 px-4 rounded-lg`}
             >
               Profile
@@ -300,8 +301,8 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
                 to="#"
                 onClick={() => handleButtonClick("Admin")}
                 className={`text-lg font-medium ${activeButton === "Admin"
-                    ? "bg-[#14044c] text-white"
-                    : "text-[#14044c]"
+                  ? "bg-[#14044c] text-white"
+                  : "text-[#14044c]"
                   } py-2 px-4 rounded-lg`}
               >
                 Admin
@@ -315,8 +316,8 @@ const Header = ({ darkMode1, setDarkMode1 }) => {
   );
 };
 Header.propTypes = {
-  darkMode1: PropTypes.bool.isRequired,
-  setDarkMode1: PropTypes.func.isRequired,
+  darkMode: PropTypes.bool.isRequired,
+  setDarkMode: PropTypes.func.isRequired,
 };
 
 export default Header;

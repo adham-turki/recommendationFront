@@ -242,7 +242,7 @@ ripple.transition()
 
     {/* Display user data if available */}
     {draggedNodeData.group === 'Users' && userData && (
-      <ul className={`mt-2 space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+      <ul className={`mt-2 space-y-2 max-h- ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
         {Object.entries(userData)
           .filter(([key]) => key !== 'user_id' && key !== 'profilePicture' && key !== 'role' && key !== 'firstName' && key !== 'lastName' && key !== 'interest') // Remove unnecessary fields
           .map(([key, value]) => {

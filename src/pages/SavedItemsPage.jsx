@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { FaBookmark, FaLaptopCode, FaFlask, FaHeartbeat, FaBrain, FaUsers, FaPalette, FaPencilAlt, FaBook } from "react-icons/fa";
-import axios from "axios";
-import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const SavedItemsPage = () => {
@@ -75,7 +73,6 @@ const SavedItemsPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
       <div className="flex-grow flex p-4 bg-[#f6f1fa]" style={{ paddingTop: '100px' }}>
         <aside className="w-1/4 pr-4">
           <div className="bg-white p-4 rounded-lg shadow-md ">

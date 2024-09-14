@@ -1,15 +1,12 @@
 import "../App.css";
 import "../index.css";
-import Header from "../components/Header";
 // npm install @mui/material @emotion/react @emotion/styled
-import RandomPosts from "../components/RandomPosts";
 import Footer from "../components/Footer";
 import Recommendations from "../components/Recommendations";
 
 const MyFeed = () => {
   return (
     <div className="pt-10">
-      <Header />
 
       <div
         // background: linear-gradient(135deg, #8363a1 0%, #74a8c3 100%);

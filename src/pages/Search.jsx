@@ -1,13 +1,11 @@
 import React , { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FaGlobe, FaBriefcase, FaSearch } from 'react-icons/fa';
-import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
 import SearchResults from './SearchResults';
 import { motion } from 'framer-motion';
 
 // Define the header height
-const headerHeight = 60; // Adjust this value based on your header's height
 const suggestedProfiles = [
   // Profiles as defined in your original code
   {
@@ -158,7 +156,6 @@ const Search = () => {
   return (
     <div>
       <div className="w-full max-w-8xl p-4 bg-[#e6e2eb] min-h-screen flex flex-col">
-      <Header />
 
       <main className="relative flex flex-1 bg-[#e6e2eb]">
         {/* Sidebar */}

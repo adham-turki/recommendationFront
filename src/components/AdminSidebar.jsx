@@ -4,9 +4,12 @@ import PropTypes from 'prop-types';
 const Sidebar = ({ onNavClick, darkMode }) => {
   const [activeItem, setActiveItem] = useState('dashboard');
   const [data, setData] = useState([]);
+
   useEffect(()=>{
     async function fetchUserData(){
-      const response = await fetch(`${import.meta.env.VITE_API}/profile`);
+      const response = await fetch(`${import.meta.env.VITE_API}/profile`,{
+        credentials: 'include',
+      });
       const userData = await response.json();
       setData(userData);
     }

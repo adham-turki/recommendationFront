@@ -8,10 +8,7 @@ import {
   FiStar,
   FiTrash2,
 } from "react-icons/fi";
-import { FaHistory, FaSave } from "react-icons/fa";
-import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { Link } from "react-router-dom";
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [activeSection, setActiveSection] = useState("Edit Profile"); // For tracking active sidebar section
@@ -90,7 +87,6 @@ const ProfilePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen relative">
-      <Header />
 
       <div className="flex-grow w-full flex flex-col items-center p-8 pt-32 bg-[#e6e2eb]">
         {!isEditing ? (
