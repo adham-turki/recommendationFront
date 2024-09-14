@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { BsX, BsList, BsSunFill, BsMoonFill } from "react-icons/bs";
-import matchifyLogo from "../assets/matchify_logo.png";
+import matchifyLogo from "../assets/matchify_logo1.png";
 import { Link, useLocation } from "react-router-dom";
 import matchifyLogo_white from "../assets/matchify_logo_white.png";
 
