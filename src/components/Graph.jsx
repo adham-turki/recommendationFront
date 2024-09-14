@@ -6,16 +6,19 @@ import * as d3 from 'd3';
 import GraphSidebar from './graphSidebar';
 import PropTypes from 'prop-types';
 import { ClipLoader } from 'react-spinners';
+import { useSelector } from 'react-redux';
 
 
 
-const ForceDirectedGraph = ({ darkMode }) => {
+const ForceDirectedGraph = () => {
   const [blueNodes, setBlueNodes] = useState([]);
   const [orangeNodes, setOrangeNodes] = useState([]);
   const [draggedNodeData, setDraggedNodeData] = useState(null);
   const [selectedNodeData, setSelectedNodeData] = useState(null);
   const [graph, setGraph] = useState(null);
   const [userData, setUserData] = useState(null);
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
 
  
   fetchData();
@@ -366,7 +369,7 @@ ripple.transition()
 
 
       </div>
-      <GraphSidebar blueNodes={blueNodes} orangeNodes={orangeNodes} darkMode={darkMode} />
+      <GraphSidebar blueNodes={blueNodes} orangeNodes={orangeNodes}  />
     </div>
   );
 };

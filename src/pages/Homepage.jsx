@@ -1,6 +1,5 @@
 import "../App.css";
 import "../index.css";
-import Footer from "../components/Footer";
 import YouTubeVideo from "../components/YouTubeVideo";
 import { useNavigate } from "react-router-dom";
 import ServicesSection from "../components/ServicesSection";
@@ -451,9 +450,7 @@ const Homepage = () => {
       </div>
 
 
-      <div>
-        <Footer />
-      </div>
+      
 
     </div>
   );

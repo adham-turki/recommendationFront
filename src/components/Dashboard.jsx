@@ -4,10 +4,13 @@ import CustomPieChart from './PieChart.jsx';
 import CustomBarChart from './BarChart.jsx';
 import StatisticsBox from './StatisticsBox.jsx';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
-const Dashboard = ({ darkMode }) => {  // Add darkMode prop
+const Dashboard = () => {  // Add darkMode prop
   const [timeRange, setTimeRange] = useState('Last 30 Days'); // Default time range
   const [statistics, setStatistics] = useState([]);
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
 
 
   useEffect(() => {
@@ -107,24 +110,24 @@ const Dashboard = ({ darkMode }) => {  // Add darkMode prop
         <StatisticsBox
           title="Total Users"
           value={statistics.totalUsers}
-          darkMode={darkMode} // Pass darkMode to StatisticsBox if needed
+           // Pass darkMode to StatisticsBox if needed
         />
         <StatisticsBox
           title="Active Users"
           value="567"
-          darkMode={darkMode} // Pass darkMode to StatisticsBox if needed
+           // Pass darkMode to StatisticsBox if needed
         />
         <StatisticsBox
           title="Engagement Rate"
           value={`${engagementRate}%`}
           engagementRate={engagementRate}
           comparisonValue={comparisonValue}
-          darkMode={darkMode} // Pass darkMode to StatisticsBox if needed
+           // Pass darkMode to StatisticsBox if needed
         />
         <StatisticsBox
           title="Total Posts"
           value={statistics.totalPosts}
-          darkMode={darkMode} // Pass darkMode to StatisticsBox if needed
+           // Pass darkMode to StatisticsBox if needed
         />
       </section>
 
@@ -162,18 +165,18 @@ const Dashboard = ({ darkMode }) => {  // Add darkMode prop
             </select>
           </div>
         </div>
-        <CustomLineChart data={getDataForTimeRange(timeRange)} darkMode={darkMode} />
+        <CustomLineChart data={getDataForTimeRange(timeRange)}  />
         </section>
       <section className={`flex flex-col rounded-3xl shadow-lg ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-[#EEEEEE]'} border p-10 mb-6`}> {/* Apply dark mode classes */}
         <h2 className="font-semibold text-[28px] leading-[1.2] tracking-[-0.015em] mb-1">Total Posts Distribution</h2>
         <p className="mb-6 text-[14px] text-[#eeeeee]">A pie chart showing the distribution of different categories. Each slice represents the proportion of total interactions attributed to that category.</p>
-        <CustomPieChart data={getCategoryCountsData()} darkMode={darkMode} />
+        <CustomPieChart data={getCategoryCountsData()}  />
         </section>
       <section className={`flex flex-col justify-self-center rounded-3xl shadow-lg ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-[#EEEEEE]'} border p-10`}> {/* Apply dark mode classes */}
         <h2 className="font-semibold text-[28px] leading-[1.2] tracking-[-0.015em] mb-1">Profile Searching</h2>
         <p className="mb-6 text-[14px] text-[#eeeeee]">A bar chart displaying the interaction metrics for each month over the past year. Each bar represents the total interaction for that month.</p>
         <div className='flex mx-auto'>
-        <CustomBarChart data={getDataForTimeRange('Last 1 Year')} darkMode={darkMode} />
+        <CustomBarChart data={getDataForTimeRange('Last 1 Year')}  />
         </div>
       </section>
     </main>

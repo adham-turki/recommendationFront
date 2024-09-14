@@ -21,10 +21,11 @@ const ProfilePage = () => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://192.168.1.123:2505/profile", {
+        const response = await fetch(`${import.meta.env.VITE_API}/profile`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
 

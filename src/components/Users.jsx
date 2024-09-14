@@ -4,14 +4,17 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ClipLoader } from 'react-spinners';
+import { useSelector } from 'react-redux';
 
 
-const Users = ({ darkMode }) => {
+const Users = () => {
   const [users, setUsers] = useState(null);
   const [error, setError] = useState(null); // State to handle errors
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 5;
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
 
   useEffect(() => {
     async function fetchData() {

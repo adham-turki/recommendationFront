@@ -5,14 +5,20 @@ import { BsX, BsList, BsSunFill, BsMoonFill } from "react-icons/bs";
 import matchifyLogo from "../assets/matchify_logo1.png";
 import { Link, useLocation } from "react-router-dom";
 import matchifyLogo_white from "../assets/matchify_logo_white.png";
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleDarkMode } from '../redux/darkModeSlice';
 
-const Header = ({ darkMode, setDarkMode }) => {
+const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeButton, setActiveButton] = useState(""); // Start with no active button
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const isAdmin = true;
   const location = useLocation();
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+  const dispatch = useDispatch();
+
+
   // Set the active button based on the current path
   useEffect(() => {
     const path = location.pathname;
@@ -31,14 +37,7 @@ const Header = ({ darkMode, setDarkMode }) => {
 
 
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    if (!darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
+
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -64,7 +63,9 @@ const Header = ({ darkMode, setDarkMode }) => {
       document.removeEventListener("mousedown", handleClickOutsideDropdown);
     };
   }, []);
-
+  if (window.location.pathname == "/home") {
+    return (<></>);
+  }
   return (
     <>
 
@@ -175,7 +176,7 @@ const Header = ({ darkMode, setDarkMode }) => {
           )}
           {/* Dark Mode Toggle */}
           <div
-            onClick={toggleDarkMode}
+            onClick={() => dispatch(toggleDarkMode())}
             className="relative w-14 h-8 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer"
             aria-label="Toggle Dark Mode"
           >

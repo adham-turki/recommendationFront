@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 
-const StatisticsBox = ({ title, value, engagementRate, comparisonValue, darkMode }) => {
+const StatisticsBox = ({ title, value, engagementRate, comparisonValue }) => {
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
   // Determine if the engagement rate is high and set arrow color accordingly
   const isEngagementHigh = engagementRate > comparisonValue;
   const arrowColor = isEngagementHigh ? 'text-green-500' : 'text-red-500';

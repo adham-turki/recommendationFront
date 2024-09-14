@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { useState } from 'react';
 import Login from './components/Login/Login.jsx';
 import ChooseInterest from './components/ChooseInterest.jsx';
 import ChooseSkills from './components/ChooseSkills.jsx';
@@ -24,12 +23,12 @@ const App = () => {
     '/search',
     '/admin',
   ];
-  const [darkMode, setDarkMode] = useState(false);
+
 
   return (
     <Router>
       {authenticatedRoutes.includes(window.location.pathname) && (
-        <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Header  />
       )}
 
       <Routes>
@@ -38,12 +37,12 @@ const App = () => {
         <Route path="/skills" element={<ChooseSkills />} />
         <Route path="/extension-guide" element={<ExtensionGuidePage />} />
         <Route path="/home" element={<Homepage />} />
-        <Route path="/profile" element={<ProfilePage darkMode={darkMode} />} />
-        <Route path="/saved-items" element={<SavedItemsPage darkMode={darkMode} />} />
-        <Route path="/my-feed" element={<MyFeed darkMode={darkMode} />} />
-        <Route path="/history" element={<HistoryPage darkMode={darkMode} />} />
-        <Route path="/search" element={<Search darkMode={darkMode} />} />
-        <Route path="/admin" element={<AdminPage darkMode={darkMode} />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/saved-items" element={<SavedItemsPage />} />
+        <Route path="/my-feed" element={<MyFeed  />} />
+        <Route path="/history" element={<HistoryPage />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/admin" element={<AdminPage  />} />
 
 
       </Routes>

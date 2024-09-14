@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLayerGroup, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
 
-const GraphSidebar = ({ blueNodes, orangeNodes, darkMode }) => {
+const GraphSidebar = ({ blueNodes, orangeNodes }) => {
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
   const [expandedSection, setExpandedSection] = useState(null);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [userData, setUserData] = useState(null);
