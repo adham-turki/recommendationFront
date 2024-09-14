@@ -11,7 +11,9 @@ import Search from './pages/Search';
 import ProfilePage from './pages/ProfilePage';
 import SavedItemsPage from './pages/SavedItemsPage';
 import AdminPage from './pages/AdminPage';
+
 import Header from './components/Header.jsx';
+
 
 const App = () => {
   const authenticatedRoutes = [
@@ -42,6 +44,8 @@ const App = () => {
         <Route path="/history" element={<HistoryPage darkMode={darkMode} />} />
         <Route path="/search" element={<Search darkMode={darkMode} />} />
         <Route path="/admin" element={<AdminPage darkMode={darkMode} />} />
+
+
       </Routes>
     </Router>
   );

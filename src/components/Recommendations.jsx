@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import {
   AiFillLike,
@@ -8,7 +9,6 @@ import {
   AiOutlineSave,
   AiOutlineShareAlt,
 } from "react-icons/ai";
-import Spinner from "./Spinner";
 import Tooltip from "@mui/material/Tooltip";
 import { BiCameraMovie } from "react-icons/bi";
 import { TiSocialYoutubeCircular } from "react-icons/ti";
@@ -17,10 +17,27 @@ import LazyLoad from "react-lazyload";
 import { TbArticleOff } from "react-icons/tb";
 import Search from "../pages/Search";
 import SearchForm from "./SearchForm";
+import { ImSpinner2 } from "react-icons/im"; 
+
+
 
 const Recommendations = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [filteredRecommendations, setFilteredRecommendations] = useState([]);
+
+
+  useEffect(() => {
+    // Fetch data from the API
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://192.168.1.123:2505/recommendations',{
+                         credentials:'include'
+            });
+        const data = await response.json();
+        setRecommendations(data.recommendations);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+
   const [filterType, setFilterType] = useState("All");
   const [likes, setLikes] = useState([]);
   const [dislikes, setDislikes] = useState([]);
@@ -39,26 +56,6 @@ const Recommendations = () => {
     title: "Iron Man",
     type: "movie",
   };
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         "http://192.168.1.123:2505/recommendations",
-  //         // "http://192.168.1.136:8089/contents",
-  //         {
-  //           credentials: "include",
-  //         }
-  //       );
-  //       const data = await response.json();
-  //       setRecommendations(data.recommendations);
-  //       setFilteredRecommendations(data.recommendations);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,6 +84,7 @@ const Recommendations = () => {
         setFilteredRecommendations([movie], ...data.recommendations);
       } catch (error) {
         console.error("Error fetching data:", error);
+
       }
     };
 
@@ -94,6 +92,7 @@ const Recommendations = () => {
   }, []);
 
   useEffect(() => {
+
     if (filterType === "All") {
       setFilteredRecommendations(recommendations);
     } else {
@@ -103,6 +102,20 @@ const Recommendations = () => {
     }
   }, [filterType, recommendations]);
 
+  useEffect(() => {
+    
+    const fetchShares = async () => {
+      try {
+        const response = await fetch('/api/getShares');//fix api
+        const data = await response.json();
+        setShares(data.shares);
+      } catch (error) {
+        console.error('Error fetching shares:', error);
+      }
+    };
+
+    fetchShares();
+  }, []);
   const handleImageClick = (image) => {
     setEnlargedImage(image);
   };
@@ -180,41 +193,6 @@ const Recommendations = () => {
   };
 
   
-  // const savePost = (post) => {
-  //   setSavedPosts((prevSavedPosts) => {
-  //     if (
-  //       prevSavedPosts.some(
-  //         (savedPost) => savedPost.content_id === post.content_id
-         
-  //       )
-  //     ) {
-  //       return prevSavedPosts.filter(
-  //         (savedPost) => savedPost.content_id !== post.content_id
-  //       );
-  //     } else {
-  //       return [...prevSavedPosts, post];
-  //     }
-  //   });
-  // };
-  // const savedItem = async (content_id=1) => {
-  //   try {
-  //     let savedData= {
-  //         "contentId" :content_id,
-  //          "userId" : 2,
-          
-  //     }//123:2505
-  //     await fetch(`http://192.168.1.136:8089/saved-items`, {
-  //       method: "POST", //PATCH
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(savedData),
-  //     });
-  //   } catch (error) {
-  //     console.error("Error sending data to backend:", error);
-  //   }
-  // };
-
   const savePost = (post) => {
     setSavedPosts((prevSavedPosts) => {
       const isAlreadySaved = prevSavedPosts.some(
@@ -223,13 +201,13 @@ const Recommendations = () => {
   
       if (isAlreadySaved) {
         // If the post is already saved, remove it and send a request to the backend to unsave it
-        savedItem(post.content_id, "DELETE");  // Use DELETE or PATCH for unsaving
+        savedItem(post.content_id, "DELETE");  
         return prevSavedPosts.filter(
           (savedPost) => savedPost.content_id !== post.content_id
         );
       } else {
         // If the post is not saved, add it and send a request to the backend to save it
-        savedItem(post.content_id, "POST"); // Use POST to save the item
+        savedItem(post.content_id, "POST");
         return [...prevSavedPosts, post];
       }
     });
@@ -244,11 +222,11 @@ const Recommendations = () => {
       };
   
       await fetch(`http://192.168.1.136:8089/saved-items`, {
-        method: method, // Use method 'POST' for saving and 'DELETE' or 'PATCH' for unsaving
+        method: method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: method === "POST" ? JSON.stringify(savedData) : null, // Only send body for POST
+        body: method === "POST" ? JSON.stringify(savedData) : null, 
       });
   
       console.log(`Successfully ${method === "POST" ? "saved" : "unsaved"} the item.`);
@@ -325,7 +303,7 @@ const Recommendations = () => {
                   ) : (
                     <div>
                       <h3 className="flex items-center text-lg font-semibold mb-2 text-[#14044c]">
-                        <RiArticleLine className="text-blue-600 text-2xl mr-2" />{" "}
+                        <RiArticleLine className="text-blue-600 text-3xl mr-2" />{" "}
                         <span>{rec.title}</span>
                       </h3>
 
@@ -496,7 +474,9 @@ const Recommendations = () => {
             </div>
           ))
         ) : (
-          <Spinner />
+          <div className="flex justify-center items-center h-64">
+          <ImSpinner2 className="w-16 h-16 text-[#5342a9] animate-spin" />
+        </div>
         )}
 
         {/* make image bigger */}
@@ -519,6 +499,7 @@ const Recommendations = () => {
         )}
       </div>
     </LazyLoad>
+
   );
 };
 

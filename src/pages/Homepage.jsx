@@ -1,26 +1,30 @@
 import "../App.css";
 import "../index.css";
 import Footer from "../components/Footer";
-import NewspaperHeader from "../components/NewspaperHeader";
 import YouTubeVideo from "../components/YouTubeVideo";
 import { useNavigate } from "react-router-dom";
 import ServicesSection from "../components/ServicesSection";
 import { useState, useEffect, useRef } from "react";
 import { BsMoonFill, BsSunFill, BsSearch, BsX, BsList } from "react-icons/bs"; // Added BsList for hamburger menu
 import matchifyLogo from "../assets/matchify_logo1.png"; // Adjust the path according to your folder structure
+
+
+
+
 import matchifyLogowhite from "../assets/matchify_logo_white.png";
- import Topmovie2 from "../components/Topmovie2";
+import Topmovie2 from "../components/Topmovie2";
+
 
 const Header2 = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeButton, setActiveButton] = useState(""); // Start with no active button
+  const [activeButton, setActiveButton] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false); // New state for scroll detection
+  const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef(null);
-  const isAdmin = true; // Simulating whether the user is an admin
+  const isAdmin = true;
 
   const handleButtonClick = (buttonName) => {
-    setActiveButton(buttonName); // Set the clicked button as active
+    setActiveButton(buttonName);
     setIsSidebarOpen(false);
   };
 
@@ -44,7 +48,7 @@ const Header2 = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 0); // Update scroll state
+      setScrolled(window.scrollY > 0);
     };
 
     document.addEventListener("scroll", handleScroll);
@@ -284,38 +288,6 @@ const Header2 = () => {
   );
 };
 
-// const HeroSection = () => {
-//   const navigate = useNavigate();
-
-//   const handleGetStartedClick = () => {
-//     navigate("/my-feed");
-//   };
-
-//   return (
-//     <div className="flex min-h-[550px] flex-col gap-6 items-center justify-center bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl px-4 pb-10 @[480px]:px-10">
-//       <div className="flex flex-col gap-2 text-center">
-//         <h1 className="text-white  text-6xl font-black  fontleading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
-//           Welcome to Matchify!
-//         </h1>
-//         <h2 className="text-white text-3xl font-medium  font-quicksand  px-20 leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
-//           For the love of articles, movies, TV, and video games. Get ready for a
-//           world of exclusive content, from in-depth articles to original videos,
-//           all tailored to your tastes.
-//         </h2>
-//       </div>
-
-//       <div className="flex justify-center mt-6">
-//         <button
-//           onClick={handleGetStartedClick}
-//           className="flex items-center justify-center min-w-[200px] min-h-14 max-w-[200px] cursor-pointer overflow-hidden rounded-xl h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#3e237d98] hover:bg-[#382857]  text-white text-2xl font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
-//         >
-//           <span className="truncate">Get started</span>
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
 const HeroSection = () => {
   const navigate = useNavigate();
 
@@ -397,7 +369,6 @@ const PersonalizedSection = () => {
 };
 
 const ArticleCard = ({ image, title, readTime }) => {
-  // Encode the title for use in a URL
   const searchQuery = encodeURIComponent(title);
 
   return (
@@ -435,12 +406,13 @@ const Homepage = () => {
       </div>
 
       {/* service */}
+
       <div
-        className=" pt-10 relative flex size-full min-h-screen flex-col bg-[#f6f1fa] group/design-root overflow-x-hidden"
+        className="pt-10 relative flex min-h-screen flex-col bg-[#f6f1fa] group/design-root overflow-x-hidden"
         style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}
       >
-        <div className="layout-container flex h-full grow flex-col">
-          <div className="px-40 flex flex-1 justify-center py-5  ">
+        <div className="layout-container flex flex-col h-full grow">
+          <div className="px-4 sm:px-10 lg:px-40 flex flex-1 justify-center py-5">
             <ServicesSection />
           </div>
         </div>
@@ -453,7 +425,6 @@ const Homepage = () => {
         <div className="layout-container flex h-full grow flex-col">
           <div className=" flex flex-1 justify-center py-5  ">
             <div className="layout-content-container flex flex-col max-w-full flex-1">
-            
               <Topmovie2 />
               {/* <NewspaperHeader/> */}
             </div>
@@ -461,13 +432,13 @@ const Homepage = () => {
         </div>
       </div>
 
-      {/* <div
-        className=" pt-10 relative flex size-full min-h-screen flex-col bg-[#f6f1fa] group/design-root overflow-x-hidden"
+      <div
+        className="pt-10 relative flex min-h-screen flex-col bg-[#f6f1fa] group/design-root overflow-x-hidden"
         style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}
       >
-        <div className="layout-container flex h-full grow flex-col">
-          <div className="px-40 flex flex-1 justify-center py-5  ">
-            <div className="layout-content-container flex flex-col max-w-full flex-1">
+        <div className="flex flex-col h-full grow">
+          <div className="px-4 md:px-10 flex flex-1 justify-center py-5">
+            <div className="w-full max-w-4xl flex flex-col">
               <PersonalizedSection />
               <YouTubeVideo
                 url={youtubeUrl}
@@ -477,32 +448,13 @@ const Homepage = () => {
             </div>
           </div>
         </div>
-      </div> */}
-
-<div
-  className="pt-10 relative flex min-h-screen flex-col bg-[#f6f1fa] group/design-root overflow-x-hidden"
-  style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}
->
-  <div className="flex flex-col h-full grow">
-    <div className="px-4 md:px-10 flex flex-1 justify-center py-5">
-      <div className="w-full max-w-4xl flex flex-col">
-        <PersonalizedSection />
-        <YouTubeVideo
-          url={youtubeUrl}
-          title="Boost Your Focus with 40Hz Gamma Binaural Beats - Enhance Productivity"
-          description="Make sure to tune in and elevate your focus today!"
-        />
       </div>
-    </div>
-  </div>
-</div>
 
-
-      
 
       <div>
         <Footer />
       </div>
+
     </div>
   );
 };

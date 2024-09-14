@@ -102,6 +102,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                 : "bg-[#14044c] text-white"
               : darkMode
                 ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+
                 : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
               }`}
           >
@@ -117,6 +118,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                 : "bg-[#14044c] text-white"
               : darkMode
                 ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+
                 : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
               }`}
           >
@@ -131,6 +133,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                 : "bg-[#14044c] text-white"
               : darkMode
                 ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+
                 : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
               }`}
           >
@@ -145,6 +148,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                 : "bg-[#14044c] text-white"
               : darkMode
                 ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+
                 : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
               }`}
           >
@@ -162,6 +166,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                   : "bg-[#14044c] text-white"
                 : darkMode
                   ? "text-white hover:bg-[#e6e2eb] hover:text-gray-900"
+
                   : "text-[#14044c] hover:bg-[#14044c] hover:text-white"
                 }`}
             >
@@ -204,6 +209,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                     <Link
                       to="/history"
                       className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+
                     >
                       History
                     </Link>
@@ -212,6 +218,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                     <Link
                       to="/saved-items"
                       className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+
                     >
                       Saved Items
                     </Link>
@@ -221,6 +228,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                     <Link
                       to="#"
                       className="block px-4 py-2 text-red-600 hover:bg-red-100 cursor-pointer font-semibold"
+
                       onClick={handleLogout}
                     >
                       Logout
@@ -261,6 +269,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                 ? "bg-[#14044c] text-white"
                 : "text-[#14044c]"
                 } py-2 px-4 rounded-lg`}
+
             >
               Home
             </Link>
@@ -271,6 +280,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                 ? "bg-[#14044c] text-white"
                 : "text-[#14044c]"
                 } py-2 px-4 rounded-lg`}
+
             >
               Feeds
             </Link>
@@ -281,6 +291,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                 ? "bg-[#14044c] text-white"
                 : "text-[#14044c]"
                 } py-2 px-4 rounded-lg`}
+
             >
               Users
             </Link>
@@ -291,6 +302,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                 ? "bg-[#14044c] text-white"
                 : "text-[#14044c]"
                 } py-2 px-4 rounded-lg`}
+
             >
               Profile
             </Link>
@@ -304,6 +316,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                   ? "bg-[#14044c] text-white"
                   : "text-[#14044c]"
                   } py-2 px-4 rounded-lg`}
+
               >
                 Admin
               </Link>
