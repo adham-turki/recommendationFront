@@ -37,7 +37,7 @@ const Recommendations = () => {
         setRecommendations(data.recommendations);
       } catch (error) {
         console.error('Error fetching data:', error);
-
+      }
   const [filterType, setFilterType] = useState("All");
   const [likes, setLikes] = useState([]);
   const [dislikes, setDislikes] = useState([]);
@@ -56,6 +56,7 @@ const Recommendations = () => {
     title: "Iron Man",
     type: "movie",
   };
+}},[]);
 
   useEffect(() => {
     const fetchData = async () => {

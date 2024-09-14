@@ -170,7 +170,6 @@ import { FaThumbsUp, FaThumbsDown, FaShareAlt } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Footer from '../components/Footer';
->>>>>>> 8d8bfceb52a836929f0b0725ef7e18c0c49baa9b
 
 // Sample static data
 const staticHistoryItems = [
@@ -256,134 +255,7 @@ const HistoryPage = () => {
     })
     .sort((a, b) => (sortOrder === "asc" ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date)));
 
-<<<<<<< HEAD
-    return (
-      <div className="min-h-screen bg-[#e6e2eb]">
-        <Header />
-        <main className="pt-20 pb-16">
-          <header className="mb-6">
-            <h1 className="text-2xl md:text-4xl font-extrabold text-[#14044c] mb-6 ml-6 md:ml-24">History</h1>
-  
-            <div className="max-w-4xl mx-auto flex flex-col space-y-6">
-              <div className="flex flex-col space-y-4">
-                <div className="flex flex-wrap md:flex-nowrap items-center border-b border-gray-400 pb-2 space-y-4 md:space-y-0">
-                  <div className="flex flex-wrap md:flex-nowrap space-x-6 space-y-4 md:space-y-0">
-                    <div
-                      onClick={() => setFilter("like")}
-                      className={`cursor-pointer flex items-center px-4 py-2 rounded-lg ${
-                        filter === "like" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
-                      } transition-all duration-300`}
-                    >
-                      <FaThumbsUp className={`text-lg ${filter === "like" ? "text-white" : "text-[#14044c]"}`} />
-                      <span className="ml-2 text-lg">Like</span>
-                    </div>
-  
-                    <div
-                      onClick={() => setFilter("dislike")}
-                      className={`cursor-pointer flex items-center px-4 py-2 rounded-lg ${
-                        filter === "dislike" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
-                      } transition-all duration-300`}
-                    >
-                      <FaThumbsDown className={`text-lg ${filter === "dislike" ? "text-white" : "text-[#14044c]"}`} />
-                      <span className="ml-2 text-lg">Dislike</span>
-                    </div>
-  
-                    <div
-                      onClick={() => setFilter("share")}
-                      className={`cursor-pointer flex items-center px-4 py-2 rounded-lg ${
-                        filter === "share" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
-                      } transition-all duration-300`}
-                    >
-                      <FaShareAlt className={`text-lg ${filter === "share" ? "text-white" : "text-[#14044c]"}`} />
-                      <span className="ml-2 text-lg">Share</span>
-                    </div>
-  
-                    <div
-                      onClick={() => setFilter("all")}
-                      className={`cursor-pointer flex items-center px-4 py-2 rounded-lg ${
-                        filter === "all" ? "bg-[#c293dd] text-white" : "hover:bg-[#d3b6e6]"
-                      } transition-all duration-300`}
-                    >
-                      <span className="text-lg">All</span>
-                    </div>
-                  </div>
-  
-                  <div
-                    onClick={() => setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"))}
-                    className="ml-auto cursor-pointer flex items-center px-4 py-2 text-[#14044c] rounded-lg hover:bg-[#c293dd] hover:text-white transition-all duration-300"
-                  >
-                    <span className="text-lg">Sort by Date</span>
-                    <MdSort
-                      className={`text-2xl ml-2 ${sortOrder === "asc" ? "transform rotate-180" : ""} transition-transform duration-300`}
-                    />
-                  </div>
-                </div>
-  
-                <div className="flex flex-wrap md:flex-nowrap space-x-6 mb-4 space-y-4 md:space-y-0">
-                  {[{ date: startDate, setDate: setStartDate, label: "Start Date" }, { date: endDate, setDate: setEndDate, label: "End Date" }].map(
-                    ({ date, setDate, label }, idx) => (
-                      <div className="relative flex-1" key={idx}>
-                        <DatePicker
-                          selected={date}
-                          onChange={(selectedDate) => setDate(selectedDate)}
-                          customInput={
-                            <div className="relative w-full">
-                              <input
-                                type="text"
-                                value={date ? date.toLocaleDateString() : ""}
-                                readOnly
-                                className="w-full px-4 py-3 bg-white text-[#14044c] border-2 border-[#d1c8f3] rounded-lg shadow-lg focus:outline-none placeholder:text-[#a4a4a4] pl-10"
-                                placeholder={label}
-                              />
-                              <div className="absolute top-0 left-0 flex items-center pl-3 h-full pointer-events-none">
-                                <AiOutlineCalendar className="text-[#14044c] text-xl" />
-                              </div>
-                            </div>
-                          }
-                        />
-                      </div>
-                    )
-                  )}
-                </div>
-              </div>
-            </div>
-          </header>
-  
-          <section className="max-w-4xl mx-auto px-4 md:px-0">
-            {loading ? (
-              <p className="text-center text-lg">Loading...</p>
-            ) : error ? (
-              <p className="text-center text-lg text-red-600">{error}</p>
-            ) : filteredItems.length === 0 ? (
-              <p className="text-center text-lg">No history items available.</p>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredItems.map((item) => (
-                  <div key={item.content_id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                    <img src={item.thumbnail} alt={item.title} className="w-full h-48 object-cover" />
-                    <div className="p-4">
-                      <h3 className="text-xl font-semibold text-[#14044c] mb-2">{item.title}</h3>
-                      <p className="text-gray-600 mb-4">{new Date(item.date).toLocaleDateString()}</p>
-                      <a
-                        href={item.videoUrl}
-                        className="inline-block bg-[#c293dd] text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-[#d1c8f3]"
-                      >
-                        Watch Video
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-        </main>
-        <Footer />
-      </div>
-    );
-  };
-  
-  export default HistoryPage;
-=======
+
   return (
     <div className="min-h-screen bg-[#e6e2eb]">
       <main className="pt-20 pb-16"> {/* Adjust padding to avoid overlap */}
@@ -527,4 +399,3 @@ const HistoryPage = () => {
 };
 
 export default HistoryPage;
->>>>>>> 8d8bfceb52a836929f0b0725ef7e18c0c49baa9b

@@ -1,7 +1,6 @@
 import "../App.css";
 import "../index.css";
 // npm install @mui/material @emotion/react @emotion/styled
-import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Recommendations from "../components/Recommendations";
 
