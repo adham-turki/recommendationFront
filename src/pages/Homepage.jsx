@@ -7,13 +7,16 @@ import ServicesSection from "../components/ServicesSection";
 import { useState, useEffect, useRef } from "react";
 import { BsMoonFill, BsSunFill, BsSearch, BsX, BsList } from "react-icons/bs"; // Added BsList for hamburger menu
 import matchifyLogo from "../assets/matchify_logo1.png"; // Adjust the path according to your folder structure
+import { logout } from '../redux/userSlice'; // Path to the userSlice
+
 
 
 
 
 import matchifyLogowhite from "../assets/matchify_logo_white.png";
 import Topmovie2 from "../components/Topmovie2";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 
 
 const Header2 = () => {
@@ -24,6 +27,8 @@ const Header2 = () => {
   const dropdownRef = useRef(null);
   const userData = useSelector((state) => state.users.user);
   const isAdmin = userData?.role?.roleName === "ADMIN";
+  const dispatch = useDispatch();
+
 
 
   const handleButtonClick = (buttonName) => {
@@ -39,8 +44,12 @@ const Header2 = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleLogout = () => {
-    console.log("Logged out");
+   // Logout function
+   const handleLogout = () => {
+    dispatch(logout()); // Dispatch logout action
+    localStorage.removeItem("token"); // Clear token
+    window.location.href= "/";
+  
   };
 
   const handleClickOutsideDropdown = (e) => {

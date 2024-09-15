@@ -60,7 +60,8 @@ const Header = () => {
   const handleLogout = () => {
     dispatch(logout()); // Dispatch logout action
     localStorage.removeItem("token"); // Clear token
-    navigate("/"); // Redirect to login page
+    window.location.href= "/";
+  
   };
 
   const handleClickOutsideDropdown = (e) => {

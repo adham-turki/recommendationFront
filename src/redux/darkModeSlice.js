@@ -4,11 +4,13 @@ import { createSlice } from '@reduxjs/toolkit';
 const darkModeSlice = createSlice({
   name: 'darkMode',
   initialState: {
-    isDarkMode: false,
+    isDarkMode: localStorage.getItem('darkMode') === 'true', // Convert string to boolean
+    
   },
   reducers: {
     toggleDarkMode: (state) => {
       state.isDarkMode = !state.isDarkMode;
+      localStorage.setItem('darkMode', state.isDarkMode.toString()); // Convert boolean to string
       if (state.isDarkMode) {
         document.documentElement.classList.add('dark');
       } else {
