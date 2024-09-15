@@ -8,6 +8,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Footer from '../components/Footer';
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 // Sample static data
 const staticHistoryItems = [
@@ -49,7 +50,7 @@ const HistoryPage = () => {
 
 
   useEffect(() => {
-    const fetchHistory = async () => {
+    async function fetchHistory() {
       setLoading(true);
       setError(null);
       try {
@@ -59,27 +60,33 @@ const HistoryPage = () => {
         if (endDate) params.append("date_range_end", endDate.toISOString().split("T")[0]);
         if (filter !== "all") params.append("type", filter);
 
-        // Simulate API response for testing
-        const response = { data: staticHistoryItems }; // For testing, replace this with actual API call
 
-        // Uncomment the following line to use the actual API call
-        // const response = await axios.get(https://virtserver.swaggerhub.com/ISSAABED3322/project/1.0.0/history?${params.toString()});
+        const response = await fetch(`${import.meta.env.VITE_API}/history`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
 
-        console.log(response.data); // For debugging
         
-        setHistoryItems(response.data);
+        setHistoryItems(data);
+        if(data.length === 0) {
+          console.log("first")
+          setHistoryItems(staticHistoryItems);
+        }
       } catch (error) {
         setError("Error fetching data. Please try again later.");
         console.error("Error fetching data:", error.response ? error.response.data : error.message);
         // Use static data as a fallback
-        setHistoryItems(staticHistoryItems);
       } finally {
         setLoading(false);
       }
     };
 
     fetchHistory();
-  }, [filter, startDate, endDate]);
+  }, []);
 
   const filteredItems = historyItems
     .filter((item) => {
@@ -234,7 +241,7 @@ const HistoryPage = () => {
           )}
         </section>
       </main>
-      {<Footer /> }
+      <Footer  className ="mt-96 "/> 
     </div>
   );
 };
