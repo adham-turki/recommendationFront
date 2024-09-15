@@ -241,6 +241,8 @@ const savedItem = async (content_id, method) => {
       method: method,
       headers: {
         "Content-Type": "application/json",
+         Authorization: `Bearer ${localStorage.getItem("token")}`,
+
       },
       body: method === "POST" ? JSON.stringify(savedData) : null, // Only include body for POST
     });
@@ -285,6 +287,8 @@ const savePost = (post) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+
         },
         body: JSON.stringify(interactionData),
       });
