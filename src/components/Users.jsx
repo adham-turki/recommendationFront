@@ -19,7 +19,7 @@ const Users = () => {
   const usersPerPage = 5;
 
   const dispatch = useDispatch();
-  const { users, loading, error } = useSelector((state) => state.users);
+  const { users, error } = useSelector((state) => state.users);
   const darkMode = useSelector((state) => state.darkMode.isDarkMode);
 
   useEffect(() => {

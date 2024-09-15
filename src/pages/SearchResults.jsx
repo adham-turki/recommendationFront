@@ -179,6 +179,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
+
 
 const initialProfiles = [
   {
@@ -223,7 +225,7 @@ const initialProfiles = [
   // Add more profiles as needed
 ];
 
-const SearchResults = ({ searchTerm, filters }) => {
+const SearchResults = ({ interests, skills }) => {
   const [profiles, setProfiles] = useState(initialProfiles);
   const [selectedProfiles, setSelectedProfiles] = useState([]);
   const [similarityResult, setSimilarityResult] = useState(null);
@@ -238,17 +240,30 @@ const SearchResults = ({ searchTerm, filters }) => {
         setLoading(true);
         setError(null);
 
-        const params = {
-          Interests: filters,
-          skill: filters,
-          url: searchTerm,
-        };
+        
+        console.log(interests)
+        console.log(skills)
 
-        const response = await axios.get(
-          "https://rsserviceplan-rsapp.azuremicroservices.io/users"
-        );
-        console.log(response.data);
-        setProfiles(response.data || []);
+      // Construct the URL with query parameters for interests and skills
+      const url = `${import.meta.env.VITE_API}/profiles/search`
+
+      // Fetch the filtered profiles
+      const response = await fetch(url, 
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            skills: skills,
+            interests: interests
+          }),
+        }
+      );
+      const data = await response.json();
+      setProfiles(data || []);
+      console.log(data)
       } catch (err) {
         setError(err);
       } finally {
@@ -257,7 +272,7 @@ const SearchResults = ({ searchTerm, filters }) => {
     };
 
     fetchProfiles();
-  }, [searchTerm, filters]);
+  }, [interests, skills]);
 
   //   useEffect(() => {
   //     const fetchProfiles = async () => {
@@ -472,6 +487,13 @@ const SearchResults = ({ searchTerm, filters }) => {
       </div>
     </div>
   );
+};
+// PropTypes validation
+SearchResults.propTypes = {
+ 
+    skills: PropTypes.arrayOf(PropTypes.string).isRequired, // Filters should have an array of strings for skills
+    interests: PropTypes.arrayOf(PropTypes.string).isRequired, // Filters should have an array of strings for interests
+   // Mark filters as required
 };
 
 export default SearchResults;
