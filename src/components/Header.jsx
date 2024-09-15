@@ -3,44 +3,28 @@ import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { BsX, BsList, BsSunFill, BsMoonFill } from "react-icons/bs";
 import matchifyLogo from "../assets/matchify_logo1.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import matchifyLogo_white from "../assets/matchify_logo_white.png";
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleDarkMode } from '../redux/darkModeSlice';
+import { logout } from '../redux/userSlice'; // Path to the userSlice
+
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeButton, setActiveButton] = useState(""); // Start with no active button
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const [isAdmin,setIsAdmin] = useState(false);
   const location = useLocation();
   const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+  const userData = useSelector((state) => state.users.user); // Ensure path matches the slice name
   const dispatch = useDispatch();
-  const [userData, setUserData] = useState(null);
-  useEffect(()=>{
-    async function fetchUserData(){
-      const response = await fetch(`${import.meta.env.VITE_API}/profile`,{
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-      }
-    });
-      const userData = await response.json();
-      setUserData(userData);
-    }
-    fetchUserData();
-   
-  },[])
-  useEffect(() => {
-    if (userData) {
-   if(userData.role.roleName == "ADMIN"){
-     setIsAdmin(true);
-   }
-  }
-    },[userData]);
+  const navigate = useNavigate();
 
-  
+  const isAdmin = userData?.role?.roleName === "ADMIN";
+
+
+
 
 
   // Set the active button based on the current path
@@ -51,6 +35,7 @@ const Header = () => {
     else if (path === "/search") setActiveButton("Users");
     else if (path === "/profile") setActiveButton("Profile");
     else if (path === "/admin") setActiveButton("Admin");
+    console.log(userData);
   }, [location]);
 
 
@@ -71,8 +56,11 @@ const Header = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  // Logout function
   const handleLogout = () => {
-    console.log("Logged out");
+    dispatch(logout()); // Dispatch logout action
+    localStorage.removeItem("token"); // Clear token
+    navigate("/"); // Redirect to login page
   };
 
   const handleClickOutsideDropdown = (e) => {
@@ -223,8 +211,10 @@ const Header = () => {
               className="bg-[#14044c] text-white flex items-center justify-center rounded-full h-10 w-10 cursor-pointer"
               onClick={toggleDropdown}
             >
-              {userData && <img src={userData.profilePicture} alt="" className="rounded-full" />}
-            </div>
+              <div className="profile">
+                {userData && <img src={userData.profilePicture} alt="Profile" className="rounded-full" />}
+              </div> 
+                         </div>
 
             {/* Dropdown Menu */}
             {isDropdownOpen && (

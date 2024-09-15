@@ -1,24 +1,12 @@
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 const Sidebar = ({ onNavClick, darkMode }) => {
   const [activeItem, setActiveItem] = useState('dashboard');
-  const [data, setData] = useState([]);
+  const data = useSelector((state) => state.users.user); // Ensure path matches the slice name
 
-  useEffect(()=>{
-    async function fetchUserData(){
-      const response = await fetch(`${import.meta.env.VITE_API}/profile`,{
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-      }
-    });
-      const userData = await response.json();
-      setData(userData);
-    }
-    fetchUserData();
-    console.log(data)
-  },[])
+  
 
   const handleNavClick = (item) => {
     setActiveItem(item);
@@ -32,7 +20,7 @@ const Sidebar = ({ onNavClick, darkMode }) => {
     >
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <div className="flex gap-3">
+        {data && <div className="flex gap-3">
             <div
               className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
               style={{
@@ -43,7 +31,7 @@ const Sidebar = ({ onNavClick, darkMode }) => {
               <h1 className="text-base font-medium leading-normal">{data.firstName}</h1>
               <p className="text-sm font-normal leading-normal">Admin</p>
             </div>
-          </div>
+          </div>}
           <div
             className={`flex items-center gap-3 px-3 py-2 rounded-xl cursor-pointer ${activeItem === 'dashboard' ? (darkMode ? 'bg-gray-700' : 'bg-[#EEEEEE]') : (darkMode ? 'hover:bg-gray-600' : 'hover:bg-[#EEEEEE]')}`}
             onClick={() => handleNavClick('dashboard')}

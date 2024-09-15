@@ -20,7 +20,6 @@ const Dashboard = () => {  // Add darkMode prop
       setStatistics(data);
     }
     fetchData();
-    console.log(statistics)
   }, []);
    // Transform categoryCounts into an array of objects with name and value properties
    const getCategoryCountsData = () => {

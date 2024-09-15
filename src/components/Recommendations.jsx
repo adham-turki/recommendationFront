@@ -17,6 +17,8 @@ import { TbArticleOff } from "react-icons/tb";
 import Search from "../pages/Search";
 import SearchForm from "./SearchForm";
 import { ImSpinner2 } from "react-icons/im";
+import { useSelector } from "react-redux";
+
 
 const Recommendations = () => {
   const [recommendations, setRecommendations] = useState([]);
@@ -27,8 +29,10 @@ const Recommendations = () => {
   const [savedPosts, setSavedPosts] = useState([]);
   const [shares, setShares] = useState([]);
   const [enlargedImage, setEnlargedImage] = useState(null);
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode); // Access dark mode state
 
- 
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,7 +78,7 @@ const Recommendations = () => {
           title: "Iron Man",
           type: "movie",
         };
-        
+
         setRecommendations([movie, ...data.recommendations]);
         setFilteredRecommendations([movie], ...data.recommendations);
       } catch (error) {
@@ -108,7 +112,7 @@ const Recommendations = () => {
 
     fetchShares();
   }, []);
-  
+
   const handleImageClick = (image) => {
     setEnlargedImage(image);
   };
@@ -208,7 +212,7 @@ const Recommendations = () => {
   // const savedItem = async (content_id, method) => {
   //   try {
   //     const savedData = {
-    
+
   //     };
 
   //     await fetch(`http://192.168.1.136:8089/saved-items`, {
@@ -228,52 +232,52 @@ const Recommendations = () => {
   // };
 
 
-// Function to save or unsave an item
-const savedItem = async (content_id, method) => {
-  try {
-    const savedData = {
-      timestamp: new Date().toISOString(),  
-      contentId: content_id,                
-      userId: 1,                            
-    };
+  // Function to save or unsave an item
+  const savedItem = async (content_id, method) => {
+    try {
+      const savedData = {
+        timestamp: new Date().toISOString(),
+        contentId: content_id,
+        userId: 1,
+      };
 
-    await fetch(`https://rsserviceplan-rsapp.azuremicroservices.io/saved-items`, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-         Authorization: `Bearer ${localStorage.getItem("token")}`,
+      await fetch(`https://rsserviceplan-rsapp.azuremicroservices.io/saved-items`, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
 
-      },
-      body: method === "POST" ? JSON.stringify(savedData) : null, // Only include body for POST
-    });
+        },
+        body: method === "POST" ? JSON.stringify(savedData) : null, // Only include body for POST
+      });
 
-    console.log(
-      `Successfully ${method === "POST" ? "saved" : "unsaved"} the item with contentId ${content_id}.`
-    );
-  } catch (error) {
-    console.error("Error sending data to backend:", error);
-  }
-};
-
-const savePost = (post) => {
-  setSavedPosts((prevSavedPosts) => {
-    const isAlreadySaved = prevSavedPosts.some(
-      (savedPost) => savedPost.content_id === post.content_id
-    );
-
-    if (isAlreadySaved) {
-      // If the post is already saved, unsave it
-      savedItem(post.content_id, "DELETE");
-      return prevSavedPosts.filter(
-        (savedPost) => savedPost.content_id !== post.content_id
+      console.log(
+        `Successfully ${method === "POST" ? "saved" : "unsaved"} the item with contentId ${content_id}.`
       );
-    } else {
-      // If the post is not saved, save it
-      savedItem(post.content_id, "POST");
-      return [...prevSavedPosts, post];
+    } catch (error) {
+      console.error("Error sending data to backend:", error);
     }
-  });
-};
+  };
+
+  const savePost = (post) => {
+    setSavedPosts((prevSavedPosts) => {
+      const isAlreadySaved = prevSavedPosts.some(
+        (savedPost) => savedPost.content_id === post.content_id
+      );
+
+      if (isAlreadySaved) {
+        // If the post is already saved, unsave it
+        savedItem(post.content_id, "DELETE");
+        return prevSavedPosts.filter(
+          (savedPost) => savedPost.content_id !== post.content_id
+        );
+      } else {
+        // If the post is not saved, save it
+        savedItem(post.content_id, "POST");
+        return [...prevSavedPosts, post];
+      }
+    });
+  };
 
   const sendUserActionToBackend = async (content_id, action, additionalData = {}) => {
     try {
@@ -282,7 +286,7 @@ const savePost = (post) => {
         interactionType: action,  // "like", "dislike"
         ...additionalData,  // Spread additional data if needed
       };
-  
+
       await fetch(`https://rsserviceplan-rsapp.azuremicroservices.io/interactions`, {
         method: "POST",
         headers: {
@@ -292,7 +296,7 @@ const savePost = (post) => {
         },
         body: JSON.stringify(interactionData),
       });
-  
+
       console.log(`Successfully sent ${action} for content ID ${content_id}`);
     } catch (error) {
       console.error("Error sending data to backend:", error);
@@ -315,9 +319,13 @@ const savePost = (post) => {
             <button
               key={index}
               onClick={() => setFilterType(type)}
-              className={`px-4 py-2 rounded-2xl ${
-                filterType === type ? "bg-[#5342a9] text-white" : "bg-white"
-              }`}
+              className={`px-4 py-2 rounded-2xl ${filterType === type
+                  ? "bg-[#5342a9] text-white"
+                  : darkMode
+                    ? "bg-gray-700 text-gray-300"
+                    : "bg-white text-black"
+                }`}
+
             >
               {type.charAt(0).toUpperCase() + type.slice(1)}
             </button>
@@ -329,7 +337,7 @@ const savePost = (post) => {
           filteredRecommendations.map((rec, index) => (
             <div
               key={index}
-              className="border border-gray-300 rounded-2xl shadow-lg bg-white overflow-hidden"
+              className={`border border-gray-300 rounded-2xl shadow-lg ${darkMode ? " bg-gray-900" : " bg-white"} overflow-hidden`}
             >
               <div className="p-4">
                 {rec.type === "article" ? (
@@ -339,12 +347,12 @@ const savePost = (post) => {
                     </p> // Display a message or nothing if title is "[Removed]"
                   ) : (
                     <div>
-                      <h3 className="flex items-center text-lg font-semibold mb-2 text-[#14044c]">
+                      <h3 className={`flex items-center text-lg font-semibold mb-2 ${darkMode ? " text-[#ffffff]" : " text-[#14044c]"} `}>
                         <RiArticleLine className="text-blue-600 text-3xl mr-2" />{" "}
                         <span>{rec.title}</span>
                       </h3>
 
-                      <p className="text-sm mt-2 text-gray-700">
+                      <p className={`text-sm mt-2 ${darkMode ? " text-[#ffffff]" : " text-gray-700"}  `}>
                         {rec.description}...
                         <a
                           href={rec.url}
@@ -373,7 +381,7 @@ const savePost = (post) => {
                   )
                 ) : rec.type === "youtube" ? (
                   <div>
-                    <h3 className="flex items-center text-lg font-semibold mb-2 text-[#14044c]">
+                    <h3 className={`flex items-center text-lg font-semibold mb-2 ${darkMode ? " text-[#ffffff]" : " text-[#14044c]"} `}>
                       <TiSocialYoutubeCircular className="text-red-600 text-3xl mr-2" />
 
                       <span>{rec.title}</span>
@@ -392,7 +400,7 @@ const savePost = (post) => {
                   </div>
                 ) : rec.type === "movie" ? (
                   <div>
-                    <h3 className="flex items-center text-lg font-semibold mb-2 text-[#14044c]">
+                    <h3 className={`flex items-center text-lg font-semibold mb-2 ${darkMode ? " text-[#ffffff]" : " text-[#14044c]"} `}>
                       <BiCameraMovie className="text-orange-500 text-3xl mr-2" />
                       <span>{rec.title}</span>
                     </h3>

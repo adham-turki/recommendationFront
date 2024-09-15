@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
+
 
 const initialProfiles = [
   {
@@ -45,6 +47,7 @@ const initialProfiles = [
   // Add more profiles as needed
 ];
 
+
 const SearchResults = ({ profiles, onProfileClick }) => {
   const [selectedProfiles, setSelectedProfiles] = useState([]);
   const [similarityResult, setSimilarityResult] = useState(null);
@@ -52,6 +55,7 @@ const SearchResults = ({ profiles, onProfileClick }) => {
   const [error, setError] = useState(null);
   const [selectedProfile, setSelectedProfile] = useState(null); // State to hold the selected profile for modal
   const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
 
   if (!profiles || profiles.length === 0) {
     return (
@@ -331,6 +335,13 @@ const SearchResults = ({ profiles, onProfileClick }) => {
       </div>
     </div>
   );
+};
+// PropTypes validation
+SearchResults.propTypes = {
+ 
+    skills: PropTypes.arrayOf(PropTypes.string).isRequired, // Filters should have an array of strings for skills
+    interests: PropTypes.arrayOf(PropTypes.string).isRequired, // Filters should have an array of strings for interests
+   // Mark filters as required
 };
 
 export default SearchResults;

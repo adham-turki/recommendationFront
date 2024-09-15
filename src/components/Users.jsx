@@ -4,27 +4,21 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ClipLoader } from 'react-spinners';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  fetchUsersStart,
-  fetchUsersSuccess,
-  fetchUsersFailure,
-  toggleUserStatus,
-} from '../redux/userSlice';
+import { useSelector } from 'react-redux';
+
 
 
 const Users = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 5;
-
-  const dispatch = useDispatch();
-  const { users, loading, error } = useSelector((state) => state.users);
   const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+  const [error, setError] = useState(null);
+  const [users, setUsers] = useState([]);
+
 
   useEffect(() => {
     async function fetchData() {
-      dispatch(fetchUsersStart());
       try {
         const res = await fetch(`${import.meta.env.VITE_API}/users`, {
           headers: {
@@ -36,13 +30,13 @@ const Users = () => {
           throw new Error('Failed to fetch users');
         }
         const data = await res.json();
-        dispatch(fetchUsersSuccess(data));
+        setUsers(data);
       } catch (err) {
-        dispatch(fetchUsersFailure(err.message));
+        setError(err)
       }
     }
     fetchData();
-  }, [dispatch]);
+  }, []);
 
   const handleActivateDeactivate = async (userId, isEnabled) => {
     const url = isEnabled
@@ -54,10 +48,15 @@ const Users = () => {
       if (!res.ok) {
         throw new Error(`Failed to ${isEnabled ? 'deactivate' : 'activate'} user`);
       }
-      dispatch(toggleUserStatus({ userId, isEnabled }));
     } catch (err) {
-      dispatch(fetchUsersFailure(err.message));
+      setError(err)
+
     }
+    setUsers(prevUsers =>
+      prevUsers.map(user =>
+        user.id === userId ? { ...user, enabled: !isEnabled } : user
+      )
+    );
   };
 
   // If error occurs, display error message

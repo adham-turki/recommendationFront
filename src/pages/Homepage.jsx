@@ -13,6 +13,7 @@ import matchifyLogo from "../assets/matchify_logo1.png"; // Adjust the path acco
 
 import matchifyLogowhite from "../assets/matchify_logo_white.png";
 import Topmovie2 from "../components/Topmovie2";
+import { useSelector } from "react-redux";
 
 
 const Header2 = () => {
@@ -21,7 +22,9 @@ const Header2 = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef(null);
-  const isAdmin = true;
+  const userData = useSelector((state) => state.users.user);
+  const isAdmin = userData?.role?.roleName === "ADMIN";
+
 
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
@@ -162,7 +165,9 @@ const Header2 = () => {
               className="bg-[#14044c] text-white flex items-center justify-center rounded-full h-10 w-10 cursor-pointer"
               onClick={toggleDropdown}
             >
-              <span className="text-lg font-bold">NH</span>
+              <div className="profile">
+                {userData && <img src={userData.profilePicture} alt="Profile" className="rounded-full" />}
+              </div> 
             </div>
 
             {/* Dropdown Menu */}

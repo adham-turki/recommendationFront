@@ -97,6 +97,8 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+  const [interest, setInterest] = useState("");
+  const [skills,setSkills] = useState("");
 
   // Define fallback data
   const fallbackProfiles = [
@@ -108,6 +110,7 @@ const Search = () => {
   const handleFilterChange = (filters) => {
     setActiveFilters(filters);
   };
+
 
   const handleSearch = async () => {
     setLoading(true);
@@ -124,6 +127,7 @@ const Search = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
+
           interests: activeFilters.filter((filter) =>
             // Check if the filter is included in the interests (replace with actual interests array)
             [
@@ -193,6 +197,7 @@ const Search = () => {
     }
   };
 
+
   const clearAllFilters = () => {
     setActiveFilters([]);
     setSearchTerm("");
@@ -202,11 +207,13 @@ const Search = () => {
   };
 
   const handleProfileDetails = (profile) => {
+    
     setSelectedProfile(profile);
   };
 
   return (
     <div>
+
       <div
         className={`min-h-screen ${
           darkMode ? "bg-gray-800 text-white" : "bg-[#e6e2eb]"
@@ -224,6 +231,7 @@ const Search = () => {
             }`}
           >
             <div
+
               className={`w-full max-w-md p-4 rounded-xl shadow-lg transition hover:shadow-2xl hover:scale-105 ${
                 darkMode
                   ? "bg-gray-900 text-gray-300"
@@ -241,6 +249,7 @@ const Search = () => {
                 <input
                   type="text"
                   placeholder="Search for people"
+
                   className={`w-full px-4 py-2 rounded-lg border text-sm transition-shadow focus:outline-none focus:ring-2 ${
                     darkMode
                       ? "bg-gray-700 border-gray-600 text-white focus:ring-gray-500"
@@ -262,6 +271,7 @@ const Search = () => {
                 Search
               </button>
             </div>
+
 
             {/* Filters Section */}
             <div className="mt-6">
@@ -340,7 +350,9 @@ const Search = () => {
             {/* Search Results Section */}
             {showResults && (
               <SearchResults
-                profiles={profiles}
+                interests={interest} 
+                skills={skills}
+                profiles = {profiles}
                 onProfileClick={handleProfileDetails}
               />
             )}
