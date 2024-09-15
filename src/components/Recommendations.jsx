@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import {
   AiFillLike,
@@ -18,11 +17,14 @@ import { TbArticleOff } from "react-icons/tb";
 import Search from "../pages/Search";
 import SearchForm from "./SearchForm";
 import { ImSpinner2 } from "react-icons/im";
+<<<<<<< HEAD
 import { useSelector } from "react-redux";
 
 
 
 
+=======
+>>>>>>> 700ce94306b2be8a5390c723b66de3cd481838f7
 
 const Recommendations = () => {
   const [recommendations, setRecommendations] = useState([]);
@@ -38,6 +40,7 @@ const Recommendations = () => {
 
 
 
+<<<<<<< HEAD
 
   useEffect(() => {
     // Fetch data from the API
@@ -73,15 +76,20 @@ const Recommendations = () => {
 }
 fetchData();},[]);
 
+=======
+ 
+
+>>>>>>> 700ce94306b2be8a5390c723b66de3cd481838f7
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`${import.meta.env.VITE_API}/recommendations` , 
+      const response = await fetch(
+        `${import.meta.env.VITE_API}/recommendations`,
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-}
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -95,21 +103,32 @@ fetchData();},[]);
       }
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_API}/recommendations` , 
+        const response = await fetch(
+          `${import.meta.env.VITE_API}/recommendations`,
           {
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           }
-  }
         );
         const data = await response.json();
+        const movie = {
+          IMDBscore: 7.9,
+          Poster:
+            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_UX182_CR0,0,182,268_AL_.jpg",
+          genres: "Action Science Fiction Adventure",
+          homepage: "http://www.ironmanmovie.com/",
+          overview:
+            "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
+          title: "Iron Man",
+          type: "movie",
+        };
         
         setRecommendations([movies, ...data.recommendations]);
         setFilteredRecommendations([movies], ...data.recommendations);
       } catch (error) {
         console.error("Error fetching data:", error);
-
       }
     };
 
@@ -117,7 +136,6 @@ fetchData();},[]);
   }, []);
 
   useEffect(() => {
-
     if (filterType === "All") {
       setFilteredRecommendations(recommendations);
     } else {
@@ -128,19 +146,19 @@ fetchData();},[]);
   }, [filterType, recommendations]);
 
   useEffect(() => {
-    
     const fetchShares = async () => {
       try {
-        const response = await fetch('/api/getShares');//fix api
+        const response = await fetch("/api/getShares"); //fix api
         const data = await response.json();
         setShares(data.shares);
       } catch (error) {
-        console.error('Error fetching shares:', error);
+        console.error("Error fetching shares:", error);
       }
     };
 
     fetchShares();
   }, []);
+  
   const handleImageClick = (image) => {
     setEnlargedImage(image);
   };
@@ -166,7 +184,7 @@ fetchData();},[]);
       if (newLikes[index]) {
         sendUserActionToBackend(content_id, "like");
       } else {
-        // sendUserActionToBackend(content_id, "unlike");
+        // 
       }
 
       setDislikes(newDislikes);
@@ -194,7 +212,6 @@ fetchData();},[]);
     });
   };
 
-
   const handleShareClick = (url, index) => {
     const content_id = recommendations[index].content_id;
 
@@ -217,74 +234,120 @@ fetchData();},[]);
     window.open(url, "_blank");
   };
 
-  
-  const savePost = (post) => {
-    setSavedPosts((prevSavedPosts) => {
-      const isAlreadySaved = prevSavedPosts.some(
-        (savedPost) => savedPost.content_id === post.content_id
-      );
-  
-      if (isAlreadySaved) {
-        // If the post is already saved, remove it and send a request to the backend to unsave it
-        savedItem(post.content_id, "DELETE");  
-        return prevSavedPosts.filter(
-          (savedPost) => savedPost.content_id !== post.content_id
-        );
-      } else {
-        // If the post is not saved, add it and send a request to the backend to save it
-        savedItem(post.content_id, "POST");
-        return [...prevSavedPosts, post];
-      }
+  // const savePost = (post) => {
+  //   setSavedPosts((prevSavedPosts) => {
+  //     const isAlreadySaved = prevSavedPosts.some(
+  //       (savedPost) => savedPost.content_id === post.content_id
+  //     );
+
+  //     if (isAlreadySaved) {
+  //       // If the post is already saved, remove it and send a request to the backend to unsave it
+  //       savedItem(post.content_id, "DELETE");
+  //       return prevSavedPosts.filter(
+  //         (savedPost) => savedPost.content_id !== post.content_id
+  //       );
+  //     } else {
+  //       // If the post is not saved, add it and send a request to the backend to save it
+  //       savedItem(post.content_id, "POST");
+  //       return [...prevSavedPosts, post];
+  //     }
+  //   });
+  // };
+
+  // // Function to save or unsave an item
+  // const savedItem = async (content_id, method) => {
+  //   try {
+  //     const savedData = {
+    
+  //     };
+
+  //     await fetch(`http://192.168.1.136:8089/saved-items`, {
+  //       method: method,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: method === "POST" ? JSON.stringify(savedData) : null,
+  //     });
+
+  //     console.log(
+  //       `Successfully ${method === "POST" ? "saved" : "unsaved"} the item.`
+  //     );
+  //   } catch (error) {
+  //     console.error("Error sending data to backend:", error);
+  //   }
+  // };
+
+
+// Function to save or unsave an item
+const savedItem = async (content_id, method) => {
+  try {
+    const savedData = {
+      timestamp: new Date().toISOString(),  
+      contentId: content_id,                
+      userId: 1,                            
+    };
+
+    await fetch(`https://rsserviceplan-rsapp.azuremicroservices.io/saved-items`, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+         Authorization: `Bearer ${localStorage.getItem("token")}`,
+
+      },
+      body: method === "POST" ? JSON.stringify(savedData) : null, // Only include body for POST
     });
-  };
-  
-  // Function to save or unsave an item
-  const savedItem = async (content_id, method) => {
-    try {
-      const savedData = {
-        contentId: 1,
-        userId: 1,
-      };
-  
-      await fetch(`http://192.168.1.136:8089/saved-items`, {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: method === "POST" ? JSON.stringify(savedData) : null, 
-      });
-  
-      console.log(`Successfully ${method === "POST" ? "saved" : "unsaved"} the item.`);
-    } catch (error) {
-      console.error("Error sending data to backend:", error);
+
+    console.log(
+      `Successfully ${method === "POST" ? "saved" : "unsaved"} the item with contentId ${content_id}.`
+    );
+  } catch (error) {
+    console.error("Error sending data to backend:", error);
+  }
+};
+
+const savePost = (post) => {
+  setSavedPosts((prevSavedPosts) => {
+    const isAlreadySaved = prevSavedPosts.some(
+      (savedPost) => savedPost.content_id === post.content_id
+    );
+
+    if (isAlreadySaved) {
+      // If the post is already saved, unsave it
+      savedItem(post.content_id, "DELETE");
+      return prevSavedPosts.filter(
+        (savedPost) => savedPost.content_id !== post.content_id
+      );
+    } else {
+      // If the post is not saved, save it
+      savedItem(post.content_id, "POST");
+      return [...prevSavedPosts, post];
     }
-  };
-  
-  const sendUserActionToBackend = async (
-    content_id,
-    action,
-    additionalData = {}
-  ) => {
+  });
+};
+
+  const sendUserActionToBackend = async (content_id, action, additionalData = {}) => {
     try {
       const interactionData = {
-        contentId: 1,
-        userId: 1,
-        interactionType: action,
-        ...additionalData,
+        contentId: content_id,  // Use dynamic content_id
+        interactionType: action,  // "like", "dislike"
+        ...additionalData,  // Spread additional data if needed
       };
-
-      await fetch(`http://192.168.1.136:8089/interactions`, {
+  
+      await fetch(`https://rsserviceplan-rsapp.azuremicroservices.io/interactions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+
         },
         body: JSON.stringify(interactionData),
       });
+  
+      console.log(`Successfully sent ${action} for content ID ${content_id}`);
     } catch (error) {
       console.error("Error sending data to backend:", error);
     }
   };
-
   const uniqueTypes = [
     "All",
     ...new Set(
@@ -295,6 +358,7 @@ fetchData();},[]);
   ];
 
   return (
+<<<<<<< HEAD
   <LazyLoad>
     <div className={`space-y-4 `}>
       <div className="flex space-x-4 mb-4 pt-7">
@@ -317,6 +381,24 @@ fetchData();},[]);
         ))}
       </div>
       <SearchForm />
+=======
+    <LazyLoad>
+      <div className="space-y-4">
+        <div className="flex space-x-4 mb-4 pt-7">
+          {uniqueTypes.map((type, index) => (
+            <button
+              key={index}
+              onClick={() => setFilterType(type)}
+              className={`px-4 py-2 rounded-2xl ${
+                filterType === type ? "bg-[#5342a9] text-white" : "bg-white"
+              }`}
+            >
+              {type.charAt(0).toUpperCase() + type.slice(1)}
+            </button>
+          ))}
+        </div>
+        <SearchForm />
+>>>>>>> 700ce94306b2be8a5390c723b66de3cd481838f7
 
       {filteredRecommendations.length > 0 ? (
         filteredRecommendations.map((rec, index) => (
@@ -334,12 +416,36 @@ fetchData();},[]);
                   </p>
                 ) : (
                   <div>
+<<<<<<< HEAD
                     <h3
                       className={`flex items-center text-lg font-semibold mb-2 ${
                         darkMode ? "text-[#9fa7ff]" : "text-[#14044c]"
                       }`}
                     >
                       <RiArticleLine className="text-blue-600 text-3xl mr-2" />{" "}
+=======
+                    <h3 className="flex items-center text-lg font-semibold mb-2 text-[#14044c]">
+                      <TiSocialYoutubeCircular className="text-red-600 text-3xl mr-2" />
+
+                      <span>{rec.title}</span>
+                    </h3>{" "}
+                    <div className="flex justify-center items-center">
+                      <iframe
+                        width="100%"
+                        height="350"
+                        src={rec.url.replace("watch?v=", "embed/")}
+                        title={rec.title}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  </div>
+                ) : rec.type === "movie" ? (
+                  <div>
+                    <h3 className="flex items-center text-lg font-semibold mb-2 text-[#14044c]">
+                      <BiCameraMovie className="text-orange-500 text-3xl mr-2" />
+>>>>>>> 700ce94306b2be8a5390c723b66de3cd481838f7
                       <span>{rec.title}</span>
                     </h3>
 
@@ -506,6 +612,7 @@ fetchData();},[]);
                 </div>
               </div>
             </div>
+<<<<<<< HEAD
           </div>
         ))
       ) : (
@@ -527,6 +634,36 @@ fetchData();},[]);
   </LazyLoad>
 );
 
+=======
+          ))
+        ) : (
+          <div className="flex justify-center items-center h-64">
+            <ImSpinner2 className="w-16 h-16 text-[#5342a9] animate-spin" />
+          </div>
+        )}
+
+        {/* make image bigger */}
+        {enlargedImage && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="relative bg-white p-4 rounded-lg">
+              <button
+                onClick={handleCloseImage}
+                className="absolute top-2 right-2 text-black text-xl "
+              >
+                &times;
+              </button>
+              <img
+                src={enlargedImage}
+                alt="Enlarged"
+                className="max-w-full max-h-screen px-5"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </LazyLoad>
+  );
+>>>>>>> 700ce94306b2be8a5390c723b66de3cd481838f7
 };
 
 export default Recommendations;
