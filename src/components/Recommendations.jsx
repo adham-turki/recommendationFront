@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import {
   AiFillLike,
@@ -17,9 +16,7 @@ import LazyLoad from "react-lazyload";
 import { TbArticleOff } from "react-icons/tb";
 import Search from "../pages/Search";
 import SearchForm from "./SearchForm";
-import { ImSpinner2 } from "react-icons/im"; 
-
-
+import { ImSpinner2 } from "react-icons/im";
 
 const Recommendations = () => {
   const [recommendations, setRecommendations] = useState([]);
@@ -31,47 +28,18 @@ const Recommendations = () => {
   const [shares, setShares] = useState([]);
   const [enlargedImage, setEnlargedImage] = useState(null);
 
-
-  useEffect(() => {
-    // Fetch data from the API
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API}/recommendations`,
-                        {
-                          headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${localStorage.getItem("token")}`,
-                        }
-            });
-        const data = await response.json();
-        setRecommendations(data.recommendations);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
  
 
-  const movie = {
-    IMDBscore: 7.9,
-    Poster:
-      "https://images-na.ssl-images-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_UX182_CR0,0,182,268_AL_.jpg",
-    genres: "Action Science Fiction Adventure",
-    homepage: "http://www.ironmanmovie.com/",
-    overview:
-      "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
-    title: "Iron Man",
-    type: "movie",
-  };
-}},[]);
-
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`${import.meta.env.VITE_API}/recommendations` , 
+      const response = await fetch(
+        `${import.meta.env.VITE_API}/recommendations`,
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-}
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -85,21 +53,32 @@ const Recommendations = () => {
       }
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_API}/recommendations` , 
+        const response = await fetch(
+          `${import.meta.env.VITE_API}/recommendations`,
           {
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           }
-  }
         );
         const data = await response.json();
+        const movie = {
+          IMDBscore: 7.9,
+          Poster:
+            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_UX182_CR0,0,182,268_AL_.jpg",
+          genres: "Action Science Fiction Adventure",
+          homepage: "http://www.ironmanmovie.com/",
+          overview:
+            "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
+          title: "Iron Man",
+          type: "movie",
+        };
         
         setRecommendations([movie, ...data.recommendations]);
         setFilteredRecommendations([movie], ...data.recommendations);
       } catch (error) {
         console.error("Error fetching data:", error);
-
       }
     };
 
@@ -107,7 +86,6 @@ const Recommendations = () => {
   }, []);
 
   useEffect(() => {
-
     if (filterType === "All") {
       setFilteredRecommendations(recommendations);
     } else {
@@ -118,19 +96,19 @@ const Recommendations = () => {
   }, [filterType, recommendations]);
 
   useEffect(() => {
-    
     const fetchShares = async () => {
       try {
-        const response = await fetch('/api/getShares');//fix api
+        const response = await fetch("/api/getShares"); //fix api
         const data = await response.json();
         setShares(data.shares);
       } catch (error) {
-        console.error('Error fetching shares:', error);
+        console.error("Error fetching shares:", error);
       }
     };
 
     fetchShares();
   }, []);
+  
   const handleImageClick = (image) => {
     setEnlargedImage(image);
   };
@@ -156,7 +134,7 @@ const Recommendations = () => {
       if (newLikes[index]) {
         sendUserActionToBackend(content_id, "like");
       } else {
-        // sendUserActionToBackend(content_id, "unlike");
+        // 
       }
 
       setDislikes(newDislikes);
@@ -184,7 +162,6 @@ const Recommendations = () => {
     });
   };
 
-
   const handleShareClick = (url, index) => {
     const content_id = recommendations[index].content_id;
 
@@ -207,74 +184,116 @@ const Recommendations = () => {
     window.open(url, "_blank");
   };
 
-  
-  const savePost = (post) => {
-    setSavedPosts((prevSavedPosts) => {
-      const isAlreadySaved = prevSavedPosts.some(
-        (savedPost) => savedPost.content_id === post.content_id
-      );
-  
-      if (isAlreadySaved) {
-        // If the post is already saved, remove it and send a request to the backend to unsave it
-        savedItem(post.content_id, "DELETE");  
-        return prevSavedPosts.filter(
-          (savedPost) => savedPost.content_id !== post.content_id
-        );
-      } else {
-        // If the post is not saved, add it and send a request to the backend to save it
-        savedItem(post.content_id, "POST");
-        return [...prevSavedPosts, post];
-      }
+  // const savePost = (post) => {
+  //   setSavedPosts((prevSavedPosts) => {
+  //     const isAlreadySaved = prevSavedPosts.some(
+  //       (savedPost) => savedPost.content_id === post.content_id
+  //     );
+
+  //     if (isAlreadySaved) {
+  //       // If the post is already saved, remove it and send a request to the backend to unsave it
+  //       savedItem(post.content_id, "DELETE");
+  //       return prevSavedPosts.filter(
+  //         (savedPost) => savedPost.content_id !== post.content_id
+  //       );
+  //     } else {
+  //       // If the post is not saved, add it and send a request to the backend to save it
+  //       savedItem(post.content_id, "POST");
+  //       return [...prevSavedPosts, post];
+  //     }
+  //   });
+  // };
+
+  // // Function to save or unsave an item
+  // const savedItem = async (content_id, method) => {
+  //   try {
+  //     const savedData = {
+    
+  //     };
+
+  //     await fetch(`http://192.168.1.136:8089/saved-items`, {
+  //       method: method,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: method === "POST" ? JSON.stringify(savedData) : null,
+  //     });
+
+  //     console.log(
+  //       `Successfully ${method === "POST" ? "saved" : "unsaved"} the item.`
+  //     );
+  //   } catch (error) {
+  //     console.error("Error sending data to backend:", error);
+  //   }
+  // };
+
+
+// Function to save or unsave an item
+const savedItem = async (content_id, method) => {
+  try {
+    const savedData = {
+      timestamp: new Date().toISOString(),  
+      contentId: content_id,                
+      userId: 1,                            
+    };
+
+    await fetch(`https://rsserviceplan-rsapp.azuremicroservices.io/saved-items`, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: method === "POST" ? JSON.stringify(savedData) : null, // Only include body for POST
     });
-  };
-  
-  // Function to save or unsave an item
-  const savedItem = async (content_id, method) => {
-    try {
-      const savedData = {
-        contentId: 1,
-        userId: 1,
-      };
-  
-      await fetch(`http://192.168.1.136:8089/saved-items`, {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: method === "POST" ? JSON.stringify(savedData) : null, 
-      });
-  
-      console.log(`Successfully ${method === "POST" ? "saved" : "unsaved"} the item.`);
-    } catch (error) {
-      console.error("Error sending data to backend:", error);
+
+    console.log(
+      `Successfully ${method === "POST" ? "saved" : "unsaved"} the item with contentId ${content_id}.`
+    );
+  } catch (error) {
+    console.error("Error sending data to backend:", error);
+  }
+};
+
+const savePost = (post) => {
+  setSavedPosts((prevSavedPosts) => {
+    const isAlreadySaved = prevSavedPosts.some(
+      (savedPost) => savedPost.content_id === post.content_id
+    );
+
+    if (isAlreadySaved) {
+      // If the post is already saved, unsave it
+      savedItem(post.content_id, "DELETE");
+      return prevSavedPosts.filter(
+        (savedPost) => savedPost.content_id !== post.content_id
+      );
+    } else {
+      // If the post is not saved, save it
+      savedItem(post.content_id, "POST");
+      return [...prevSavedPosts, post];
     }
-  };
-  
-  const sendUserActionToBackend = async (
-    content_id,
-    action,
-    additionalData = {}
-  ) => {
+  });
+};
+
+  const sendUserActionToBackend = async (content_id, action, additionalData = {}) => {
     try {
       const interactionData = {
-        contentId: 1,
-        userId: 1,
-        interactionType: action,
-        ...additionalData,
+        contentId: content_id,  // Use dynamic content_id
+        interactionType: action,  // "like", "dislike"
+        ...additionalData,  // Spread additional data if needed
       };
-
-      await fetch(`http://192.168.1.136:8089/interactions`, {
+  
+      await fetch(`https://rsserviceplan-rsapp.azuremicroservices.io/interactions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(interactionData),
       });
+  
+      console.log(`Successfully sent ${action} for content ID ${content_id}`);
     } catch (error) {
       console.error("Error sending data to backend:", error);
     }
   };
-
   const uniqueTypes = [
     "All",
     ...new Set(
@@ -298,7 +317,6 @@ const Recommendations = () => {
             >
               {type.charAt(0).toUpperCase() + type.slice(1)}
             </button>
-          
           ))}
         </div>
         <SearchForm />
@@ -369,8 +387,6 @@ const Recommendations = () => {
                     </div>
                   </div>
                 ) : rec.type === "movie" ? (
-                
-
                   <div>
                     <h3 className="flex items-center text-lg font-semibold mb-2 text-[#14044c]">
                       <BiCameraMovie className="text-orange-500 text-3xl mr-2" />
@@ -490,8 +506,8 @@ const Recommendations = () => {
           ))
         ) : (
           <div className="flex justify-center items-center h-64">
-          <ImSpinner2 className="w-16 h-16 text-[#5342a9] animate-spin" />
-        </div>
+            <ImSpinner2 className="w-16 h-16 text-[#5342a9] animate-spin" />
+          </div>
         )}
 
         {/* make image bigger */}
@@ -514,7 +530,6 @@ const Recommendations = () => {
         )}
       </div>
     </LazyLoad>
-
   );
 };
 
