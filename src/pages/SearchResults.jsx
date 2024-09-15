@@ -47,12 +47,8 @@ const initialProfiles = [
   // Add more profiles as needed
 ];
 
-<<<<<<< HEAD
-const SearchResults = ({ interests, skills }) => {
-  const [profiles, setProfiles] = useState(initialProfiles);
-=======
+
 const SearchResults = ({ profiles, onProfileClick }) => {
->>>>>>> 700ce94306b2be8a5390c723b66de3cd481838f7
   const [selectedProfiles, setSelectedProfiles] = useState([]);
   const [similarityResult, setSimilarityResult] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -60,76 +56,7 @@ const SearchResults = ({ profiles, onProfileClick }) => {
   const [selectedProfile, setSelectedProfile] = useState(null); // State to hold the selected profile for modal
   const darkMode = useSelector((state) => state.darkMode.isDarkMode);
 
-<<<<<<< HEAD
-  useEffect(() => {
-    const fetchProfiles = async () => {
-      try {
-        setLoading(true);
-        setError(null);
 
-        
-        console.log(interests)
-        console.log(skills)
-
-      // Construct the URL with query parameters for interests and skills
-      const url = `${import.meta.env.VITE_API}/profiles/search`
-
-      // Fetch the filtered profiles
-      const response = await fetch(url, 
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({
-            skills: skills,
-            interests: interests
-          }),
-        }
-      );
-      const data = await response.json();
-      setProfiles(data || []);
-      console.log(data)
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfiles();
-  }, [interests, skills]);
-
-  //   useEffect(() => {
-  //     const fetchProfiles = async () => {
-  //       try {
-  //         setLoading(true);
-  //         setError(null);
-
-  //         const { interests, skills } = filters;
-
-  //         // Construct the search URL based on interests and skills
-  //         const url = `http://192.168.1.123:2505/profiles/search?interests=${interests}&skills=${skills}`;
-
-  //         // Make the API request
-  //         const response = await axios.get(url);
-
-  //         console.log(response.data);
-
-  //         // Set profiles based on the response data
-  //         setProfiles(response.data || []);
-  //       } catch (err) {
-  //         setError(err);
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     };
-
-  //     // Trigger the profile fetching only when filters change or searchTerm is updated
-  //     fetchProfiles();
-  //   }, [searchTerm, filters]);
-=======
   if (!profiles || profiles.length === 0) {
     return (
       <div className="p-4">
@@ -137,7 +64,6 @@ const SearchResults = ({ profiles, onProfileClick }) => {
       </div>
     );
   }
->>>>>>> 700ce94306b2be8a5390c723b66de3cd481838f7
 
   const handleProfileSelect = (profile) => {
     if (selectedProfiles.includes(profile)) {
