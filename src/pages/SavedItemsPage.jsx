@@ -61,6 +61,67 @@ const SavedItemsPage = () => {
     }
   };
 
+  // // Fetch saved items from the backend
+  // useEffect(() => {
+  //   const fetchSavedItems = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await fetch("http://192.168.1.136:8089/users/2/saved-items", {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
+
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch saved items");
+  //       }
+
+  //       const data = await response.json();
+
+  //       // Transform the data to match the structure
+  //       const transformedData = data.map((item) => ({
+  //         saved_item_id: item.savedItemId, // Use savedItemId as the saved_item_id
+  //         title: `${item.title}`, // Generic title, modify as needed
+  //         description: `Saved on ${new Date(item.timestamp).toLocaleString()}`, // Format timestamp
+  //         type: item.type, // Use type to filter based on category
+  //       }));
+
+  //       setSavedItems(transformedData);
+  //     } catch (err) {
+  //       setError("Error fetching saved items");
+  //       console.error(err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchSavedItems();
+  // }, []);
+
+  // // Handle item removal
+  // const handleRemoveItem = async (itemId) => {
+  //   try {
+  //     // Send DELETE request to remove the saved item
+  //     const response = await fetch(`http://192.168.1.136:8089/saved-items/${itemId}`, {
+  //       method: "DELETE",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to delete saved item");
+  //     }
+
+  //     // Remove the item from the list if DELETE is successful
+  //     setSavedItems(savedItems.filter(item => item.saved_item_id !== itemId));
+  //   } catch (err) {
+  //     setError("Error removing saved item");
+  //     console.error(err);
+  //   }
+  // };
+
   // Handle category selection
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
