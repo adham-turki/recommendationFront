@@ -15,7 +15,6 @@ const SavedItemsPage = () => {
 
   // Use mock data instead of fetching from the backend
   useEffect(() => {
-    // Use mock data instead
     const mockData = [
       {
         saved_item_id: 1,
@@ -57,6 +56,9 @@ const SavedItemsPage = () => {
   // Handle item removal
   const handleRemoveItem = (itemId) => {
     setSavedItems(savedItems.filter((item) => item.saved_item_id !== itemId));
+    if (selectedItem && selectedItem.saved_item_id === itemId) {
+      setSelectedItem(null); // If the selected item is removed, reset it
+    }
   };
 
   // Handle category selection
@@ -104,7 +106,9 @@ const SavedItemsPage = () => {
 
   // Handle click on an item to display its details
   const handleItemClick = (item) => {
-    setSelectedItem(item);
+    setSelectedItem((prevItem) =>
+      prevItem && prevItem.saved_item_id === item.saved_item_id ? null : item
+    ); // Toggle the item selection
   };
 
   // Render different views based on the selected item's type
@@ -112,7 +116,7 @@ const SavedItemsPage = () => {
     if (!item) return null;
 
     return (
-      <div className="border border-gray-300 rounded-2xl shadow-lg bg-white p-4 mt-6">
+      <div className="border border-gray-300 rounded-2xl shadow-lg bg-white p-4 mt-2">
         {item.type === "article" ? (
           <div>
             <h3 className="text-lg font-semibold mb-2 text-[#14044c]">
@@ -240,29 +244,43 @@ const SavedItemsPage = () => {
             <ul>
               {filteredItems.length > 0 ? (
                 filteredItems.map((item) => (
-                  <li
-                    key={item.saved_item_id}
-                    className="flex justify-between items-center mb-4 p-4 rounded-lg bg-white shadow-md hover:bg-[#f6f1fa] transition duration-300 transform hover:scale-105 cursor-pointer"
-                    onClick={() => handleItemClick(item)} // Set the selected item on click
-                  >
-                    <div className="flex items-center">
-                      {getItemIcon(item.type)}
-                      <div className="ml-4">
-                        <h2 className="text-lg font-semibold text-[#14044c]">
-                          {item.title}
-                        </h2>
-                        <p className="text-gray-500">{item.description}</p>
-                      </div>
-                    </div>
-                    <button
-                      className="text-[#14044c] hover:text-[#5342a9] transition duration-300 px-3 py-2 text-sm md:px-6 md:py-2 md:text-base"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent item click event from firing
-                        handleRemoveItem(item.saved_item_id);
-                      }}
+                  <li key={item.saved_item_id}>
+                    <div
+                      className={`flex justify-between items-center mb-4 p-4 rounded-lg bg-white shadow-md hover:bg-[#f6f1fa] transition duration-300 transform cursor-pointer ${
+                        selectedItem &&
+                        selectedItem.saved_item_id === item.saved_item_id
+                          ? "bg-[#e6e2eb]"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick(item)} // Set the selected item on click
                     >
-                      <FaBookmark className="w-4 h-4 md:w-6 md:h-6" />
-                    </button>
+                      <div className="flex items-center">
+                        {getItemIcon(item.type)}
+                        <div className="ml-4">
+                          <h2 className="text-lg font-semibold text-[#14044c]">
+                            {item.title}
+                          </h2>
+                          <p className="text-gray-500">{item.description}</p>
+                        </div>
+                      </div>
+                      <button
+                        className="text-[#14044c] hover:text-[#5342a9] transition duration-300 px-3 py-2 text-sm md:px-6 md:py-2 md:text-base"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent item click event from firing
+                          handleRemoveItem(item.saved_item_id);
+                        }}
+                      >
+                        <FaBookmark className="w-4 h-4 md:w-6 md:h-6" />
+                      </button>
+                    </div>
+
+                    {/* Render details for selected item */}
+                    {selectedItem &&
+                      selectedItem.saved_item_id === item.saved_item_id && (
+                        <div className="pl-4">
+                          {renderSelectedItemDetails(selectedItem)}
+                        </div>
+                      )}
                   </li>
                 ))
               ) : (
@@ -272,9 +290,6 @@ const SavedItemsPage = () => {
               )}
             </ul>
           </div>
-
-          {/* Display selected item details */}
-          {renderSelectedItemDetails(selectedItem)}
         </main>
       </div>
 
