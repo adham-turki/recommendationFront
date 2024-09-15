@@ -6,7 +6,6 @@ import {
 } from 'react-icons/fa';
 import Button from './Button';
 import ParticleBackground from './ParticleBackground';
-import Header from './Header';
 import Footer from './Footer';
 import { useSelector } from 'react-redux';
 
@@ -49,10 +48,11 @@ const EditSkills = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch("http://192.168.1.123:2505/profile", {
+        const response = await fetch(`${import.meta.env.VITE_API}/profile`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
 
@@ -85,10 +85,11 @@ const EditSkills = () => {
 
   const confirmSave = async () => {
     try {
-      const response = await fetch("http://192.168.1.123:2505/profile", {
+      const response = await fetch(`${import.meta.env.VITE_API}/profile`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           skills: selectedSkills, // Send the updated skills to the server
@@ -122,7 +123,6 @@ const EditSkills = () => {
   return (
     <div className={`relative min-h-screen flex flex-col justify-between ${darkMode ? 'bg-gray-800 text-gray-200' : 'bg-[#e6e2eb] text-gray-900'}`}>
       {/* Header */}
-      <Header />
 
      
 

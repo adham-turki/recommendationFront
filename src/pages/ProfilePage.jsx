@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useCountries } from "use-react-countries";
 import { FiUser, FiBriefcase } from "react-icons/fi";
-import { useNavigate } from "react-router-dom"; // Import for navigation
+import { Link, useNavigate } from "react-router-dom"; // Import for navigation
 import Footer from "../components/Footer";
 import { useSelector } from "react-redux";
 
@@ -181,13 +181,13 @@ const ProfilePage = () => {
                 <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-[#14044c]'} mb-4`}>Profile Settings</h2>
                 <ul className="space-y-3">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       onClick={() => setActiveSection("Edit Profile")}
                       className={`text-lg font-semibold ${activeSection === "Edit Profile" ? 'font-bold' : ''} transition duration-300 block rounded-lg p-2 ${darkMode ? 'text-white hover:bg-gray-700' : 'text-[#14044c] hover:bg-[#e6e2eb]'}`}
                     >
                       <FiUser className="inline mr-2" /> Edit Profile
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <a

@@ -10,6 +10,7 @@ import Search from './pages/Search';
 import ProfilePage from './pages/ProfilePage';
 import SavedItemsPage from './pages/SavedItemsPage';
 import AdminPage from './pages/AdminPage';
+import EditSkills from './components/EditSkills.jsx';
 
 import Header from './components/Header.jsx';
 import { useEffect } from 'react';
@@ -27,6 +28,7 @@ const App = () => {
     '/history',
     '/search',
     '/admin',
+    '/edit-skills',
   ];
   useEffect(() => {
     dispatch(fetchUserData());
@@ -46,6 +48,7 @@ const App = () => {
         <Route path="/extension-guide" element={<ExtensionGuidePage />} />
         <Route path="/home" element={<Homepage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/edit-skills" element={<EditSkills />} />
         <Route path="/saved-items" element={<SavedItemsPage />} />
         <Route path="/my-feed" element={<MyFeed  />} />
         <Route path="/history" element={<HistoryPage />} />

@@ -64,42 +64,43 @@ const SavedItemsPage = () => {
   };
 
   // // Fetch saved items from the backend
-  // useEffect(() => {
-  //   const fetchSavedItems = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const response = await fetch("http://192.168.1.136:8089/users/2/saved-items", {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       });
+  useEffect(() => {
+    const fetchSavedItems = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${import.meta.env.VITE_API}/saved-items`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch saved items");
-  //       }
+        if (!response.ok) {
+          throw new Error("Failed to fetch saved items");
+        }
 
-  //       const data = await response.json();
+        const data = await response.json();
 
-  //       // Transform the data to match the structure
-  //       const transformedData = data.map((item) => ({
-  //         saved_item_id: item.savedItemId, // Use savedItemId as the saved_item_id
-  //         title: `${item.title}`, // Generic title, modify as needed
-  //         description: `Saved on ${new Date(item.timestamp).toLocaleString()}`, // Format timestamp
-  //         type: item.type, // Use type to filter based on category
-  //       }));
+        // Transform the data to match the structure
+        const transformedData = data.map((item) => ({
+          saved_item_id: item.savedItemId, // Use savedItemId as the saved_item_id
+          title: `${item.title}`, // Generic title, modify as needed
+          description: `Saved on ${new Date(item.timestamp).toLocaleString()}`, // Format timestamp
+          type: item.type, // Use type to filter based on category
+        }));
 
-  //       setSavedItems(transformedData);
-  //     } catch (err) {
-  //       setError("Error fetching saved items");
-  //       console.error(err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+        setSavedItems(transformedData);
+      } catch (err) {
+        setError("Error fetching saved items");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   fetchSavedItems();
-  // }, []);
+    fetchSavedItems();
+  }, []);
 
   // // Handle item removal
   // const handleRemoveItem = async (itemId) => {
