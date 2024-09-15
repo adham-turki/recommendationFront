@@ -11,6 +11,7 @@ import {
   AiOutlineSave,
 } from "react-icons/ai";
 import Tooltip from "@mui/material/Tooltip";
+import { useSelector } from "react-redux";
 
 const SearchForm = () => {
   const [query, setQuery] = useState("");
@@ -18,6 +19,8 @@ const SearchForm = () => {
   const [loading, setLoading] = useState(false);
   const [likes, setLikes] = useState([]);
   const [dislikes, setDislikes] = useState([]);
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode); // Access dark mode state
+
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -155,8 +158,8 @@ const SearchForm = () => {
 
   return (
     <div className="">
-      <div className="flex items-center space-x-2">
-        <form onSubmit={handleSearch} className="flex-grow">
+      <div className={`flex items-center space-x-2  `}>
+        <form onSubmit={handleSearch} className={`flex-grow `}>
           <label
             htmlFor="default-search"
             className="mb-2 text-sm font-medium text-gray-900 sr-only"
@@ -166,7 +169,7 @@ const SearchForm = () => {
           <div className="relative">
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
               <svg
-                className="w-4 h-4 text-gray-500"
+                className={`w-4 h-4 ${darkMode ? " text-white" :  " text-gray-500" }  `}
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -186,7 +189,7 @@ const SearchForm = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               id="default-search"
-              className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-[#5342a9] focus:border-[#5342a9]"
+              className={`block w-full p-4 ps-10 text-sm  border border-gray-300 rounded-lg ${darkMode ? "bg-gray-700 text-white" :  "bg-white text-gray-900" } focus:ring-[#5342a9] focus:border-[#5342a9]`}
               placeholder="Search Similar Movies..."
               required
             />

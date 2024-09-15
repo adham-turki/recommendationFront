@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import { RiArticleLine } from "react-icons/ri";
 import { TiSocialYoutubeCircular } from "react-icons/ti";
 import { BiCameraMovie } from "react-icons/bi";
+import { useSelector } from "react-redux";
 
 const SavedItemsPage = () => {
   const [savedItems, setSavedItems] = useState([]);
@@ -11,6 +12,8 @@ const SavedItemsPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null); // Track selected item for details
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode); // Access dark mode state
+
 
   // Use mock data instead of fetching from the backend
   useEffect(() => {
@@ -139,13 +142,13 @@ const SavedItemsPage = () => {
   const getItemIcon = (type) => {
     switch (type) {
       case "article":
-        return <FaFileAlt className="w-8 h-8 text-[#14044c]" />;
+        return <FaFileAlt className={`w-8 h-8 ${darkMode ? "text-gray-300" : "text-[#14044c]"}`} />;
       case "video":
-        return <FaVideo className="w-8 h-8 text-[#14044c]" />;
+        return <FaVideo className={`w-8 h-8 ${darkMode ? "text-gray-300" : "text-[#14044c]"}`} />;
       case "movie":
-        return <FaFilm className="w-8 h-8 text-[#14044c]" />;
+        return <FaFilm className={`w-8 h-8 ${darkMode ? "text-gray-300" : "text-[#14044c]"}`} />;
       default:
-        return <FaBookmark className="w-8 h-8 text-[#14044c]" />;
+        return <FaBookmark className={`w-8 h-8 ${darkMode ? "text-gray-300" : "text-[#14044c]"}`} />;
     }
   };
 
@@ -176,12 +179,12 @@ const SavedItemsPage = () => {
     if (!item) return null;
 
     return (
-      <div className="border border-gray-300 rounded-2xl shadow-lg bg-white p-4 mt-2">
+      <div className={`border rounded-2xl shadow-lg p-4 mt-2 ${darkMode ? "bg-gray-800 text-white" : "bg-white text-black"}`}>
         {item.type === "article" ? (
           <div>
             <h3 className="text-lg font-semibold mb-2 text-[#14044c]">
-              <RiArticleLine className="text-blue-600 text-2xl mr-2" />
-              {item.title}
+            <RiArticleLine className={`text-2xl mr-2 ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
+            {item.title}
             </h3>
             <p className="text-sm mt-2 text-gray-700">
               {item.description}...{" "}
@@ -189,7 +192,7 @@ const SavedItemsPage = () => {
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-700 underline hover:text-blue-700"
+                className={`text-blue-700 underline hover:text-blue-700 ${darkMode ? "text-blue-400" : ""}`}
               >
                 Read more
               </a>
@@ -204,9 +207,9 @@ const SavedItemsPage = () => {
           </div>
         ) : item.type === "video" ? (
           <div>
-            <h3 className="text-lg font-semibold mb-2 text-[#14044c]">
-              <TiSocialYoutubeCircular className="text-red-600 text-3xl mr-2" />
-              {item.title}
+            <h3 className={`text-lg font-semibold mb-2  ${darkMode ? "text-white" : "text-[#14044c] "}`}>
+            <TiSocialYoutubeCircular className={`text-3xl mr-2 ${darkMode ? "text-red-400" : "text-red-600"}`} />
+            {item.title}
             </h3>
             <iframe
               width="100%"
@@ -220,9 +223,9 @@ const SavedItemsPage = () => {
           </div>
         ) : item.type === "movie" ? (
           <div>
-            <h3 className="text-lg font-semibold mb-2 text-[#14044c]">
-              <BiCameraMovie className="text-orange-500 text-3xl mr-2" />
-              {item.title}
+            <h3 className={`text-lg font-semibold mb-2  ${darkMode ? "text-white" : "text-[#14044c] "}`}>
+            <BiCameraMovie className={`text-3xl mr-2 ${darkMode ? "text-orange-400" : "text-orange-500"}`} />
+            {item.title}
             </h3>
             <img
               src={item.Poster}
@@ -239,17 +242,17 @@ const SavedItemsPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className={`flex flex-col min-h-screen ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}>
 
       {/* Add padding below header */}
       <div
-        className="flex-grow flex flex-col lg:flex-row p-4 bg-[#f6f1fa]"
+        className={`flex-grow flex flex-col lg:flex-row p-4 ${darkMode ? "bg-gray-900" : "bg-[#f6f1fa]"}`}
         style={{ paddingTop: "120px" }}
       >
         {/* Horizontal category slider for small and medium screens */}
-        <div className="lg:hidden mb-4">
+        <div className={`lg:hidden mb-4 ${darkMode ? "bg-gray-800" : "bg-[#f6f1fa]"} `}>
           {/* "Type" Label */}
-          <h2 className="text-lg font-bold text-[#14044c] mb-2">Type</h2>
+          <h2 className={`text-lg font-bold  ${darkMode ? "text-white" : "text-[#14044c] "} mb-2`}>Type</h2>
 
           {/* Horizontal Scrollable Buttons */}
           <div className="flex justify-start overflow-x-auto space-x-4 bg-white p-4 rounded-lg shadow-md">
@@ -269,43 +272,44 @@ const SavedItemsPage = () => {
             ))}
           </div>
         </div>
-        {/* Sidebar for large screens only */}
-        <aside className="lg:w-1/4 w-full lg:pr-4 mb-4 lg:mb-0 hidden lg:block">
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-lg font-bold text-[#14044c] mb-4">Type</h2>
-            <ul className="space-y-2">
-              {categories.map((category, index) => (
-                <li
-                  key={index}
-                  className={`flex items-center space-x-2 cursor-pointer py-2 px-3 rounded-md transition duration-300 ${
-                    activeCategory === category.name
-                      ? "bg-[#e6e2eb] text-[#14044c]"
-                      : "text-[#14044c] hover:bg-[#e6e2eb] hover:text-[#14044c]"
-                  }`}
-                  onClick={() => handleCategoryClick(category.name)}
-                >
-                  {category.icon}
-                  <span className="font-semibold">{category.name}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </aside>
+        <aside className={`lg:w-1/4 w-full lg:pr-4 mb-4 lg:mb-0 hidden lg:block ${darkMode ? "bg-gray-900" : "bg-[#f6f1fa]"}`}>
+  <div className={`p-4 rounded-lg shadow-md ${darkMode ? "bg-gray-800 text-white" : "bg-white text-black"}`}>
+    <h2 className={`text-lg font-bold mb-4 ${darkMode ? "text-white" : "text-[#14044c]"}`}>Type</h2>
+    <ul className="space-y-2">
+      {categories.map((category, index) => (
+        <li
+        key={index}
+        className={`flex items-center space-x-2 cursor-pointer py-2 px-3 rounded-md transition duration-300 ${
+          activeCategory === category.name
+            ? `${darkMode ? "bg-gray-700 text-[#e6e2eb]" : "bg-[#e6e2eb] text-[#14044c]"}`
+            : `${darkMode ? "text-gray-400 hover:bg-gray-700 hover:text-[#e6e2eb]" : "text-[#14044c] hover:bg-[#e6e2eb] hover:text-[#14044c]"}`
+        }`}
+        onClick={() => handleCategoryClick(category.name)}
+      >
+        {category.icon}
+        <span className="font-semibold">{category.name}</span>
+      </li>
+      
+      ))}
+    </ul>
+  </div>
+</aside>
+
         {/* Main Content */}
-        <main className="lg:w-3/4 w-full p-4 bg-white rounded-lg shadow-lg">
+        <main className={`lg:w-3/4 w-full p-4  ${darkMode ? "bg-gray-800 " : "bg-white "} rounded-lg shadow-lg`}>
           {/* Dynamic Title */}
-          <h1 className="text-3xl font-bold mb-2 text-[#14044c]">
+          <h1 className={`text-3xl font-bold mb-2  ${darkMode ? "text-white" : "text-[#14044c] "}`}>
             {getDynamicTitle()}
           </h1>
 
           {/* Fixed height for the saved items container */}
-          <div className="h-96 overflow-y-auto">
+          <div className={`h-96 overflow-y-auto `}>
             <ul>
               {filteredItems.length > 0 ? (
                 filteredItems.map((item) => (
                   <li key={item.saved_item_id}>
                     <div
-                      className={`flex justify-between items-center mb-4 p-4 rounded-lg bg-white shadow-md hover:bg-[#f6f1fa] transition duration-300 transform cursor-pointer ${
+                      className={`flex justify-between items-center mb-4 p-4 rounded-lg ${darkMode ? "bg-gray-900 hover:bg-gray-700" : "bg-white hover:bg-[#f6f1fa]"}  shadow-md  transition duration-300 transform cursor-pointer ${
                         selectedItem &&
                         selectedItem.saved_item_id === item.saved_item_id
                           ? "bg-[#e6e2eb]"
@@ -316,7 +320,7 @@ const SavedItemsPage = () => {
                       <div className="flex items-center">
                         {getItemIcon(item.type)}
                         <div className="ml-4">
-                          <h2 className="text-lg font-semibold text-[#14044c]">
+                          <h2 className={`text-lg font-semibold  ${darkMode ? "text-white" : "text-[#14044c] "}`}>
                             {item.title}
                           </h2>
                           <p className="text-gray-500">{item.description}</p>

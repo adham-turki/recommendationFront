@@ -12,9 +12,14 @@ import SavedItemsPage from './pages/SavedItemsPage';
 import AdminPage from './pages/AdminPage';
 
 import Header from './components/Header.jsx';
+import { useEffect } from 'react';
+import { fetchUserData } from './redux/userSlice.js';
+import { useDispatch } from 'react-redux';
 
 
 const App = () => {
+  const dispatch = useDispatch();
+
   const authenticatedRoutes = [
     '/profile',
     '/saved-items',
@@ -23,6 +28,9 @@ const App = () => {
     '/search',
     '/admin',
   ];
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, [dispatch]);
 
 
   return (
