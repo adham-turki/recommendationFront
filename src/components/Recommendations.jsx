@@ -19,7 +19,6 @@ import SearchForm from "./SearchForm";
 import { ImSpinner2 } from "react-icons/im";
 import { useSelector } from "react-redux";
 
-
 const Recommendations = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [filteredRecommendations, setFilteredRecommendations] = useState([]);
@@ -31,13 +30,110 @@ const Recommendations = () => {
   const [enlargedImage, setEnlargedImage] = useState(null);
   const darkMode = useSelector((state) => state.darkMode.isDarkMode); // Access dark mode state
 
+  const [page, setPage] = useState(1); // To track the current page
+  const [loading, setLoading] = useState(false); // To manage loading state
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await fetch(
+  //       `${import.meta.env.VITE_API}/recommendations`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       }
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     const text = await response.text(); // Read the response as text
+  //     if (text) {
+  //       const data = JSON.parse(text); // Parse the text as JSON
+  //       console.log(data);
+  //     } else {
+  //       console.error("Empty response");
+  //     }
 
+  //     try {
+  //       const response = await fetch(
+  //         `${import.meta.env.VITE_API}/recommendations`,
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //           },
+  //         }
+  //       );
+  //       const data = await response.json();
+  //       const movie = {
+  //         IMDBscore: 7.9,
+  //         Poster:
+  //           "https://images-na.ssl-images-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_UX182_CR0,0,182,268_AL_.jpg",
+  //         genres: "Action Science Fiction Adventure",
+  //         homepage: "http://www.ironmanmovie.com/",
+  //         overview:
+  //           "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
+  //         title: "Iron Man",
+  //         type: "movie",
+  //       };
 
-  useEffect(() => {
-    const fetchData = async () => {
+  //       setRecommendations([movie, ...data.recommendations]);
+  //       setFilteredRecommendations([movie], ...data.recommendations);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  // const fetchData = async (pageNum = 1) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await fetch(
+  //       `${import.meta.env.VITE_API}/recommendations?page=${pageNum}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       }
+  //     );
+
+  //     const movie = {
+  //                IMDBscore: 7.9,
+  //               Poster:
+  //                  "https://images-na.ssl-images-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_UX182_CR0,0,182,268_AL_.jpg",
+  //                genres: "Action Science Fiction Adventure",
+  //               homepage: "http://www.ironmanmovie.com/",
+  //              overview:
+  //                "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
+  //               title: "Iron Man",
+  //                type: "movie",
+  //              };
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     const data = await response.json();
+  //     if (pageNum === 1) {
+  //       setRecommendations(data.recommendations);
+  //     } else {
+  //       setRecommendations((prev) => [...prev, ...data.recommendations]);
+  //     }
+  //     setFilteredRecommendations(data.recommendations);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const fetchData = async (pageNum = 1) => {
+    setLoading(true);
+    try {
       const response = await fetch(
-        `${import.meta.env.VITE_API}/recommendations`,
+        `${import.meta.env.VITE_API}/recommendations?page=${pageNum}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -45,48 +141,48 @@ const Recommendations = () => {
           },
         }
       );
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const text = await response.text(); // Read the response as text
-      if (text) {
-        const data = JSON.parse(text); // Parse the text as JSON
-        console.log(data);
+  
+      const data = await response.json();
+   
+      const movie = {
+        IMDBscore: 7.9,
+        Poster: "https://images-na.ssl-images-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_UX182_CR0,0,182,268_AL_.jpg",
+        genres: "Action Science Fiction Adventure",
+        homepage: "http://www.ironmanmovie.com/",
+        overview: "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
+        title: "Iron Man",
+        type: "movie",
+      };
+  
+      // Add the movie object to the fetched recommendations
+      const recommendationsWithMovie = [...data.recommendations, movie];
+  
+      if (pageNum === 1) {
+        setRecommendations(recommendationsWithMovie);
       } else {
-        console.error("Empty response");
+        setRecommendations((prev) => [...prev, ...data.recommendations]);
       }
+  
+      setFilteredRecommendations(recommendationsWithMovie);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchData(nextPage);
+  };
 
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API}/recommendations`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        const data = await response.json();
-        const movie = {
-          IMDBscore: 7.9,
-          Poster:
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_UX182_CR0,0,182,268_AL_.jpg",
-          genres: "Action Science Fiction Adventure",
-          homepage: "http://www.ironmanmovie.com/",
-          overview:
-            "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
-          title: "Iron Man",
-          type: "movie",
-        };
-
-        setRecommendations([movie, ...data.recommendations]);
-        setFilteredRecommendations([movie], ...data.recommendations);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+  useEffect(() => {
+    fetchData(); // Fetch initial data
   }, []);
 
   useEffect(() => {
@@ -138,7 +234,7 @@ const Recommendations = () => {
       if (newLikes[index]) {
         sendUserActionToBackend(content_id, "like");
       } else {
-        // 
+        //
       }
 
       setDislikes(newDislikes);
@@ -188,50 +284,6 @@ const Recommendations = () => {
     window.open(url, "_blank");
   };
 
-  // const savePost = (post) => {
-  //   setSavedPosts((prevSavedPosts) => {
-  //     const isAlreadySaved = prevSavedPosts.some(
-  //       (savedPost) => savedPost.content_id === post.content_id
-  //     );
-
-  //     if (isAlreadySaved) {
-  //       // If the post is already saved, remove it and send a request to the backend to unsave it
-  //       savedItem(post.content_id, "DELETE");
-  //       return prevSavedPosts.filter(
-  //         (savedPost) => savedPost.content_id !== post.content_id
-  //       );
-  //     } else {
-  //       // If the post is not saved, add it and send a request to the backend to save it
-  //       savedItem(post.content_id, "POST");
-  //       return [...prevSavedPosts, post];
-  //     }
-  //   });
-  // };
-
-  // // Function to save or unsave an item
-  // const savedItem = async (content_id, method) => {
-  //   try {
-  //     const savedData = {
-
-  //     };
-
-  //     await fetch(`http://192.168.1.136:8089/saved-items`, {
-  //       method: method,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: method === "POST" ? JSON.stringify(savedData) : null,
-  //     });
-
-  //     console.log(
-  //       `Successfully ${method === "POST" ? "saved" : "unsaved"} the item.`
-  //     );
-  //   } catch (error) {
-  //     console.error("Error sending data to backend:", error);
-  //   }
-  // };
-
-
   // Function to save or unsave an item
   const savedItem = async (content_id, method) => {
     try {
@@ -241,18 +293,22 @@ const Recommendations = () => {
         userId: 1,
       };
 
-      await fetch(`https://rsserviceplan-rsapp.azuremicroservices.io/saved-items`, {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-
-        },
-        body: method === "POST" ? JSON.stringify(savedData) : null, // Only include body for POST
-      });
+      await fetch(
+        `https://rsserviceplan-rsapp.azuremicroservices.io/saved-items`,
+        {
+          method: method,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: method === "POST" ? JSON.stringify(savedData) : null, // Only include body for POST
+        }
+      );
 
       console.log(
-        `Successfully ${method === "POST" ? "saved" : "unsaved"} the item with contentId ${content_id}.`
+        `Successfully ${
+          method === "POST" ? "saved" : "unsaved"
+        } the item with contentId ${content_id}.`
       );
     } catch (error) {
       console.error("Error sending data to backend:", error);
@@ -279,23 +335,29 @@ const Recommendations = () => {
     });
   };
 
-  const sendUserActionToBackend = async (content_id, action, additionalData = {}) => {
+  const sendUserActionToBackend = async (
+    content_id,
+    action,
+    additionalData = {}
+  ) => {
     try {
       const interactionData = {
-        contentId: content_id,  // Use dynamic content_id
-        interactionType: action,  // "like", "dislike"
-        ...additionalData,  // Spread additional data if needed
+        contentId: content_id, // Use dynamic content_id
+        interactionType: action, // "like", "dislike"
+        ...additionalData, // Spread additional data if needed
       };
 
-      await fetch(`https://rsserviceplan-rsapp.azuremicroservices.io/interactions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-
-        },
-        body: JSON.stringify(interactionData),
-      });
+      await fetch(
+        `https://rsserviceplan-rsapp.azuremicroservices.io/interactions`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(interactionData),
+        }
+      );
 
       console.log(`Successfully sent ${action} for content ID ${content_id}`);
     } catch (error) {
@@ -319,13 +381,13 @@ const Recommendations = () => {
             <button
               key={index}
               onClick={() => setFilterType(type)}
-              className={`px-4 py-2 rounded-2xl ${filterType === type
+              className={`px-4 py-2 rounded-2xl ${
+                filterType === type
                   ? "bg-[#5342a9] text-white"
                   : darkMode
-                    ? "bg-gray-700 text-gray-300"
-                    : "bg-white text-black"
-                }`}
-
+                  ? "bg-gray-700 text-gray-300"
+                  : "bg-white text-black"
+              }`}
             >
               {type.charAt(0).toUpperCase() + type.slice(1)}
             </button>
@@ -337,7 +399,9 @@ const Recommendations = () => {
           filteredRecommendations.map((rec, index) => (
             <div
               key={index}
-              className={`border border-gray-300 rounded-2xl shadow-lg ${darkMode ? " bg-gray-900" : " bg-white"} overflow-hidden`}
+              className={`border border-gray-300 rounded-2xl shadow-lg ${
+                darkMode ? " bg-gray-900" : " bg-white"
+              } overflow-hidden`}
             >
               <div className="p-4">
                 {rec.type === "article" ? (
@@ -347,12 +411,20 @@ const Recommendations = () => {
                     </p> // Display a message or nothing if title is "[Removed]"
                   ) : (
                     <div>
-                      <h3 className={`flex items-center text-lg font-semibold mb-2 ${darkMode ? " text-[#ffffff]" : " text-[#14044c]"} `}>
+                      <h3
+                        className={`flex items-center text-lg font-semibold mb-2 ${
+                          darkMode ? " text-[#ffffff]" : " text-[#14044c]"
+                        } `}
+                      >
                         <RiArticleLine className="text-blue-600 text-3xl mr-2" />{" "}
                         <span>{rec.title}</span>
                       </h3>
 
-                      <p className={`text-sm mt-2 ${darkMode ? " text-[#ffffff]" : " text-gray-700"}  `}>
+                      <p
+                        className={`text-sm mt-2 ${
+                          darkMode ? " text-[#ffffff]" : " text-gray-700"
+                        }  `}
+                      >
                         {rec.description}...
                         <a
                           href={rec.url}
@@ -381,7 +453,11 @@ const Recommendations = () => {
                   )
                 ) : rec.type === "youtube" ? (
                   <div>
-                    <h3 className={`flex items-center text-lg font-semibold mb-2 ${darkMode ? " text-[#ffffff]" : " text-[#14044c]"} `}>
+                    <h3
+                      className={`flex items-center text-lg font-semibold mb-2 ${
+                        darkMode ? " text-[#ffffff]" : " text-[#14044c]"
+                      } `}
+                    >
                       <TiSocialYoutubeCircular className="text-red-600 text-3xl mr-2" />
 
                       <span>{rec.title}</span>
@@ -400,7 +476,11 @@ const Recommendations = () => {
                   </div>
                 ) : rec.type === "movie" ? (
                   <div>
-                    <h3 className={`flex items-center text-lg font-semibold mb-2 ${darkMode ? " text-[#ffffff]" : " text-[#14044c]"} `}>
+                    <h3
+                      className={`flex items-center text-lg font-semibold mb-2 ${
+                        darkMode ? " text-[#ffffff]" : " text-[#14044c]"
+                      } `}
+                    >
                       <BiCameraMovie className="text-orange-500 text-3xl mr-2" />
                       <span>{rec.title}</span>
                     </h3>
@@ -521,6 +601,23 @@ const Recommendations = () => {
             <ImSpinner2 className="w-16 h-16 text-[#5342a9] animate-spin" />
           </div>
         )}
+
+        <div className="text-center py-4">
+        <button
+      onClick={handleLoadMore}
+      className={`px-4 py-2 rounded-2xl ${
+        darkMode ? "bg-gray-700 text-gray-300" : "bg-[#5342a9] text-white"
+      }`}
+    >
+      {loading ? (
+        <ImSpinner2 className="w-7 h-7  text-white animate-spin" />
+      ) : (
+        'Load More'
+      )}
+    </button>
+
+          
+        </div>
 
         {/* make image bigger */}
         {enlargedImage && (
