@@ -3,7 +3,7 @@
 // export default ForceDirectedGraph;
 import { useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import GraphSidebar from './graphSidebar';
+import GraphSidebar from './GraphSidebar';
 import PropTypes from 'prop-types';
 import { ClipLoader } from 'react-spinners';
 import { useSelector } from 'react-redux';
