@@ -395,7 +395,7 @@ const Recommendations = () => {
         </div>
         <SearchForm />
 
-        {filteredRecommendations.length > 0 ? (
+        {filteredRecommendations.length > 0 && (
           filteredRecommendations.map((rec, index) => (
             <div
               key={index}
@@ -596,11 +596,7 @@ const Recommendations = () => {
               </div>
             </div>
           ))
-        ) : (
-          <div className="flex justify-center items-center h-64">
-            <ImSpinner2 className="w-16 h-16 text-[#5342a9] animate-spin" />
-          </div>
-        )}
+        ) }
 
         <div className="text-center py-4">
         <button

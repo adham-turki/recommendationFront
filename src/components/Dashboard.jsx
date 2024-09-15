@@ -99,7 +99,7 @@ const Dashboard = () => {  // Add darkMode prop
   };
 
   // Example engagement rate and comparison value
-  const engagementRate = 86; // Example engagement rate
+  const engagementRate = 62; // Example engagement rate
   const comparisonValue = 50; // Example comparison value
 
   return (
@@ -113,7 +113,7 @@ const Dashboard = () => {  // Add darkMode prop
         />
         <StatisticsBox
           title="Active Users"
-          value="567"
+          value="3"
            // Pass darkMode to StatisticsBox if needed
         />
         <StatisticsBox

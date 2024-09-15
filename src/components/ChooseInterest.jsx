@@ -24,8 +24,19 @@ const ChooseInterest = () => {
     );
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (selectedInterests.length >= 5) {
+      const response = await fetch(`${import.meta.env.VITE_API}/profile`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          interests: selectedInterests, // Send the updated skills to the server
+          interest: selectedInterests, // Send the updated skills to the server
+        }),
+      }); 
       navigate('/skills');
     } else {
       setError('Please select at least 5 interests.');

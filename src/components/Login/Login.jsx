@@ -1,10 +1,13 @@
 import { useLocation } from 'react-router-dom';
 import './Login.css'; // Import styles
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const Login = () => {
   // Handler for third-party login
   const location = useLocation();
+  const userData = useSelector((state) => state.users.user); // Ensure path matches the slice name
+
 
   const handleLogin = (provider) => {
     let url = '';
@@ -29,9 +32,18 @@ const Login = () => {
       localStorage.setItem('refreshToken', refreshToken);
 
       // Redirect to home page or other routes
-      window.location.href = '/home';
+      if(userData!=null){
+        if (userData.interests && userData.interests.length > 0) {
+
+          window.location.href = '/home';
+        }
+        else{
+          window.location.href = '/interests';
+        }
+      }
     }
-  }, [location]);
+    
+  }, [location,userData]);
 
   return (
     <div className="login-container flex items-center min-h-screen">
