@@ -116,7 +116,7 @@ const ProfilePage = () => {
                   <img
                     src={userInfo.profilePicture}
                     alt="Profile"
-                    className={`w-32 h-32 rounded-full border-4 ${!darkMode ? 'border-[#14044c]': 'border-gray-100'} shadow-lg object-cover`}
+                    className={`w-32 h-32 rounded-full border-4 ${!darkMode ? 'border-[#14044c]' : 'border-gray-100'} shadow-lg object-cover`}
                   />
                 ) : (
                   <div className="w-32 h-32 bg-[#14044c] text-white text-3xl flex items-center justify-center rounded-full border-4 border-[#14044c] shadow-lg">
@@ -201,37 +201,37 @@ const ProfilePage = () => {
               </div>
 
               <div className={`w-full md:w-3/4 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'} rounded-lg shadow-lg p-8`}>
-                
 
-                  
-                <h2 className="text-2xl font-bold text-[#14044c] mb-6">
+
+
+                <h2 className={`text-2xl font-bold ${darkMode ? "text-[#ffffff]" : "text-[#14044c]"}  mb-6`}>
                   Edit Profile
                 </h2>
                 <div>
-                    <label className="block mb-2 text-sm font-medium">First Name</label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={editData.firstName || ""}
-                      onChange={handleInputChange}
-                      className={`w-full p-2 rounded-md ${darkMode ? 'bg-gray-900 text-white border-gray-700' : 'bg-gray-200 border border-gray-300'}`}
-                    />
-                  </div>
+                  <label className="block mb-2 text-sm font-medium">First Name</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={editData.firstName || ""}
+                    onChange={handleInputChange}
+                    className={`w-full p-2 rounded-md bg-white ${darkMode ? ' text-white border-gray-700' : ' border border-gray-300'}`}
+                  />
+                </div>
 
-                  <div>
-                    <label className="block mb-2 text-sm font-medium">Last Name</label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={editData.lastName || ""}
-                      onChange={handleInputChange}
-                      className={`w-full p-2 rounded-md ${darkMode ? 'bg-gray-900 text-white border-gray-700' : 'bg-gray-200 border border-gray-300'}`}
-                    />
-                  </div>
+                <div>
+                  <label className="block mb-2 text-sm font-medium">Last Name</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={editData.lastName || ""}
+                    onChange={handleInputChange}
+                    className={`w-full p-2 rounded-md bg-white ${darkMode ? ' text-white border-gray-700' : ' border border-gray-300'}`}
+                  />
+                </div>
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-[#14044c]">
-                      Country
+                  <label className={`block text-sm font-medium ${darkMode ?  "text-[#ffffff]": "text-[#14044c]" }`}>
+                  Country
                     </label>
                     <select
                       name="address"
@@ -247,8 +247,8 @@ const ProfilePage = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-[#14044c]">
-                      Job Status
+                  <label className={`block text-sm font-medium ${darkMode ?  "text-[#ffffff]": "text-[#14044c]" }`}>
+                  Job Status
                     </label>
                     <select
                       name="jobStatus"
@@ -275,7 +275,7 @@ const ProfilePage = () => {
 
                   <button
                     onClick={handleCancel}
-                    className={`py-2 px-6 rounded-full shadow-md transition duration-300 ${darkMode ? 'bg-gray-600 text-white hover:bg-white hover:text-black' : 'bg-gray-300 text-black hover:bg-gray-100 hover:text-black'}`}
+                    className={`py-2 px-6 mt-4 rounded-full shadow-md transition duration-300 ${darkMode ? 'bg-gray-600 text-white hover:bg-white hover:text-black' : 'bg-gray-300 text-black hover:bg-gray-100 hover:text-black'}`}
                   >
                     Cancel
                   </button>
