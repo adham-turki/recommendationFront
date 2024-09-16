@@ -82,7 +82,7 @@ const SavedItemsPage = () => {
           description: `Saved on ${new Date(item.timestamp).toLocaleString()}`, // Format timestamp
           type: item.type, // Use type to filter based on category
         }));
-
+        console.log(transformedData);
         setSavedItems(transformedData);
       }
       } catch (err) {
