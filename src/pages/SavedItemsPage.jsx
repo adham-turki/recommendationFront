@@ -13,47 +13,88 @@ const SavedItemsPage = () => {
   const [error, setError] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null); // Track selected item for details
   const darkMode = useSelector((state) => state.darkMode.isDarkMode); // Access dark mode state
+  const userData = useSelector((state) => state.users.user); // Ensure path matches the slice name
 
 
-  // Use mock data instead of fetching from the backend
+
+  // // Use mock data instead of fetching from the backend
+  // useEffect(() => {
+  //   const mockData = [
+  //     {
+  //       saved_item_id: 1,
+  //       title: "How to Learn JavaScript",
+  //       description: `Saved on ${new Date().toLocaleString()}`,
+  //       type: "article",
+  //       url: "https://example.com/article/javascript",
+  //       image_url: "https://example.com/images/javascript.jpg",
+  //     },
+  //     {
+  //       saved_item_id: 2,
+  //       title: "React Tutorial",
+  //       description: `Saved on ${new Date().toLocaleString()}`,
+  //       type: "video",
+  //       url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  //     },
+  //     {
+  //       saved_item_id: 3,
+  //       title: "The Inception Movie",
+  //       description: `Saved on ${new Date().toLocaleString()}`,
+  //       type: "movie",
+  //       Poster: "https://example.com/images/inception.jpg",
+  //     },
+  //     {
+  //       saved_item_id: 4,
+  //       title: "Web Development Trends",
+  //       description: `Saved on ${new Date().toLocaleString()}`,
+  //       type: "article",
+  //       url: "https://example.com/article/webdev",
+  //       image_url: "https://example.com/images/webdev.jpg",
+  //     },
+  //   ];
+
+  //   // Set mock data
+  //   // setSavedItems(mockData);
+  //   setLoading(false);
+  // }, []);
   useEffect(() => {
-    const mockData = [
-      {
-        saved_item_id: 1,
-        title: "How to Learn JavaScript",
-        description: `Saved on ${new Date().toLocaleString()}`,
-        type: "article",
-        url: "https://example.com/article/javascript",
-        image_url: "https://example.com/images/javascript.jpg",
-      },
-      {
-        saved_item_id: 2,
-        title: "React Tutorial",
-        description: `Saved on ${new Date().toLocaleString()}`,
-        type: "video",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      },
-      {
-        saved_item_id: 3,
-        title: "The Inception Movie",
-        description: `Saved on ${new Date().toLocaleString()}`,
-        type: "movie",
-        Poster: "https://example.com/images/inception.jpg",
-      },
-      {
-        saved_item_id: 4,
-        title: "Web Development Trends",
-        description: `Saved on ${new Date().toLocaleString()}`,
-        type: "article",
-        url: "https://example.com/article/webdev",
-        image_url: "https://example.com/images/webdev.jpg",
-      },
-    ];
+    const fetchSavedItems = async () => {
+      try {
+        if (!userData) {
+          setLoading(true);
+          const response = await fetch(`${import.meta.env.VITE_API}/users/${userData.user_id}/savedItems`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+          
+          if (!response.ok) {
+            throw new Error("Failed to fetch saved items");
+          }
+          
+          const data = await response.json();
+          
+          // Transform the data to match the structure
+          const transformedData = data.map((item) => ({
+          saved_item_id: item.savedItemId, // Use savedItemId as the saved_item_id
+          title: `${item.title}`, // Generic title, modify as needed
+          description: `Saved on ${new Date(item.timestamp).toLocaleString()}`, // Format timestamp
+          type: item.type, // Use type to filter based on category
+        }));
 
-    // Set mock data
-    setSavedItems(mockData);
-    setLoading(false);
-  }, []);
+        setSavedItems(transformedData);
+      }
+      } catch (err) {
+        setError("Error fetching saved items");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSavedItems();
+  }, [userData]);
 
   // Handle item removal
   const handleRemoveItem = (itemId) => {
@@ -63,68 +104,31 @@ const SavedItemsPage = () => {
     }
   };
 
-  // // Fetch saved items from the backend
-  // useEffect(() => {
-  //   const fetchSavedItems = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const response = await fetch(`${import.meta.env.VITE_API}/saved-items`, {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       });
-
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch saved items");
-  //       }
-
-  //       const data = await response.json();
-
-  //       // Transform the data to match the structure
-  //       const transformedData = data.map((item) => ({
-  //         saved_item_id: item.savedItemId, // Use savedItemId as the saved_item_id
-  //         title: `${item.title}`, // Generic title, modify as needed
-  //         description: `Saved on ${new Date(item.timestamp).toLocaleString()}`, // Format timestamp
-  //         type: item.type, // Use type to filter based on category
-  //       }));
-
-  //       setSavedItems(transformedData);
-  //     } catch (err) {
-  //       setError("Error fetching saved items");
-  //       console.error(err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchSavedItems();
-  // }, []);
+  
 
   // // Handle item removal
-  const fetchItem = async (itemId) => {
-    try {
-      // Send DELETE request to remove the saved item
-      const response = await fetch(`https://rsserviceplan-rsapp.azuremicroservices.io/contents/${itemId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+  // const fetchItem = async (itemId) => {
+  //   try {
+  //     // Send DELETE request to remove the saved item
+  //     const response = await fetch(`https://rsserviceplan-rsapp.azuremicroservices.io/contents/${itemId}`, {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     });
 
-      if (!response.ok) {
-        throw new Error("Failed to delete saved item");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Failed to delete saved item");
+  //     }
 
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      setError("Error removing saved item");
-      console.error(err);
-    }
-  };
+  //     const data = await response.json();
+  //     return data;
+  //   } catch (err) {
+  //     setError("Error removing saved item");
+  //     console.error(err);
+  //   }
+  // };
 
   // Handle category selection
   const handleCategoryClick = (category) => {
