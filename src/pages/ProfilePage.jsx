@@ -214,7 +214,7 @@ const ProfilePage = () => {
                     name="firstName"
                     value={editData.firstName || ""}
                     onChange={handleInputChange}
-                    className={`w-full p-2 rounded-md bg-white ${darkMode ? ' text-white border-gray-700' : ' border border-gray-300'}`}
+                    className={`w-full p-2 rounded-md ${darkMode ? 'bg-gray-900 text-white border-gray-700' : 'bg-gray-200 border border-gray-300'}`}
                   />
                 </div>
 
@@ -225,7 +225,7 @@ const ProfilePage = () => {
                     name="lastName"
                     value={editData.lastName || ""}
                     onChange={handleInputChange}
-                    className={`w-full p-2 rounded-md bg-white ${darkMode ? ' text-white border-gray-700' : ' border border-gray-300'}`}
+                    className={`w-full p-2 rounded-md ${darkMode ? 'bg-gray-900 text-white border-gray-700' : 'bg-gray-200 border border-gray-300'}`}
                   />
                 </div>
                 <div className="space-y-6">
