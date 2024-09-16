@@ -204,7 +204,6 @@ const ProfilePage = () => {
                 
 
                   
-                  <div className="w-full md:w-3/4 p-12 bg-white rounded-lg shadow-lg">
                 <h2 className="text-2xl font-bold text-[#14044c] mb-6">
                   Edit Profile
                 </h2>
@@ -264,7 +263,6 @@ const ProfilePage = () => {
                     </select>
                   </div>
                 </div>
-                </div> 
 
 
                 <div className="flex justify-between">
