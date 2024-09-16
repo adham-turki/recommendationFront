@@ -413,7 +413,7 @@ const Homepage = () => {
 
   return (
     <div>
-      <div className="bg-[url('./src/assets/pexels-anniroenkae-2.png')] bg-cover">
+      <div className="bg-[url('../src/assets/pexels-anniroenkae-2.png')] bg-cover">
         <Header2 />
 
         <HeroSection />
