@@ -52,8 +52,8 @@ const SavedItemsPage = () => {
   //     },
   //   ];
 
-  //   // Set mock data
-  //   // setSavedItems(mockData);
+  //    Set mock data
+  //    setSavedItems(mockData);
   //   setLoading(false);
   // }, []);
   useEffect(() => {
@@ -94,6 +94,7 @@ const SavedItemsPage = () => {
     };
 
     fetchSavedItems();
+    console.log(savedItems);
   }, [userData]);
 
   // Handle item removal
