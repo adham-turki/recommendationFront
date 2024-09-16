@@ -201,15 +201,14 @@ const ProfilePage = () => {
               </div>
 
               <div className={`w-full md:w-3/4 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'} rounded-lg shadow-lg p-8`}>
-                {/* Edit form */}
-                <div className="mb-6">
-                  <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-[#14044c]'} mb-4`}>
-                    Edit Profile Information
-                  </h2>
-                </div>
+                
 
-                <form className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                  <div>
+                  
+                  <div className="w-full md:w-3/4 p-12 bg-white rounded-lg shadow-lg">
+                <h2 className="text-2xl font-bold text-[#14044c] mb-6">
+                  Edit Profile
+                </h2>
+                <div>
                     <label className="block mb-2 text-sm font-medium">First Name</label>
                     <input
                       type="text"
@@ -230,10 +229,6 @@ const ProfilePage = () => {
                       className={`w-full p-2 rounded-md ${darkMode ? 'bg-gray-900 text-white border-gray-700' : 'bg-gray-200 border border-gray-300'}`}
                     />
                   </div>
-                  <div className="w-full md:w-3/4 p-12 bg-white rounded-lg shadow-lg">
-                <h2 className="text-2xl font-bold text-[#14044c] mb-6">
-                  Edit Profile
-                </h2>
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-[#14044c]">
@@ -269,9 +264,7 @@ const ProfilePage = () => {
                     </select>
                   </div>
                 </div>
-                </div>
-                  
-                </form>
+                </div> 
 
 
                 <div className="flex justify-between">
