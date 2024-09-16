@@ -58,44 +58,49 @@ const SavedItemsPage = () => {
   // }, []);
   useEffect(() => {
     const fetchSavedItems = async () => {
+      if (!userData) return; // Ensure userData is available before fetching
+  
       try {
-        if (!userData) {
-          setLoading(true);
-          const response = await fetch(`${import.meta.env.VITE_API}/users/${userData.user_id}/savedItems`, {
+        setLoading(true); // Set loading to true at the start of fetch
+        const response = await fetch(
+          `${import.meta.env.VITE_API}/users/${userData.user_id}/savedItems`,
+          {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          });
-          
-          if (!response.ok) {
-            throw new Error("Failed to fetch saved items");
           }
-          
-          const data = await response.json();
-          
-          // Transform the data to match the structure
-          const transformedData = data.map((item) => ({
+        );
+  
+        if (!response.ok) {
+          throw new Error("Failed to fetch saved items");
+        }
+  
+        const data = await response.json();
+  
+        // Transform the data to match the structure
+        const transformedData = data.map((item) => ({
           saved_item_id: item.savedItemId, // Use savedItemId as the saved_item_id
-          title: `${item.title}`, // Generic title, modify as needed
+          title: item.title,
           description: `Saved on ${new Date(item.timestamp).toLocaleString()}`, // Format timestamp
           type: item.type, // Use type to filter based on category
         }));
-        console.log(transformedData);
-        setSavedItems(transformedData);
-      }
+  
+        setSavedItems(transformedData); // Update the state with fetched items
       } catch (err) {
         setError("Error fetching saved items");
         console.error(err);
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading after the fetch
       }
     };
-
+  
     fetchSavedItems();
-    console.log(savedItems);
-  }, [userData]);
+    console.log(savedItems); // Check what is being logged in the console
+  }, [userData]); // Fetch only when userData is updated
+  
+  
 
   // Handle item removal
   const handleRemoveItem = (itemId) => {
