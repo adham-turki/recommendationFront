@@ -237,7 +237,7 @@ const ProfilePage = () => {
                       name="address"
                       value={editData.address}
                       onChange={handleInputChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#14044c] focus:border-[#14044c] text-[#14044c]"
+                      className={`mt-1 block w-full p-2 border rounded-md shadow-sm focus:outline-none focus:ring-[#14044c] focus:border-[#14044c] text-[#14044c] ${darkMode ? 'bg-gray-900 text-white border-gray-700' : 'bg-gray-200 border border-gray-300'} `}
                     >
                       {countries.map((country) => (
                         <option key={country.code} value={country.name}>
@@ -254,7 +254,7 @@ const ProfilePage = () => {
                       name="jobStatus"
                       value={editData.jobStatus}
                       onChange={handleInputChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#14044c] focus:border-[#14044c] text-[#14044c]"
+                      className={`mt-1 block w-full p-2 border  rounded-md shadow-sm focus:outline-none focus:ring-[#14044c] focus:border-[#14044c] text-[#14044c] ${darkMode ? 'bg-gray-900 text-white border-gray-700' : 'bg-gray-200 border border-gray-300'}`}
                     >
                       <option value="Employed">Employed</option>
                       <option value="Unemployed">Unemployed</option>
