@@ -70,6 +70,7 @@ const ProfilePage = () => {
         method: "PATCH", // Change to PATCH
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(editData),
       });
