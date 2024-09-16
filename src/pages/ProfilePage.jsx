@@ -268,7 +268,7 @@ const ProfilePage = () => {
                 <div className="flex justify-between">
                   <button
                     onClick={handleSaveChanges}
-                    className={`py-2 px-6 rounded-full shadow-md transition duration-300 ${darkMode ? 'bg-white text-black hover:bg-gray-600 hover:text-white' : 'bg-[#14044c] text-white hover:bg-[#e6e2eb] hover:text-[#14044c]'}`}
+                    className={`py-2 px-6 mt-4 rounded-full shadow-md transition duration-300 ${darkMode ? 'bg-white text-black hover:bg-gray-600 hover:text-white' : 'bg-[#14044c] text-white hover:bg-[#e6e2eb] hover:text-[#14044c]'}`}
                   >
                     Save Changes
                   </button>
