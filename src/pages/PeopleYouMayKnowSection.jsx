@@ -29,6 +29,7 @@ const PeopleYouMayKnowSection = () => {
         }
 
         const data = await response.json();
+        console.log(data)
 
         if (data && data.similar_users) {
           setPeopleYouMayKnow(data.similar_users);
