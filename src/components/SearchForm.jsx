@@ -312,7 +312,7 @@ const SearchForm = () => {
                 </div>
 
                 {/*  Buttons */}
-                <div className="bg-gray-50 border-t border-slate-200 py-3 px-4 flex justify-between items-center">
+                {/* <div className="bg-gray-50 border-t border-slate-200 py-3 px-4 flex justify-between items-center">
                   <Tooltip title="Like">
                     <button
                       onClick={() => toggleLike(index)}
@@ -360,7 +360,7 @@ const SearchForm = () => {
                       <AiOutlineShareAlt />
                     </button>
                   </div>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>
