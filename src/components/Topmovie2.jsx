@@ -12,7 +12,7 @@ const Topmovie2 = () => {
     const fetchData = async () => {
       try {
         const movieResponse = await axios.get(
-          "http://192.168.1.136:5001/homepage-movies"
+          "https://rsnlp.azurewebsites.net/homepage-movies"
         );
         const movies = movieResponse.data.movies || [];
         const topMovies = Array.isArray(movies) ? movies.slice(0, 10) : [];

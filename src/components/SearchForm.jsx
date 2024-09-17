@@ -27,7 +27,7 @@ const SearchForm = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://192.168.1.136:5001/search/${query}`);
+      const response = await fetch(`https://rsnlp.azurewebsites.net/search/${query}`);
       const responseText = await response.text();
       console.log("Raw response:", responseText);
 

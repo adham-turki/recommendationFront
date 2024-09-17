@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 const ExtensionGuidePage = () => {
   const navigate = useNavigate(); // Initialize navigate
-  const downloadFileUrl = "https://drive.google.com/file/d/1dLkNh9VcWBYwnX2nKPxK-JlWe98CNC2v/view?usp=sharing"; // Replace with your actual file URL
+  const downloadFileUrl = "https://drive.google.com/file/d/17nv8TetUX9V-tJbmIw58hUF0EagY6pAS/view?fbclid=IwY2xjawFWRStleHRuA2FlbQIxMAABHVo-VqtJUK4DojFcscERn_-F050liWPlWWku6HgQQY1kJ9AwBQeiIMQI-w_aem_d8cXkD3K77hVA2Fk53uN3A"; // Replace with your actual file URL
 
   return (
     <div className="min-h-screen bg-[#e6e2eb] flex flex-col">
