@@ -32,102 +32,7 @@ const Recommendations = () => {
 
   const [page, setPage] = useState(1); // To track the current page
   const [loading, setLoading] = useState(false); // To manage loading state
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = await fetch(
-  //       `${import.meta.env.VITE_API}/recommendations`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       }
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-  //     const text = await response.text(); // Read the response as text
-  //     if (text) {
-  //       const data = JSON.parse(text); // Parse the text as JSON
-  //       console.log(data);
-  //     } else {
-  //       console.error("Empty response");
-  //     }
-
-  //     try {
-  //       const response = await fetch(
-  //         `${import.meta.env.VITE_API}/recommendations`,
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //           },
-  //         }
-  //       );
-  //       const data = await response.json();
-  //       const movie = {
-  //         IMDBscore: 7.9,
-  //         Poster:
-  //           "https://images-na.ssl-images-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_UX182_CR0,0,182,268_AL_.jpg",
-  //         genres: "Action Science Fiction Adventure",
-  //         homepage: "http://www.ironmanmovie.com/",
-  //         overview:
-  //           "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
-  //         title: "Iron Man",
-  //         type: "movie",
-  //       };
-
-  //       setRecommendations([movie, ...data.recommendations]);
-  //       setFilteredRecommendations([movie], ...data.recommendations);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-  // const fetchData = async (pageNum = 1) => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await fetch(
-  //       `${import.meta.env.VITE_API}/recommendations?page=${pageNum}`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       }
-  //     );
-
-  //     const movie = {
-  //                IMDBscore: 7.9,
-  //               Poster:
-  //                  "https://images-na.ssl-images-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_UX182_CR0,0,182,268_AL_.jpg",
-  //                genres: "Action Science Fiction Adventure",
-  //               homepage: "http://www.ironmanmovie.com/",
-  //              overview:
-  //                "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
-  //               title: "Iron Man",
-  //                type: "movie",
-  //              };
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-  //     const data = await response.json();
-  //     if (pageNum === 1) {
-  //       setRecommendations(data.recommendations);
-  //     } else {
-  //       setRecommendations((prev) => [...prev, ...data.recommendations]);
-  //     }
-  //     setFilteredRecommendations(data.recommendations);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const userData = useSelector((state) => state.users.user);
 
   const fetchData = async (pageNum = 1) => {
     setLoading(true);
@@ -147,19 +52,12 @@ const Recommendations = () => {
       }
   
       const data = await response.json();
+      console.log(data);
    
-      const movie = {
-        IMDBscore: 7.9,
-        Poster: "https://images-na.ssl-images-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_UX182_CR0,0,182,268_AL_.jpg",
-        genres: "Action Science Fiction Adventure",
-        homepage: "http://www.ironmanmovie.com/",
-        overview: "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
-        title: "Iron Man",
-        type: "movie",
-      };
+      
   
       // Add the movie object to the fetched recommendations
-      const recommendationsWithMovie = [...data.recommendations, movie];
+      const recommendationsWithMovie = [...data.recommendations];
   
       if (pageNum === 1) {
         setRecommendations(recommendationsWithMovie);
@@ -287,10 +185,11 @@ const Recommendations = () => {
   // Function to save or unsave an item
   const savedItem = async (content_id, method) => {
     try {
+      if(userData){
       const savedData = {
         timestamp: new Date().toISOString(),
         contentId: content_id,
-        userId: 1,
+        userId: userData.user_id,
       };
 
       await fetch(
@@ -310,6 +209,7 @@ const Recommendations = () => {
           method === "POST" ? "saved" : "unsaved"
         } the item with contentId ${content_id}.`
       );
+    }
     } catch (error) {
       console.error("Error sending data to backend:", error);
     }
@@ -488,7 +388,7 @@ const Recommendations = () => {
                     <div className="flex items-start space-x-4 mb-4">
                       <div className="w-[200px] h-auto flex-shrink-0">
                         <img
-                          src={rec.Poster}
+                          src={rec.image_url}
                           alt={rec.title}
                           className="w-full h-auto object-cover cursor-pointer"
                           onClick={() => handleImageClick(rec.Poster)}
@@ -500,16 +400,16 @@ const Recommendations = () => {
                         <div>
                           <p className="text-lg text-gray-700">
                             <span className="font-semibold">Movie genre:</span>{" "}
-                            {rec.genres}
+                            {rec.category}
                           </p>
                           <p className="text-lg text-gray-700">
                             <span className="font-semibold">IMDB score:</span>{" "}
-                            {rec.IMDBscore}
+                            {rec.IMDB_Score}
                           </p>
                           <p className="text-lg text-gray-700 mt-2">
-                            {rec.overview}...
+                            {rec.description}...
                             <a
-                              href={rec.homepage}
+                              href={rec.url}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-blue-600 underline hover:text-blue-800"

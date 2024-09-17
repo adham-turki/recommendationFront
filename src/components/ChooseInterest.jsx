@@ -5,8 +5,8 @@ import Button from './Button';
 import ParticleBackground from './ParticleBackground';
 
 const interests = [
-  'Music', 'Movies', 'Books', 'Tech', 'Travel', 'Fitness', 'Gaming', 'Photography',
-  'Art', 'Cooking', 'Fashion', 'Science', 'Health', 'Nature', 'Business'
+  'Music', 'Action_Movies', 'Books', 'Tech', 'Travel','Comedy_Movies', 'Fitness', 'Gaming', 'Photography',
+  'Art', 'Cooking', 'Fashion', 'Science', 'Health', 'Nature', 'Business','Drama_Movies'
 ];
 
 const ChooseInterest = () => {
@@ -25,7 +25,7 @@ const ChooseInterest = () => {
   };
 
   const handleContinue = async () => {
-    if (selectedInterests.length >= 5) {
+    if (selectedInterests.length >= 2) {
       const response = await fetch(`${import.meta.env.VITE_API}/profile`, {
         method: "PATCH",
         headers: {
@@ -39,7 +39,7 @@ const ChooseInterest = () => {
       }); 
       navigate('/skills');
     } else {
-      setError('Please select at least 5 interests.');
+      setError('Please select at least 2 interests.');
     }
   };
 

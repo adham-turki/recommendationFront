@@ -17,72 +17,41 @@ const SavedItemsPage = () => {
 
 
 
-  // // Use mock data instead of fetching from the backend
-  // useEffect(() => {
-  //   const mockData = [
-  //     {
-  //       saved_item_id: 1,
-  //       title: "How to Learn JavaScript",
-  //       description: `Saved on ${new Date().toLocaleString()}`,
-  //       type: "article",
-  //       url: "https://example.com/article/javascript",
-  //       image_url: "https://example.com/images/javascript.jpg",
-  //     },
-  //     {
-  //       saved_item_id: 2,
-  //       title: "React Tutorial",
-  //       description: `Saved on ${new Date().toLocaleString()}`,
-  //       type: "video",
-  //       url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  //     },
-  //     {
-  //       saved_item_id: 3,
-  //       title: "The Inception Movie",
-  //       description: `Saved on ${new Date().toLocaleString()}`,
-  //       type: "movie",
-  //       Poster: "https://example.com/images/inception.jpg",
-  //     },
-  //     {
-  //       saved_item_id: 4,
-  //       title: "Web Development Trends",
-  //       description: `Saved on ${new Date().toLocaleString()}`,
-  //       type: "article",
-  //       url: "https://example.com/article/webdev",
-  //       image_url: "https://example.com/images/webdev.jpg",
-  //     },
-  //   ];
+ 
 
-  //    Set mock data
-  //    setSavedItems(mockData);
-  //   setLoading(false);
-  // }, []);
+  // Handle item removal
+  const handleRemoveItem = (itemId) => {
+    fetchRemoveItem(itemId);
+    setSavedItems(savedItems.filter((item) => item.saved_item_id !== itemId));
+    if (selectedItem && selectedItem.saved_item_id === itemId) {
+      setSelectedItem(null); // If the selected item is removed, reset it
+    }
+  };
+
+  // // Fetch saved items from the backend
   useEffect(() => {
     const fetchSavedItems = async () => {
       try {
         if (userData) {
-          setLoading(true);
-          const response = await fetch(`${import.meta.env.VITE_API}/users/${userData.user_id}/savedItems`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
-          
-          if (!response.ok) {
-            throw new Error("Failed to fetch saved items");
-          }
-          
-          const data = await response.json();
-          
-          // Transform the data to match the structure
-          const transformedData = data.map((item) => ({
-          saved_item_id: item.savedItemId, // Use savedItemId as the saved_item_id
-          title: `${item.title}`, // Generic title, modify as needed
-          description: `Saved on ${new Date(item.timestamp).toLocaleString()}`, // Format timestamp
-          type: item.type, // Use type to filter based on category
-        }));
-        setSavedItems(transformedData);
+        setLoading(true);
+        const response = await fetch(`${import.meta.env.VITE_API}/users/${userData.user_id}/saved-items`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch saved items");
+        }
+
+        const data = await response.json();
+        
+
+        
+
+        setSavedItems(data);
       }
       } catch (err) {
         setError("Error fetching saved items");
@@ -93,42 +62,29 @@ const SavedItemsPage = () => {
     };
 
     fetchSavedItems();
-    console.log(savedItems);
   }, [userData]);
 
-  // Handle item removal
-  const handleRemoveItem = (itemId) => {
-    setSavedItems(savedItems.filter((item) => item.saved_item_id !== itemId));
-    if (selectedItem && selectedItem.saved_item_id === itemId) {
-      setSelectedItem(null); // If the selected item is removed, reset it
+  // // Handle item removal
+  const fetchRemoveItem = async (itemId) => {
+    try {
+      // Send DELETE request to remove the saved item
+      const response = await fetch(`${import.meta.env.VITE_API}/saved-items/${itemId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete saved item");
+      }
+
+    } catch (err) {
+      setError("Error removing saved item");
+      console.error(err);
     }
   };
-
-  
-
-  // // Handle item removal
-  // const fetchItem = async (itemId) => {
-  //   try {
-  //     // Send DELETE request to remove the saved item
-  //     const response = await fetch(`https://rsserviceplan-rsapp.azuremicroservices.io/contents/${itemId}`, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to delete saved item");
-  //     }
-
-  //     const data = await response.json();
-  //     return data;
-  //   } catch (err) {
-  //     setError("Error removing saved item");
-  //     console.error(err);
-  //   }
-  // };
 
   // Handle category selection
   const handleCategoryClick = (category) => {
@@ -140,16 +96,18 @@ const SavedItemsPage = () => {
   const categories = [
     { name: "All", icon: <FaBook /> },
     { name: "Article", icon: <FaFileAlt /> },
-    { name: "Video", icon: <FaVideo /> },
+    { name: "youtube", icon: <FaVideo /> },
     { name: "Movie", icon: <FaFilm /> },
   ];
 
   // Map the item type to its corresponding icon
   const getItemIcon = (type) => {
+    console.log(savedItems)
+
     switch (type) {
       case "article":
         return <FaFileAlt className={`w-8 h-8 ${darkMode ? "text-gray-300" : "text-[#14044c]"}`} />;
-      case "video":
+      case "youtube":
         return <FaVideo className={`w-8 h-8 ${darkMode ? "text-gray-300" : "text-[#14044c]"}`} />;
       case "movie":
         return <FaFilm className={`w-8 h-8 ${darkMode ? "text-gray-300" : "text-[#14044c]"}`} />;
@@ -178,6 +136,7 @@ const SavedItemsPage = () => {
     setSelectedItem((prevItem) =>
       prevItem && prevItem.saved_item_id === item.saved_item_id ? null : item
     ); // Toggle the item selection
+    
   };
 
   // Render different views based on the selected item's type
@@ -193,7 +152,7 @@ const SavedItemsPage = () => {
             {item.title}
             </h3>
             <p className="text-sm mt-2 text-gray-700">
-              {item.description}...{" "}
+              {item.timestamp}...{" "}
               <a
                 href={item.url}
                 target="_blank"
@@ -203,15 +162,15 @@ const SavedItemsPage = () => {
                 Read more
               </a>
             </p>
-            {item.image_url && (
+            {item.urlImage && (
               <img
-                src={item.image_url}
+                src={item.urlImage}
                 alt={item.title}
                 className="w-[500px] h-[250px] object-cover mt-4"
               />
             )}
           </div>
-        ) : item.type === "video" ? (
+        ) : item.type === "youtube" ? (
           <div>
             <h3 className={`text-lg font-semibold mb-2  ${darkMode ? "text-white" : "text-[#14044c] "}`}>
             <TiSocialYoutubeCircular className={`text-3xl mr-2 ${darkMode ? "text-red-400" : "text-red-600"}`} />
@@ -222,7 +181,6 @@ const SavedItemsPage = () => {
               height="350"
               src={item.url.replace("watch?v=", "embed/")}
               title={item.title}
-              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
@@ -234,7 +192,7 @@ const SavedItemsPage = () => {
             {item.title}
             </h3>
             <img
-              src={item.Poster}
+              src={item.urlImage}
               alt={item.title}
               className="w-[300px] h-[450px] object-cover mt-4"
             />
@@ -329,11 +287,11 @@ const SavedItemsPage = () => {
                           <h2 className={`text-lg font-semibold  ${darkMode ? "text-white" : "text-[#14044c] "}`}>
                             {item.title}
                           </h2>
-                          <p className="text-gray-500">{item.description}</p>
+                          <p className="text-gray-500">{item.timestamp}</p>
                         </div>
                       </div>
                       <button
-                        className="text-[#14044c] hover:text-[#5342a9] transition duration-300 px-3 py-2 text-sm md:px-6 md:py-2 md:text-base"
+                        className={`${darkMode ? "text-white" : "text-[#14044c] "} hover:text-[#5342a9] transition duration-300 px-3 py-2 text-sm md:px-6 md:py-2 md:text-base`}
                         onClick={(e) => {
                           e.stopPropagation(); // Prevent item click event from firing
                           handleRemoveItem(item.saved_item_id);

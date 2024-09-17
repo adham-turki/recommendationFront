@@ -7,8 +7,6 @@ import {
   AiOutlineLike,
   AiFillDislike,
   AiOutlineDislike,
-  AiFillSave,
-  AiOutlineSave,
 } from "react-icons/ai";
 import Tooltip from "@mui/material/Tooltip";
 import { useSelector } from "react-redux";
@@ -19,7 +17,9 @@ const SearchForm = () => {
   const [loading, setLoading] = useState(false);
   const [likes, setLikes] = useState([]);
   const [dislikes, setDislikes] = useState([]);
-  const darkMode = useSelector((state) => state.darkMode.isDarkMode); // Access dark mode state
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+
+  const [savedMovies, setSavedMovies] = useState([]);
 
 
   const handleSearch = async (e) => {
@@ -32,7 +32,6 @@ const SearchForm = () => {
       console.log("Raw response:", responseText);
 
       const data = JSON.parse(responseText);
-      // const data = mockData;
 
       setResults(data.suggested_movies);
       console.log(data.suggested_movies);
@@ -44,35 +43,69 @@ const SearchForm = () => {
   };
 
   const handleClearResults = () => {
-    setResults([]); // clear search results
-    setQuery(""); // clear search bar
+    setResults([]); 
+    setQuery(""); 
   };
 
+  // const handleSave = async (movie) => {
+  //   try {
+  //     const response = await fetch(
+  //       `${import.meta.env.VITE_API}/saved-item`, 
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(movie),
+  //       }
+  //     );
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to save the movie");
+  //     }
+  //     const data = await response.json();
+  //     console.log("Movie saved successfully:", data);
+  //     alert("Movie saved successfully!");
+  //   } catch (error) {
+  //     console.error("Error saving movie:", error);
+  //     alert("Failed to save the movie.");
+  //   }
+  // };
+
   const handleSave = async (movie) => {
+    const isMovieSaved = savedMovies.some((savedMovie) => savedMovie.content_id === movie.content_id);
+  
     try {
       const response = await fetch(
-        "http://192.168.1.136:8089/interactions", //change to right api
+        `${import.meta.env.VITE_API}/saved-item`,
         {
-          method: "POST",
+          method: isMovieSaved ? "PUT" : "POST",  // Use PUT for updates, POST for new saves
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(movie),
         }
       );
-
+  
       if (!response.ok) {
-        throw new Error("Failed to save the movie");
+        throw new Error("Failed to save or update the movie");
       }
+  
       const data = await response.json();
-      console.log("Movie saved successfully:", data);
-      alert("Movie saved successfully!");
+      console.log(isMovieSaved ? "Movie updated successfully:" : "Movie saved successfully:", data);
+  
+      if (isMovieSaved) {
+        alert("Movie updated successfully!");
+      } else {
+        setSavedMovies([...savedMovies, movie]);  // Add the saved movie to state
+        alert("Movie saved successfully!");
+      }
     } catch (error) {
-      console.error("Error saving movie:", error);
-      alert("Failed to save the movie.");
+      console.error("Error saving or updating the movie:", error);
+      alert("Failed to save or update the movie.");
     }
   };
-
+  
   const handleShareClick = (url) => {
     navigator.clipboard.writeText(url).then(
       () => {
@@ -86,24 +119,24 @@ const SearchForm = () => {
     window.open(url, "_blank");
   };
 
+ 
   const toggleLike = (index) => {
-    // const content_id = recommendations[index].content_id;
-
+    const content_id = results[index].content_id;
+    console.log("Like button clicked for index:", index);
+    console.log("Like button clicked for content_id:", content_id);
     setLikes((prevLikes) => {
       const newLikes = [...prevLikes];
       const newDislikes = [...dislikes];
 
       if (newLikes[index]) {
         newLikes[index] = false;
+        console.log("Unlike:", content_id);
+        sendUserActionToBackend(content_id, "unlike"); // Unlike (DELETE)
       } else {
         newLikes[index] = true;
         newDislikes[index] = false;
-      }
-
-      if (newLikes[index]) {
-        // sendUserActionToBackend(content_id, "like");
-      } else {
-        // sendUserActionToBackend(content_id, "unlike");
+        console.log("Like:", content_id);
+        sendUserActionToBackend(content_id, "like"); // Like (POST)
       }
 
       setDislikes(newDislikes);
@@ -112,7 +145,9 @@ const SearchForm = () => {
   };
 
   const toggleDislike = (index) => {
-    // const content_id = recommendations[index].content_id; //uncomment when u connect
+    const content_id = results[index].content_id;
+    console.log("Dislike button clicked for index:", index);
+    console.log("Dislike button clicked for content_id:", content_id);
 
     setDislikes((prevDislikes) => {
       const newDislikes = [...prevDislikes];
@@ -120,10 +155,13 @@ const SearchForm = () => {
 
       if (newDislikes[index]) {
         newDislikes[index] = false;
-        // sendUserActionToBackend(content_id, "dislike");  when u connect to backend uncomment
+        console.log("Undislike:", content_id);
+        sendUserActionToBackend(content_id, "undislike"); // Undislike (DELETE)
       } else {
         newDislikes[index] = true;
         newLikes[index] = false;
+        console.log("Dislike:", content_id);
+        sendUserActionToBackend(content_id, "dislike"); // Dislike (POST)
       }
 
       setLikes(newLikes);
@@ -131,31 +169,23 @@ const SearchForm = () => {
     });
   };
 
-  const sendUserActionToBackend = async (
-    content_id,
-    action,
-    additionalData = {}
-  ) => {
+  //for like and dislike
+  const sendUserActionToBackend = async (content_id, action) => {
     try {
-      const interactionData = {
-        contentId: 1,
-        userId: 1,
-        interactionType: action,
-        ...additionalData,
-      };
-
-      await fetch(`http://192.168.1.136:8089/interactions`, {
-        method: "POST",
+      const method = action.startsWith("un") ? "DELETE" : "POST"; // Use DELETE for "unlike"/"undislike", POST for "like"/"dislike"
+      await fetch(`${import.meta.env.VITE_API}/interactions`, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(interactionData),
+        body: JSON.stringify({ contentId: content_id, interactionType: action }),
       });
+      console.log(`Action ${action} sent to the backend for content ID: ${content_id}`);
+
     } catch (error) {
       console.error("Error sending data to backend:", error);
     }
   };
-
   return (
     <div className="">
       <div className={`flex items-center space-x-2  `}>

@@ -3,7 +3,9 @@ import { FaMusic, FaFilm, FaPaw,FaBook, FaLaptopCode, FaPlane, FaDumbbell, FaGam
 
 const icons = {
   Music: <FaMusic />,
-  Movies: <FaFilm />,
+  Action_Movies: <FaFilm />,
+  Drama_Movies: <FaFilm />,
+  Comedy_Movies: <FaFilm />,
   Books: <FaBook />,
   Tech: <FaLaptopCode />,
   Travel: <FaPlane />,

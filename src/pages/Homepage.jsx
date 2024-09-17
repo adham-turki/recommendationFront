@@ -8,11 +8,6 @@ import { useState, useEffect, useRef } from "react";
 import { BsMoonFill, BsSunFill, BsSearch, BsX, BsList } from "react-icons/bs"; // Added BsList for hamburger menu
 import matchifyLogo from "../assets/matchify_logo1.png"; // Adjust the path according to your folder structure
 import { logout } from '../redux/userSlice'; // Path to the userSlice
-
-
-
-
-
 import matchifyLogowhite from "../assets/matchify_logo_white.png";
 import Topmovie2 from "../components/Topmovie2";
 import { useDispatch, useSelector } from "react-redux";
@@ -334,39 +329,31 @@ const HeroSection = () => {
   );
 };
 
+
+// Fallback logo for articles without images
+const defaultImageUrl = "https://via.placeholder.com/300?text=No+Image";
+
+// Helper function to truncate long titles
+const truncateTitle = (title, maxLength = 50) => {
+  return title.length > maxLength ? `${title.substring(0, maxLength)}...` : title;
+};
+
 const PersonalizedSection = () => {
-  const articles = [
-    {
-      image:
-        "https://cdn.usegalileo.ai/stability/9f3511ab-0cf1-4e6c-a9c7-14c80c1427d9.png",
-      title: "Meet the cast of The Marvels",
-      readTime: 5,
-    },
-    {
-      image:
-        "https://cdn.usegalileo.ai/sdxl10/9b3ca3b8-440f-4a3c-8c70-b870bcb841b6.png",
-      title: "The best new shows on Netflix",
-      readTime: 4,
-    },
-    {
-      image:
-        "https://cdn.usegalileo.ai/stability/8844c9e0-d369-4e62-aa27-524c42917bfd.png",
-      title: "The 10 best video game villains",
-      readTime: 3,
-    },
-    {
-      image:
-        "https://cdn.usegalileo.ai/stability/255195ac-7ddf-4416-b970-bea1a7f7d814.png",
-      title: "The most anticipated movies of 2023",
-      readTime: 7,
-    },
-    {
-      image:
-        "https://cdn.usegalileo.ai/sdxl10/36fd406e-b322-451d-9bee-119bfd0914c0.png",
-      title: "The 15 greatest TV series finales ever",
-      readTime: 6,
-    },
-  ];
+  const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API}/mostPopular`);
+        const data = await response.json();
+        setArticles(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -374,35 +361,35 @@ const PersonalizedSection = () => {
         Most Popular
       </h2>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
-        {articles.map((article, index) => (
-          <ArticleCard key={index} {...article} />
+        {articles.map((article) => (
+          <ArticleCard
+            key={article.contentId}
+            imageUrl={article.imageUrl ? article.imageUrl : defaultImageUrl}
+            title={truncateTitle(article.title)}
+            url={article.url}
+          />
         ))}
       </div>
     </>
   );
 };
 
-const ArticleCard = ({ image, title, readTime }) => {
-  const searchQuery = encodeURIComponent(title);
-
+const ArticleCard = ({ imageUrl, title, url }) => {
   return (
     <div className="flex flex-col gap-3 pb-3">
       <div
         className="bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-        style={{ backgroundImage: `url("${image}")` }}
+        style={{ backgroundImage: `url("${imageUrl}")` }}
       ></div>
       <div>
         <a
-          href={`https://www.google.com/search?q=${searchQuery}`}
+          href={url}
           target="_blank"
           rel="noopener noreferrer"
           className="text-[#1D3557] text-xl font-medium leading-normal hover:underline"
         >
           {title}
         </a>
-        <p className="text-[#25303f] text-base font-normal leading-normal">
-          {readTime} min read
-        </p>
       </div>
     </div>
   );

@@ -59,7 +59,7 @@ const FilterCard = ({ title, icon, options, onFilterChange, reset }) => {
                 onClick={() => handleToggle(option)}
                 className={`cursor-pointer py-1 px-1 rounded-lg text-xs border transition duration-200 text-center ${
                   selectedOptions.includes(option)
-                    ? "bg-gradient-to-r from-purple-700 to-purple-500 text-white shadow-md"
+                    ? "bg-gradient-to-r from-[#352872] to-[#352899] text-white shadow-md"
                     : `${
                         darkMode
                           ? "bg-gray-700 text-white hover:bg-gray-600"
@@ -98,7 +98,8 @@ const Search = () => {
   const [error, setError] = useState(null);
   const darkMode = useSelector((state) => state.darkMode.isDarkMode);
   const [interest, setInterest] = useState("");
-  const [skills,setSkills] = useState("");
+  const [skills, setSkills] = useState("");
+  const [showPeopleYouMayKnow, setShowPeopleYouMayKnow] = useState(true); // Add this state
 
   // Define fallback data
   const fallbackProfiles = [
@@ -111,13 +112,149 @@ const Search = () => {
     setActiveFilters(filters);
   };
 
+  // const handleSearch = async () => {
+  //   setLoading(true);
+  //   setError(null);
+  //   try {
+  //     // Construct the URL for the search API
+  //     const url = `https://rsserviceplan-rsapp.azuremicroservices.io/profiles/search`;
 
+  //     // Fetch the filtered profiles
+  //     const response = await fetch(url, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //       body: JSON.stringify({
+  //         interests: activeFilters.filter((filter) =>
+  //           // Check if the filter is included in the interests (replace with actual interests array)
+  //           [
+  //             "Music",
+  //             "Movies",
+  //             "Books",
+  //             "Tech",
+  //             "Travel",
+  //             "Fitness",
+  //             "Gaming",
+  //             "Photography",
+  //             "Art",
+  //             "Cooking",
+  //             "Fashion",
+  //             "Science",
+  //             "Health",
+  //             "Nature",
+  //             "Business",
+  //             "Animal",
+  //             "Sport",
+  //           ].includes(filter)
+  //         ),
+  //         skills: activeFilters.filter((filter) =>
+  //           // Check if the filter is included in the skills (replace with actual skills array)
+  //           [
+  //             "Coding",
+  //             "Design",
+  //             "Database",
+  //             "Management",
+  //             "Mobile",
+  //             "Networking",
+  //             "DevOps",
+  //             "AI",
+  //             "Cloud",
+  //             "Security",
+  //             "Debugging",
+  //             "Business",
+  //             "Music",
+  //             "Writing",
+  //             "Marketing",
+  //             "Languages",
+  //             "Engineering",
+  //             "Travel",
+  //           ].includes(filter)
+  //         ),
+  //       }),
+  //     });
+
+  //     console.log("Response Status:", response.status); // Log the status code
+
+  //     if (!response.ok) {
+  //       const errorText = await response.text(); // Read the response text
+  //       console.error("Error Response:", errorText); // Log the error response
+  //       throw new Error("Network response was not ok");
+  //     }
+
+  //     const data = await response.json();
+  //     console.log("Response Data:", data); // Log the response data
+  //     setProfiles(data); // Update the profiles state with the search result
+  //   } catch (err) {
+  //     console.error("Fetch error:", err);
+  //     setProfiles(fallbackProfiles); // Use fallback data if fetch fails
+  //     setError("Failed to fetch profiles, showing fallback data.");
+  //   } finally {
+  //     setLoading(false);
+  //     setShowResults(true);
+  //   }
+  // };
   const handleSearch = async () => {
     setLoading(true);
     setError(null);
+
     try {
       // Construct the URL for the search API
       const url = `https://rsserviceplan-rsapp.azuremicroservices.io/profiles/search`;
+
+      // Log activeFilters to verify its content
+      console.log("Active Filters:", activeFilters);
+
+      // Construct the request payload
+      const requestPayload = {
+        interests: activeFilters.filter((filter) =>
+          [
+            "Music",
+            "Movies",
+            "Books",
+            "Tech",
+            "Travel",
+            "Fitness",
+            "Gaming",
+            "Photography",
+            "Art",
+            "Cooking",
+            "Fashion",
+            "Science",
+            "Health",
+            "Nature",
+            "Business",
+            "Animal",
+            "Sport",
+          ].includes(filter)
+        ),
+        skills: activeFilters.filter((filter) =>
+          [
+            "Coding",
+            "Design",
+            "Database",
+            "Management",
+            "Mobile",
+            "Networking",
+            "DevOps",
+            "AI",
+            "Cloud",
+            "Security",
+            "Debugging",
+            "Business",
+            "Music",
+            "Writing",
+            "Marketing",
+            "Languages",
+            "Engineering",
+            "Travel",
+          ].includes(filter)
+        ),
+      };
+
+      // Log the request payload for debugging
+      console.log("Request Payload:", JSON.stringify(requestPayload));
 
       // Fetch the filtered profiles
       const response = await fetch(url, {
@@ -126,54 +263,7 @@ const Search = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({
-
-          interests: activeFilters.filter((filter) =>
-            // Check if the filter is included in the interests (replace with actual interests array)
-            [
-              "Music",
-              "Movies",
-              "Books",
-              "Tech",
-              "Travel",
-              "Fitness",
-              "Gaming",
-              "Photography",
-              "Art",
-              "Cooking",
-              "Fashion",
-              "Science",
-              "Health",
-              "Nature",
-              "Business",
-              "Animal",
-              "Sport",
-            ].includes(filter)
-          ),
-          skills: activeFilters.filter((filter) =>
-            // Check if the filter is included in the skills (replace with actual skills array)
-            [
-              "Coding",
-              "Design",
-              "Database",
-              "Management",
-              "Mobile",
-              "Networking",
-              "DevOps",
-              "AI",
-              "Cloud",
-              "Security",
-              "Debugging",
-              "Business",
-              "Music",
-              "Writing",
-              "Marketing",
-              "Languages",
-              "Engineering",
-              "Travel",
-            ].includes(filter)
-          ),
-        }),
+        body: JSON.stringify(requestPayload),
       });
 
       console.log("Response Status:", response.status); // Log the status code
@@ -197,23 +287,21 @@ const Search = () => {
     }
   };
 
-
   const clearAllFilters = () => {
     setActiveFilters([]);
     setSearchTerm("");
     setShowResults(false);
     setResetFilters(true);
     setTimeout(() => setResetFilters(false), 0);
+    setShowPeopleYouMayKnow(true); // Show the PeopleYouMayKnowSection
   };
 
   const handleProfileDetails = (profile) => {
-    
     setSelectedProfile(profile);
   };
 
   return (
     <div>
-
       <div
         className={`min-h-screen ${
           darkMode ? "bg-gray-800 text-white" : "bg-[#e6e2eb]"
@@ -231,7 +319,6 @@ const Search = () => {
             }`}
           >
             <div
-
               className={`w-full max-w-md p-4 rounded-xl shadow-lg transition hover:shadow-2xl hover:scale-105 ${
                 darkMode
                   ? "bg-gray-900 text-gray-300"
@@ -249,7 +336,6 @@ const Search = () => {
                 <input
                   type="text"
                   placeholder="Search for people"
-
                   className={`w-full px-4 py-2 rounded-lg border text-sm transition-shadow focus:outline-none focus:ring-2 ${
                     darkMode
                       ? "bg-gray-700 border-gray-600 text-white focus:ring-gray-500"
@@ -271,7 +357,6 @@ const Search = () => {
                 Search
               </button>
             </div>
-
 
             {/* Filters Section */}
             <div className="mt-6">
@@ -335,7 +420,7 @@ const Search = () => {
                 reset={resetFilters}
               />
               <button
-                className="w-full py-2 mt-4 bg-[#c293dd] text-white font-semibold rounded-lg shadow-md hover:shadow-lg focus:outline-none transition-all duration-300 text-sm hover:scale-105"
+                className="w-full py-2 mt-4 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg focus:outline-none transition-all duration-300 text-sm hover:scale-105"
                 onClick={clearAllFilters}
               >
                 Clear All Filters
@@ -344,17 +429,16 @@ const Search = () => {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 p-6 min-h-screen">
-            <PeopleYouMayKnowSection />
-
-            {/* Search Results Section */}
+          <div className="w-full lg:w-3/4 p-6">
             {showResults && (
-              <SearchResults
-                interests={interest} 
-                skills={skills}
-                profiles = {profiles}
-                onProfileClick={handleProfileDetails}
-              />
+              <div>
+                <SearchResults profiles={profiles} />
+                {loading && <p>Loading...</p>}
+                {error && <p>{error}</p>}
+              </div>
+            )}
+            {!showResults && showPeopleYouMayKnow && (
+              <PeopleYouMayKnowSection />
             )}
           </div>
         </main>

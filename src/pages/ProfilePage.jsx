@@ -13,6 +13,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true); // For loading state
   const [error, setError] = useState(null); // To handle fetch errors
   const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+  const userData = useSelector((state) => state.users.user);
 
   const { countries } = useCountries();
   const navigate = useNavigate(); // Hook for navigation
@@ -210,24 +211,26 @@ const ProfilePage = () => {
                 </h2>
                 <div>
                   <label className="block mb-2 text-sm font-medium">First Name</label>
-                  <input
+                  { userData && <input
                     type="text"
                     name="firstName"
-                    value={editData.firstName || ""}
+                    value={userData.firstName || ""}
                     onChange={handleInputChange}
                     className={`w-full p-2 rounded-md ${darkMode ? 'bg-gray-900 text-white border-gray-700' : 'bg-gray-200 border border-gray-300'}`}
                   />
+                }
                 </div>
 
                 <div>
                   <label className="block mb-2 text-sm font-medium">Last Name</label>
-                  <input
+                  { userData && <input
                     type="text"
                     name="lastName"
-                    value={editData.lastName || ""}
+                    value={userData.lastName || ""}
                     onChange={handleInputChange}
                     className={`w-full p-2 rounded-md ${darkMode ? 'bg-gray-900 text-white border-gray-700' : 'bg-gray-200 border border-gray-300'}`}
                   />
+}
                 </div>
                 <div className="space-y-6">
                   <div>

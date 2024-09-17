@@ -52,7 +52,7 @@ const Topmovie2 = () => {
           </p>
 
           <div className="overflow-x-auto w-full py-6">
-            <div className="flex space-x-6 px-5">
+            <div className="flex space-x-6 px-5 justify-center">
               {combinedData.length > 0 ? (
                 combinedData.map((item, index) => (
                   <div key={index} className="container">
@@ -96,7 +96,7 @@ const Topmovie2 = () => {
                   </div>
                 ))
               ) : (
-                <div className="flex justify-center items-center h-64">
+                <div className="flex justify-center align-middle items-center h-64">
                 <ImSpinner2 className="w-14 h-14 text-[#5342a9] animate-spin" />
               </div>
               )}

@@ -3,7 +3,7 @@
 // export default ForceDirectedGraph;
 import { useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import GraphSidebar from './GraphSidebar';
+import GraphSidebar from './graphSidebar';
 import PropTypes from 'prop-types';
 import { ClipLoader } from 'react-spinners';
 import { useSelector } from 'react-redux';
@@ -235,7 +235,7 @@ ripple.transition()
 
 {/* Display selected node data */}
 {selectedNodeData && (
-  <div className={`fixed bottom-80 top-20 right-72 2xl:right-1/4 w-96 p-6 shadow-lg border overflow-auto rounded-3xl mt-6 
+  <div className={`fixed bottom-20 top-20 right-72 2xl:right-1/4 w-96  p-6 shadow-lg border overflow-auto rounded-3xl mt-6 
     ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-[#F8F9FA] border-[#E0E0E0]'}`}>
     
     {/* Profile Image and ID */}

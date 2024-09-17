@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { BsX, BsList, BsSunFill, BsMoonFill } from "react-icons/bs";
 import matchifyLogo from "../assets/matchify_logo1.png";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import matchifyLogo_white from "../assets/matchify_logo_white.png";
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleDarkMode } from '../redux/darkModeSlice';
@@ -19,7 +19,6 @@ const Header = () => {
   const darkMode = useSelector((state) => state.darkMode.isDarkMode);
   const userData = useSelector((state) => state.users.user); // Ensure path matches the slice name
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const isAdmin = userData?.role?.roleName === "ADMIN";
 
