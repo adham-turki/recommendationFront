@@ -171,6 +171,7 @@ const SearchForm = () => {
 
   //for like and dislike
   const sendUserActionToBackend = async (content_id, action) => {
+    console.log("aaaaaaaaaaaaaaaaaaaa")
     try {
       const method = action.startsWith("un") ? "DELETE" : "POST"; // Use DELETE for "unlike"/"undislike", POST for "like"/"dislike"
       await fetch(`${import.meta.env.VITE_API}/interactions`, {
