@@ -4,7 +4,7 @@ import Dashboard from '../components/Dashboard.jsx';
 import Posts from '../components/Posts.jsx';
 import Users from '../components/Users.jsx';
 import ForceDirectedGraph from '../components/Graph.jsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Footer from '../components/Footer.jsx';
 import { useSelector } from 'react-redux';
 
@@ -12,7 +12,15 @@ import { useSelector } from 'react-redux';
 const ContentPage = () => { 
   const [activeComponent, setActiveComponent] = useState('dashboard'); // Default to Dashboard
   const darkMode = useSelector((state) => state.darkMode.isDarkMode);
+  const user = useSelector((state) => state.users.user);
 
+
+useEffect(() => {
+ if(user!=null){
+  if(user.role.roleName !== 'ADMIN'){
+    window.location.href = '/home';  }
+ }
+},[user]);
 
   const renderComponent = () => {
     switch (activeComponent) {
